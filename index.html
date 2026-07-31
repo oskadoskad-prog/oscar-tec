@@ -26,7 +26,6 @@ body.light.search-box input{background:#fff}
 .search-item{display:flex;gap:10px;padding:10px;cursor:pointer;border-bottom:1px solid #00d4ff22}
 .search-item:hover{background:#00d4ff11}
 .icon-btn{background:none;border:none;color:var(--blue);font-size:1.6rem;cursor:pointer;padding:8px;position:relative}
-.admin-btn{background:var(--yellow);color:#000;border:none;padding:8px 15px;border-radius:8px;font-weight:900;cursor:pointer}
 .whatsapp-btn{background:#25D366;color:#fff;border:none;padding:8px 15px;border-radius:8px;font-weight:900;cursor:pointer}
 .menu-btn{background:none;border:none;color:var(--blue);font-size:1.8rem;cursor:pointer}
 .cart-count{position:absolute;top:0;right:0;background:var(--red);color:#fff;border-radius:50%;width:20px;height:20px;font-size:0.8rem;display:flex;align-items:center;justify-content:center;font-weight:900}
@@ -87,7 +86,8 @@ body.light footer{background:#ddd}
 /* لوحة التحكم الجانبية */
 #adminPanel{position:fixed;top:0;left:-450px;width:450px;height:100%;background:#111827;z-index:99999;overflow-y:auto;padding:20px;border-right:3px solid var(--blue);transition:left 0.4s ease;box-shadow:5px 0 30px #000}
 #adminPanel.show{left:0}
-.admin-toggle{position:fixed;top:50%;left:0;transform:translateY(-50%);background:var(--blue);color:#000;border:none;padding:15px 8px;border-radius:0 10px 10px 0;font-size:1.5rem;cursor:pointer;z-index:100000;font-weight:900}
+.admin-toggle{position:fixed;top:50%;left:0;transform:translateY(-50%);background:var(--blue);color:#000;border:none;padding:15px 8px;border-radius:0 10px 10px 0;font-size:1.5rem;cursor:pointer;z-index:100000;font-weight:900;display:none}
+#adminPanel.show ~.admin-toggle{display:block}
 .admin-box h2{color:var(--blue);text-align:center;margin-bottom:15px}
 .admin-box input,.admin-box textarea,.admin-box select{width:100%;padding:10px;margin:8px 0;border-radius:8px;border:1px solid var(--blue);background:#0a0f1a;color:#fff}
 .admin-box button{padding:10px 20px;margin:5px;border-radius:8px;border:none;font-weight:700;cursor:pointer}
@@ -103,7 +103,6 @@ body.light footer{background:#ddd}
       <button class="menu-btn" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></button>
       <button class="icon-btn" onclick="toggleCart(event)"><i class="fa-solid fa-cart-shopping"></i><span id="cartCount" class="cart-count">0</span></button>
       <a href="https://wa.me/+971544066811" target="_blank"><button class="whatsapp-btn"><i class="fa-brands fa-whatsapp"></i> تواصل</button></a>
-      <button class="admin-btn" onclick="toggleAdminPanel()"><i class="fa-solid fa-gear"></i> الادمن</button>
     </div>
 
     <div id="cartBox" class="cart-box" onclick="event.stopPropagation()">
@@ -133,13 +132,11 @@ body.light footer{background:#ddd}
   <button onclick="focusSearch()"><i class="fa-solid fa-magnifying-glass"></i> البحث</button>
 </div>
 
-<!-- زر تصغير وتكبير اللوحة -->
 <button class="admin-toggle" onclick="toggleAdminPanel()"><i class="fa-solid fa-chevron-right"></i></button>
 
-<!-- لوحة التحكم الجانبية -->
 <div id="adminPanel">
   <div class="admin-box">
-    <h2><i class="fa-solid fa-user-shield"></i> لوحة التحكم</h2>
+    <h2><i class="fa-solid fa-user-shield"></i> لوحة التحكم السرية</h2>
     <button onclick="toggleAdminPanel()" style="background:var(--red);width:100%">اخفاء اللوحة</button>
 
     <div id="adminContent">
@@ -200,6 +197,7 @@ let allProducts = [];
 let siteData = JSON.parse(localStorage.getItem('oskarSiteData')) || getDefaultData();
 let tempCatImg = '';
 let tempProdImg = '';
+let adminActive = false;
 const SECRET_CODE = "oskad0099";
 
 function getDefaultData(){
@@ -253,7 +251,7 @@ function renderHome(){
   let html = '';
   siteData.categories.forEach(cat=>{
     html += `<div class="card" onclick="openPage('${cat.id}')">
-      <div class="card-admin">
+      <div class="card-admin" style="display:${adminActive?'flex':'none'}">
         <button onclick="editCategory('${cat.id}');event.stopPropagation()"><i class="fa-solid fa-pen"></i></button>
         <button class="del" onclick="deleteCategory('${cat.id}');event.stopPropagation()"><i class="fa-solid fa-trash"></i></button>
       </div>
@@ -271,9 +269,9 @@ function renderPages(){
       <div class="page-header">
         <button class="back-btn" onclick="goHome()"><i class="fa-solid fa-arrow-right"></i> رجوع</button>
         <h2 class="page-title">${cat.name}</h2>
-        <button class="edit-cat-btn" onclick="editCategory('${cat.id}')"><i class="fa-solid fa-pen"></i> تعديل القسم</button>
+        <button class="edit-cat-btn" style="display:${adminActive?'block':'none'}" onclick="editCategory('${cat.id}')"><i class="fa-solid fa-pen"></i> تعديل القسم</button>
       </div>
-      <button class="add-product-btn" onclick="quickAddProduct('${cat.id}')"><i class="fa-solid fa-plus"></i> اضافة منتج لهذا القسم</button>
+      <button class="add-product-btn" style="display:${adminActive?'block':'none'}" onclick="quickAddProduct('${cat.id}')"><i class="fa-solid fa-plus"></i> اضافة منتج لهذا القسم</button>
       <div class="products" id="products-${cat.id}"></div>
     </div>`;
   });
@@ -283,7 +281,7 @@ function renderPages(){
     let productsHtml = '';
     siteData.products[catId].forEach((p,i)=>{
       productsHtml += `<div class="item">
-        <div class="item-admin">
+        <div class="item-admin" style="display:${adminActive?'flex':'none'}">
           <button onclick="editProduct('${catId}',${i})"><i class="fa-solid fa-pen"></i></button>
           <button class="del" onclick="deleteProduct('${catId}',${i})"><i class="fa-solid fa-trash"></i></button>
         </div>
@@ -316,7 +314,7 @@ function searchProduct(){
   box.innerHTML = '';
 
   if(val === SECRET_CODE){
-    box.innerHTML = `<div class="search-item" onclick="openSecretAdmin()"><i class="fa-solid fa-user-shield"></i> فتح لوحة التحكم السرية</div>`;
+    box.innerHTML = `<div class="search-item" onclick="activateAdmin()"><i class="fa-solid fa-user-shield"></i> تفعيل لوحة التحكم السرية</div>`;
     box.style.display = 'block';
     return;
   }
@@ -327,11 +325,15 @@ function searchProduct(){
   box.style.display = results.length? 'block' : 'none';
 }
 
-function openSecretAdmin(){
+function activateAdmin(){
+  adminActive = true;
   toggleAdminPanel();
+  renderHome();
+  renderPages();
   document.getElementById('searchInput').value = '';
   document.getElementById('searchResults').style.display = 'none';
   document.getElementById('marqueeText').value=siteData.marquee;
+  alert('تم تفعيل لوحة التحكم. الان تقدر تعدل من الازرار على الاقسام والمنتجات');
 }
 
 function focusSearch(){document.getElementById('searchInput').focus();toggleMenu();}
@@ -359,7 +361,7 @@ function editProduct(cat,i){
   let name=prompt('الاسم الجديد:',p.name);
   let specs=prompt('المواصفات الجديدة:',p.specs);
   let price=prompt('السعر الجديد:',p.price);
-  let newImg=prompt('الصق رابط الصورة الجديدة او اتركه فاضي:',p.img);
+  let newImg=prompt('الصق رابط الصورة الجديدة او اتركه فاضي لتغييرها:',p.img);
   if(name){p.name=name;p.specs=specs;p.price=parseInt(price);if(newImg) p.img=newImg;saveData();location.reload();}
 }
 
