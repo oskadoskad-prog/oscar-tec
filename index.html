@@ -34,7 +34,7 @@ body.light.search-box input{background:#fff}
 .search-item:hover{background:#00d4ff11}
 .icon-btn{background:none;border:none;color:var(--blue);font-size:1.6rem;cursor:pointer;padding:8px;position:relative}
 .admin-btn{background:var(--yellow);color:#000;border:none;padding:8px 15px;border-radius:8px;font-weight:900;cursor:pointer;display:none}
-body.admin-btn{display:block}
+body.admin.admin-btn{display:block} /* تم التعديل هنا */
 .whatsapp-btn{background:#25D366;color:#fff;border:none;padding:8px 15px;border-radius:8px;font-weight:900;cursor:pointer}
 .menu-btn{background:none;border:none;color:var(--blue);font-size:1.8rem;cursor:pointer}
 .cart-count{position:absolute;top:0;right:0;background:var(--red);color:#fff;border-radius:50%;width:20px;height:20px;font-size:0.8rem;display:flex;align-items:center;justify-content:center;font-weight:900}
@@ -57,7 +57,7 @@ body.light.cart-item{background:#f0f0f0}
 .card-content{padding:18px}
 .card-content.icon{font-size:2.8rem;color:var(--blue);margin-bottom:10px}
 .card-admin-btns{position:absolute;top:5px;left:5px;display:none;gap:5px}
-body.admin.card-admin-btns{display:flex}
+body.admin.card-admin-btns{display:flex} /* تم التعديل هنا */
 .card-admin-btns button{background:var(--yellow);color:#000;border:none;border-radius:5px;padding:3px 8px;font-size:0.7rem;cursor:pointer}
 .card-admin-btns.del{background:var(--red);color:#fff}
 
@@ -65,7 +65,7 @@ body.admin.card-admin-btns{display:flex}
 .back-btn{background:var(--blue);color:#000;border:none;padding:10px 20px;border-radius:10px;font-weight:700;cursor:pointer;margin-bottom:20px;font-size:1rem}
 .page-title{text-align:center;margin-bottom:25px;font-size:1.8rem;color:var(--blue)}
 .add-product-btn{background:var(--green);color:#000;border:none;padding:12px 25px;border-radius:10px;font-weight:900;cursor:pointer;margin:20px auto;display:none;font-size:1rem}
-body.admin.add-product-btn{display:block}
+body.admin.add-product-btn{display:block} /* تم التعديل هنا */
 
 .products{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:15px}
 .item{display:flex;align-items:center;gap:12px;padding:12px;background:#0a0f1a;border-radius:12px;border:1px solid #00d4ff22;position:relative}
@@ -78,7 +78,7 @@ body.light.item-info.specs{color:#555}
 .price{color:var(--green);font-weight:900;font-size:1rem;white-space:nowrap}
 .add-btn{background:var(--green);color:#000;border:none;padding:8px 12px;border-radius:8px;font-weight:900;cursor:pointer;font-size:0.85rem}
 .item-admin-btns{position:absolute;top:5px;left:5px;display:none;gap:5px}
-body.admin.item-admin-btns{display:flex}
+body.admin.item-admin-btns{display:flex} /* تم التعديل هنا */
 .item-admin-btns button{background:var(--yellow);color:#000;border:none;padding:3px 8px;border-radius:5px;font-size:0.7rem;cursor:pointer}
 .item-admin-btns.del{background:var(--red);color:#fff}
 
@@ -90,7 +90,7 @@ body.light footer{background:#ddd}
 #sideMenu.show{display:block}
 #sideMenu h3{color:var(--blue);margin:15px 0}
 #sideMenu button{width:100%;padding:12px;margin:8px 0;border:none;border-radius:8px;background:#00d4ff22;color:var(--text);font-weight:700;cursor:pointer;text-align:right}
-.overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000aa;z-index:10000}
+.overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000000aa;z-index:10000}
 .overlay.show{display:block}
 
 /* لوحة التحكم */
@@ -271,6 +271,7 @@ function renderPages(){
   });
   document.getElementById('dynamicPages').innerHTML = pagesHtml;
 
+  allProducts = [];
   for(let catId in siteData.products){
     let productsHtml = '';
     siteData.products[catId].forEach((p,i)=>{
