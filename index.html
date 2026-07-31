@@ -16,20 +16,29 @@ body.light{background: linear-gradient(rgba(240,242,245,0.9), rgba(240,242,245,0
 header{text-align:center;padding:10px;background:linear-gradient(90deg,#00d4ff22,#111827);border-bottom:2px solid var(--blue);position:sticky;top:0;z-index:999;backdrop-filter:blur(5px)}
 .header-top{display:flex;justify-content:space-between;align-items:center;max-width:1400px;margin:auto;gap:10px;flex-wrap:wrap}
 .brand{display:flex;align-items:center;gap:12px}
-.brand img{width:60px;height:60px;border-radius:12px;border:2px solid var(--blue);cursor:pointer;object-fit:cover}
-header h1{font-size:2.2rem;font-weight:900;color:var(--blue);text-shadow:0 0 20px #00d4ff88}
-.search-box{flex:1;min-width:250px;max-width:500px;position:relative;display:flex;gap:8px;align-items:center}
-.search-box input{flex:1;padding:10px 40px 10px 15px;border-radius:25px;border:2px solid var(--blue);background:#0a0f1a;color:var(--text);outline:none}
+.brand img{width:70px;height:70px;border-radius:12px;border:2px solid var(--blue);cursor:pointer;object-fit:cover}
+header h1{font-size:2rem;font-weight:900;color:var(--blue);text-shadow:0 0 20px #00d4ff88}
+.search-box{flex:1;min-width:200px;max-width:350px;position:relative;display:flex;gap:8px;align-items:center}
+.search-box input{flex:1;padding:10px 45px 10px 15px;border-radius:25px;border:2px solid var(--blue);background:#0a0f1a;color:var(--text);outline:none;font-size:0.9rem}
 body.light.search-box input{background:#fff}
-.search-box i{position:absolute;right:55px;top:50%;transform:translateY(-50%);color:var(--blue)}
+.search-box i{position:absolute;right:60px;top:50%;transform:translateY(-50%);color:var(--blue)}
 .back-search-btn{background:var(--blue);color:#000;border:none;padding:10px 12px;border-radius:50%;cursor:pointer;font-size:1rem}
 .search-results{position:absolute;top:45px;left:0;right:50px;background:var(--card);border:2px solid var(--blue);border-radius:10px;max-height:400px;overflow-y:auto;display:none;z-index:1000}
 .search-item{display:flex;gap:10px;padding:10px;cursor:pointer;border-bottom:1px solid #00d4ff22}
 .search-item:hover{background:#00d4ff11}
 
 .icon-btn{background:none;border:none;color:var(--blue);font-size:1.6rem;cursor:pointer;padding:8px;position:relative}
+.cart-count{position:absolute;top:0;right:0;background:var(--red);color:#fff;border-radius:50%;width:20px;height:20px;font-size:0.8rem;display:flex;align-items:center;justify-content:center;font-weight:900}
 .whatsapp-btn{background:#25D366;color:#fff;border:none;padding:8px 15px;border-radius:8px;font-weight:900;cursor:pointer}
 .menu-btn{background:none;border:none;color:var(--blue);font-size:1.8rem;cursor:pointer}
+
+.cart-box{position:absolute;top:60px;left:10px;background:var(--card);border:2px solid var(--blue);border-radius:15px;padding:15px;display:none;z-index:10000;width:380px;max-height:600px;overflow-y:auto;text-align:right;backdrop-filter:blur(10px)}
+.cart-box.show{display:block}
+.cart-item{display:flex;gap:10px;align-items:center;background:#0a0f1a;padding:10px;border-radius:10px;margin:8px 0}
+body.light.cart-item{background:#f0f0f0}
+.cart-item img{width:50px;height:50px;border-radius:8px;object-fit:cover}
+.cart-total{font-weight:900;color:var(--green);text-align:center;margin:10px 0;font-size:1.2rem}
+.pay-btn{background:var(--yellow);color:#000;border:none;padding:12px;width:100%;border-radius:10px;font-weight:900;font-size:1.1rem;cursor:pointer;margin-top:10px}
 
 .marquee{width:100%;background:#00d4ff11;border-top:1px solid #00d4ff33;border-bottom:1px solid #00d4ff33;padding:10px 0;text-align:center;overflow:hidden}
 .marquee span{display:inline-block;font-weight:800;font-size:1.1rem;color:var(--blue);animation:marquee 6s ease-in-out infinite alternate}
@@ -61,6 +70,7 @@ body.light.item{background:#f0f0f0}
 .item-info.specs{font-size:0.8rem;color:#aaa;margin-top:3px}
 body.light.item-info.specs{color:#555}
 .price{color:var(--green);font-weight:900;font-size:1rem;white-space:nowrap}
+.add-btn{background:var(--green);color:#000;border:none;padding:8px 12px;border-radius:8px;font-weight:900;cursor:pointer;font-size:0.85rem}
 .item-admin{position:absolute;top:8px;left:8px;display:flex;gap:5px;z-index:10}
 .item-admin button{background:var(--yellow);color:#000;border:none;padding:5px 9px;border-radius:6px;font-size:0.75rem;cursor:pointer;font-weight:900}
 .item-admin.del{background:var(--red);color:#fff}
@@ -93,9 +103,17 @@ body.light footer{background:#ddd}
 
 <header>
   <div class="header-top">
-    <div style="display:flex;gap:10px">
+    <div style="display:flex;gap:10px;position:relative">
       <button class="menu-btn" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></button>
+      <button class="icon-btn" onclick="toggleCart(event)"><i class="fa-solid fa-cart-shopping"></i><span id="cartCount" class="cart-count">0</span></button>
       <a href="https://wa.me/+971544066811" target="_blank"><button class="whatsapp-btn"><i class="fa-brands fa-whatsapp"></i> تواصل</button></a>
+
+      <div id="cartBox" class="cart-box" onclick="event.stopPropagation()">
+        <h3 style="text-align:center;color:var(--blue)">سلة المشتريات</h3>
+        <div id="cartItems"></div>
+        <div id="cartTotal" class="cart-total">المجموع: 0 ل.س</div>
+        <button class="pay-btn" onclick="payWithShamCash()"><i class="fa-solid fa-wallet"></i> الدفع عبر شام كاش</button>
+      </div>
     </div>
 
     <div class="search-box">
@@ -189,6 +207,7 @@ body.light footer{background:#ddd}
 <footer><p>جميع الحقوق محفوظة © مركز اوسكار التقني 2026</p></footer>
 
 <script>
+let cart = [];
 let siteData = JSON.parse(localStorage.getItem('oskarSiteData')) || getDefaultData();
 let tempCatImg = '';
 let tempProdImg = '';
@@ -303,7 +322,7 @@ function renderPages(){
           <button onclick="editProduct('${catId}',${i})"><i class="fa-solid fa-pen"></i></button>
           <button class="del" onclick="deleteProduct('${catId}',${i})"><i class="fa-solid fa-trash"></i></button>
         </div>
-        <img src="${p.img}"><div class="item-info"><div>${p.name}</div><div class="specs">${p.specs}</div></div><div class="price">${p.price.toLocaleString()} ل.س</div></div>`;
+        <img src="${p.img}"><div class="item-info"><div>${p.name}</div><div class="specs">${p.specs}</div></div><div class="price">${p.price.toLocaleString()} ل.س</div><button class="add-btn" onclick='addToCart(${JSON.stringify(p)})'>اضافة</button></div>`;
       allProducts.push({...p, catId:catId});
     });
     if(document.getElementById('products-'+catId)) document.getElementById('products-'+catId).innerHTML = productsHtml;
@@ -339,6 +358,13 @@ function quickAddProduct(catId){
   document.getElementById('adminContent').scrollIntoView();
 }
 
+function addToCart(item){let existing = cart.find(p=>p.name==item.name);if(existing) existing.qty++;else cart.push({...item, qty:1});updateCart();}
+function updateCart(){let html = ''; let total = 0;cart.forEach((item,i)=>{total += item.price * item.qty;html += `<div class="cart-item"><img src="${item.img}"><div style="flex:1"><div>${item.name}</div><div style="color:var(--green)">${item.price.toLocaleString()} ل.س x ${item.qty}</div></div><button onclick="cart.splice(${i},1);updateCart()" style="background:red;color:#fff;border:none;border-radius:5px;padding:3px 8px">x</button></div>`;});document.getElementById('cartItems').innerHTML = html || '<p style="text-align:center">السلة فارغة</p>';document.getElementById('cartTotal').innerText = `المجموع: ${total.toLocaleString()} ل.س`;document.getElementById('cartCount').innerText = cart.reduce((a,b)=>a+b.qty,0);}
+function toggleCart(e){ e.stopPropagation(); document.getElementById('cartBox').classList.toggle('show'); }
+document.addEventListener('click', ()=>{document.getElementById('cartBox').classList.remove('show');document.getElementById('searchResults').style.display='none'});
+
+function payWithShamCash(){if(cart.length == 0){ alert("السلة فارغة"); return; }let total = cart.reduce((a,b)=>a + b.price * b.qty, 0);let message = `مرحبا مركز اوسكار التقني\nاريد الدفع عبر شام كاش\nالمبلغ: ${total.toLocaleString()} ل.س\nعدد المنتجات: ${cart.reduce((a,b)=>a+b.qty,0)}`;window.open(`https://wa.me/+971544066811?text=${encodeURIComponent(message)}`, '_blank');}
+
 function searchProduct(){
   let val = document.getElementById('searchInput').value.toLowerCase();
   let box = document.getElementById('searchResults');
@@ -359,8 +385,6 @@ function searchProduct(){
   });
   box.style.display = results.length? 'block' : 'none';
 }
-
-document.addEventListener('click', ()=>{document.getElementById('searchResults').style.display='none'});
 
 function activateAdmin(){
   adminActive = true;
@@ -451,7 +475,7 @@ function importData(event){
 
 window.onload = function(){
   applyData();
-  renderHome();renderPages();
+  renderHome();renderPages();updateCart();
   if(localStorage.getItem('theme')=='light') document.body.classList.add('light');
   if(adminActive){document.getElementById('adminToggleBtn').classList.add('show');document.getElementById('adminPanel').classList.add('show')}
 }
