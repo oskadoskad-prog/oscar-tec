@@ -10,95 +10,96 @@
 :root{--bg:#070710;--card:#111827dd;--blue:#00d4ff;--green:#00ff88; --red:#ff4444; --yellow:#ffc107; --text:#fff}
 body.light{--bg:#f0f2f5;--card:#ffffffdd;--text:#000}
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Cairo',sans-serif}
-body{background: linear-gradient(rgba(7,7,16,0.8), rgba(7,7,16,0.8)),url('https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1920') center/cover fixed;color:var(--text)}
-body.light{background: linear-gradient(rgba(240,242,245,0.9), rgba(240,242,245,0.9)),url('https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1920') center/cover fixed;}
+body{background: linear-gradient(rgba(7,7,16,0.85), rgba(7,7,16,0.85)),url('https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=1920') center/cover fixed;color:var(--text)}
+body.light{background: linear-gradient(rgba(240,242,245,0.9), rgba(240,242,245,0.9)),url('https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=1920') center/cover fixed;}
 
-header{text-align:center;padding:10px;background:linear-gradient(90deg,#00d4ff22,#111827);border-bottom:2px solid var(--blue);position:sticky;top:0;z-index:999;backdrop-filter:blur(5px)}
-.header-top{display:flex;justify-content:space-between;align-items:center;max-width:1400px;margin:auto;gap:10px;flex-wrap:wrap}
+header{text-align:center;padding:12px 20px;background:linear-gradient(90deg,#00d4ff22,#111827);border-bottom:2px solid var(--blue);position:sticky;top:0;z-index:999;backdrop-filter:blur(8px)}
+.header-top{display:flex;justify-content:space-between;align-items:center;max-width:1400px;margin:auto;gap:15px;flex-wrap:wrap}
 .brand{display:flex;align-items:center;gap:12px}
-.brand img{width:50px;height:50px;border-radius:50%;border:2px solid var(--blue)}
-header h1{font-size:2.2rem;font-weight:900;color:var(--blue);text-shadow:0 0 20px #00d4ff88}
-.search-box{flex:1;min-width:250px;max-width:500px;position:relative}
-.search-box input{width:100%;padding:10px 40px 10px 15px;border-radius:25px;border:2px solid var(--blue);background:#0a0f1a;color:var(--text);outline:none}
+.brand img{width:55px;height:55px;border-radius:50%;border:2px solid var(--blue)}
+header h1{font-size:2.3rem;font-weight:900;color:var(--blue);text-shadow:0 0 20px #00d4ff88}
+.search-box{flex:1;min-width:280px;max-width:500px;position:relative}
+.search-box input{width:100%;padding:12px 45px 12px 15px;border-radius:25px;border:2px solid var(--blue);background:#0a0f1a;color:var(--text);outline:none;font-size:1rem}
 body.light.search-box input{background:#fff}
-.search-box i{position:absolute;right:15px;top:50%;transform:translateY(-50%);color:var(--blue)}
-.search-results{position:absolute;top:45px;left:0;right:0;background:var(--card);border:2px solid var(--blue);border-radius:10px;max-height:400px;overflow-y:auto;display:none;z-index:1000}
-.search-item{display:flex;gap:10px;padding:10px;cursor:pointer;border-bottom:1px solid #00d4ff22}
+.search-box i{position:absolute;right:15px;top:50%;transform:translateY(-50%);color:var(--blue);font-size:1.1rem}
+.search-results{position:absolute;top:50px;left:0;right:0;background:var(--card);border:2px solid var(--blue);border-radius:12px;max-height:400px;overflow-y:auto;display:none;z-index:1000}
+.search-item{display:flex;gap:12px;padding:12px;cursor:pointer;border-bottom:1px solid #00d4ff22}
 .search-item:hover{background:#00d4ff11}
-.icon-btn{background:none;border:none;color:var(--blue);font-size:1.6rem;cursor:pointer;padding:8px;position:relative}
-.admin-btn{background:var(--yellow);color:#000;border:none;padding:8px 15px;border-radius:8px;font-weight:900;cursor:pointer;display:none}
+.search-item img{width:45px;height:45px;border-radius:8px;object-fit:cover}
+.icon-btn{background:none;border:none;color:var(--blue);font-size:1.7rem;cursor:pointer;padding:8px;position:relative}
+.admin-btn{background:var(--yellow);color:#000;border:none;padding:10px 18px;border-radius:10px;font-weight:900;cursor:pointer;display:none;font-size:0.95rem}
 body.admin-btn{display:block}
-.whatsapp-btn{background:#25D366;color:#fff;border:none;padding:8px 15px;border-radius:8px;font-weight:900;cursor:pointer}
-.menu-btn{background:none;border:none;color:var(--blue);font-size:1.8rem;cursor:pointer}
-.cart-count{position:absolute;top:0;right:0;background:var(--red);color:#fff;border-radius:50%;width:20px;height:20px;font-size:0.8rem;display:flex;align-items:center;justify-content:center;font-weight:900}
-.cart-box{position:absolute;top:60px;left:10px;background:var(--card);border:2px solid var(--blue);border-radius:15px;padding:15px;display:none;z-index:10000;width:380px;max-height:600px;overflow-y:auto;text-align:right;backdrop-filter:blur(10px)}
+.whatsapp-btn{background:#25D366;color:#fff;border:none;padding:10px 18px;border-radius:10px;font-weight:900;cursor:pointer;font-size:0.95rem}
+.menu-btn{background:none;border:none;color:var(--blue);font-size:1.9rem;cursor:pointer}
+.cart-count{position:absolute;top:-5px;right:-5px;background:var(--red);color:#fff;border-radius:50%;width:22px;height:22px;font-size:0.8rem;display:flex;align-items:center;justify-content:center;font-weight:900}
+.cart-box{position:absolute;top:65px;left:10px;background:var(--card);border:2px solid var(--blue);border-radius:15px;padding:15px;display:none;z-index:10000;width:400px;max-height:600px;overflow-y:auto;text-align:right;backdrop-filter:blur(10px)}
 .cart-box.show{display:block}
 .cart-item{display:flex;gap:10px;align-items:center;background:#0a0f1a;padding:10px;border-radius:10px;margin:8px 0}
 body.light.cart-item{background:#f0f0f0}
-.cart-item img{width:50px;height:50px;border-radius:8px;object-fit:cover}
+.cart-item img{width:55px;height:55px;border-radius:8px;object-fit:cover}
 .cart-total{font-weight:900;color:var(--green);text-align:center;margin:10px 0;font-size:1.2rem}
-.pay-btn{background:var(--yellow);color:#000;border:none;padding:12px;width:100%;border-radius:10px;font-weight:900;font-size:1.1rem;cursor:pointer;margin-top:10px}
+.pay-btn{background:var(--yellow);color:#000;border:none;padding:14px;width:100%;border-radius:10px;font-weight:900;font-size:1.1rem;cursor:pointer;margin-top:10px}
 
-.marquee{width:100%;background:#00d4ff11;border-top:1px solid #00d4ff33;border-bottom:1px solid #00d4ff33;padding:10px 0;text-align:center;overflow:hidden}
-.marquee span{display:inline-block;font-weight:800;font-size:1.1rem;color:var(--blue);animation:marquee 6s ease-in-out infinite alternate}
-@keyframes marquee{0%{transform:translateX(10px)}100%{transform:translateX(-10px)}}
+.marquee{width:100%;background:#00d4ff11;border-top:1px solid #00d4ff33;border-bottom:1px solid #00d4ff33;padding:12px 0;text-align:center;overflow:hidden}
+.marquee span{display:inline-block;font-weight:800;font-size:1.15rem;color:var(--blue);animation:marquee 8s ease-in-out infinite alternate}
+@keyframes marquee{0%{transform:translateX(15px)}100%{transform:translateX(-15px)}}
 
-.container{max-width:1400px;margin:30px auto;padding:0 20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
-.card{background:var(--card);border-radius:20px;overflow:hidden;border:2px solid #00d4ff33;transition:all 0.4s ease;cursor:pointer;text-align:center;backdrop-filter:blur(5px);position:relative}
-.card:hover{transform:translateY(-10px);border-color:var(--blue);box-shadow:0 0 30px #00d4ff66}
-.card img{width:100%;height:160px;object-fit:cover}
-.card-content{padding:18px}
-.card-content.icon{font-size:2.8rem;color:var(--blue);margin-bottom:10px}
-.card-edit-btn{position:absolute;top:8px;left:8px;background:var(--yellow);color:#000;border:none;border-radius:8px;padding:5px 10px;font-size:0.8rem;font-weight:900;cursor:pointer;display:none;z-index:10}
+.container{max-width:1400px;margin:40px auto;padding:0 20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:25px}
+.card{background:var(--card);border-radius:22px;overflow:hidden;border:2px solid #00d4ff33;transition:all 0.4s ease;cursor:pointer;text-align:center;backdrop-filter:blur(5px);position:relative}
+.card:hover{transform:translateY(-12px);border-color:var(--blue);box-shadow:0 0 35px #00d4ff66}
+.card img{width:100%;height:170px;object-fit:cover}
+.card-content{padding:20px}
+.card-content.icon{font-size:3rem;color:var(--blue);margin-bottom:12px}
+.card-edit-btn{position:absolute;top:10px;left:10px;background:var(--yellow);color:#000;border:none;border-radius:8px;padding:6px 12px;font-size:0.85rem;font-weight:900;cursor:pointer;display:none;z-index:10}
 body.admin.card-edit-btn{display:block}
 
-.page{display:none;padding:20px;max-width:1400px;margin:20px auto}
-.back-btn{background:var(--blue);color:#000;border:none;padding:10px 20px;border-radius:10px;font-weight:700;cursor:pointer;margin-bottom:20px;font-size:1rem}
-.page-title{text-align:center;margin-bottom:25px;font-size:1.8rem;color:var(--blue)}
-.add-product-btn{background:var(--green);color:#000;border:none;padding:12px 25px;border-radius:10px;font-weight:900;cursor:pointer;margin:20px auto;display:none;font-size:1rem}
+.page{display:none;padding:25px;max-width:1400px;margin:25px auto}
+.back-btn{background:var(--blue);color:#000;border:none;padding:12px 22px;border-radius:10px;font-weight:700;cursor:pointer;margin-bottom:25px;font-size:1.05rem}
+.page-title{text-align:center;margin-bottom:30px;font-size:2rem;color:var(--blue)}
+.add-product-btn{background:var(--green);color:#000;border:none;padding:14px 28px;border-radius:10px;font-weight:900;cursor:pointer;margin:25px auto;display:none;font-size:1.05rem}
 body.admin.add-product-btn{display:block}
 
-.products{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:15px}
-.item{display:flex;align-items:center;gap:12px;padding:12px;background:#0a0f1a;border-radius:12px;border:1px solid #00d4ff22;position:relative}
+.products{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:18px}
+.item{display:flex;align-items:center;gap:15px;padding:14px;background:#0a0f1a;border-radius:14px;border:1px solid #00d4ff22;position:relative}
 body.light.item{background:#f0f0f0}
 .item:hover{border-color:var(--blue)}
-.item img{width:70px;height:70px;border-radius:10px;object-fit:cover}
-.item-info{flex:1;text-align:right;font-size:0.9rem}
-.item-info.specs{font-size:0.8rem;color:#aaa;margin-top:3px}
+.item img{width:75px;height:75px;border-radius:10px;object-fit:cover}
+.item-info{flex:1;text-align:right;font-size:0.95rem}
+.item-info.specs{font-size:0.85rem;color:#aaa;margin-top:4px}
 body.light.item-info.specs{color:#555}
-.price{color:var(--green);font-weight:900;font-size:1rem;white-space:nowrap}
-.add-btn{background:var(--green);color:#000;border:none;padding:8px 12px;border-radius:8px;font-weight:900;cursor:pointer;font-size:0.85rem}
-.item-edit-btn{position:absolute;top:8px;left:8px;background:var(--yellow);color:#000;border:none;border-radius:8px;padding:5px 10px;font-size:0.8rem;font-weight:900;cursor:pointer;display:none;z-index:10}
+.price{color:var(--green);font-weight:900;font-size:1.05rem;white-space:nowrap}
+.add-btn{background:var(--green);color:#000;border:none;padding:9px 14px;border-radius:8px;font-weight:900;cursor:pointer;font-size:0.9rem}
+.item-edit-btn{position:absolute;top:10px;left:10px;background:var(--yellow);color:#000;border:none;border-radius:8px;padding:6px 12px;font-size:0.85rem;font-weight:900;cursor:pointer;display:none;z-index:10}
 body.admin.item-edit-btn{display:block}
 
-footer{text-align:center;padding:30px;background:#0a0f1a;margin-top:40px;border-top:2px solid var(--blue)}
+footer{text-align:center;padding:35px;background:#0a0f1a;margin-top:50px;border-top:2px solid var(--blue);font-size:1rem}
 body.light footer{background:#ddd}
 
 /* قائمة 3 خطوط */
-#sideMenu{display:none;position:fixed;top:0;right:0;width:300px;height:100%;background:var(--card);z-index:10001;padding:20px;border-left:2px solid var(--blue);backdrop-filter:blur(10px)}
+#sideMenu{display:none;position:fixed;top:0;right:0;width:320px;height:100%;background:var(--card);z-index:10001;padding:25px;border-left:2px solid var(--blue);backdrop-filter:blur(10px)}
 #sideMenu.show{display:block}
-#sideMenu h3{color:var(--blue);margin:15px 0}
-#sideMenu button{width:100%;padding:12px;margin:8px 0;border:none;border-radius:8px;background:#00d4ff22;color:var(--text);font-weight:700;cursor:pointer;text-align:right}
+#sideMenu h3{color:var(--blue);margin:18px 0;font-size:1.3rem}
+#sideMenu button{width:100%;padding:14px;margin:10px 0;border:none;border-radius:10px;background:#00d4ff22;color:var(--text);font-weight:700;cursor:pointer;text-align:right;font-size:1rem}
 .overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000aa;z-index:10000}
 .overlay.show{display:block}
 
 /* لوحة التحكم الجانبية يسار */
-#adminPanel{position:fixed;top:0;left:-450px;width:450px;height:100%;background:#111827;z-index:99999;overflow-y:auto;padding:20px;border-right:3px solid var(--blue);transition:left 0.4s ease;box-shadow:5px 0 30px #000}
+#adminPanel{position:fixed;top:0;left:-480px;width:480px;height:100%;background:#111827;z-index:99999;overflow-y:auto;padding:25px;border-right:3px solid var(--blue);transition:left 0.4s ease;box-shadow:5px 0 35px #000}
 #adminPanel.show{left:0}
-.admin-toggle{position:fixed;top:50%;left:0;transform:translateY(-50%);background:var(--blue);color:#000;border:none;padding:15px 8px;border-radius:0 10px 10px 0;font-size:1.5rem;cursor:pointer;z-index:100000;display:none;font-weight:900}
+.admin-toggle{position:fixed;top:50%;left:0;transform:translateY(-50%);background:var(--blue);color:#000;border:none;padding:18px 10px;border-radius:0 12px 12px 0;font-size:1.7rem;cursor:pointer;z-index:100000;display:none;font-weight:900}
 body.admin-toggle{display:block}
-.admin-box h2{color:var(--blue);text-align:center;margin-bottom:15px}
-.admin-box input,.admin-box textarea,.admin-box select{width:100%;padding:10px;margin:8px 0;border-radius:8px;border:1px solid var(--blue);background:#0a0f1a;color:#fff}
-.admin-box button{padding:10px 20px;margin:5px;border-radius:8px;border:none;font-weight:700;cursor:pointer}
-.admin-section{border:1px solid #00d4ff33;padding:15px;border-radius:10px;margin:15px 0}
-.preview-img{width:80px;height:80px;border-radius:8px;object-fit:cover;margin:5px;border:2px solid var(--blue)}
+.admin-box h2{color:var(--blue);text-align:center;margin-bottom:20px;font-size:1.6rem}
+.admin-box input,.admin-box textarea,.admin-box select{width:100%;padding:12px;margin:10px 0;border-radius:10px;border:1px solid var(--blue);background:#0a0f1a;color:#fff;font-size:1rem}
+.admin-box button{padding:12px 22px;margin:6px;border-radius:10px;border:none;font-weight:700;cursor:pointer;font-size:1rem}
+.admin-section{border:1px solid #00d4ff33;padding:18px;border-radius:12px;margin:18px 0}
+.preview-img{width:90px;height:90px;border-radius:10px;object-fit:cover;margin:8px;border:2px solid var(--blue)}
 </style>
 </head>
 <body>
 
 <header>
   <div class="header-top">
-    <div style="display:flex;gap:10px">
+    <div style="display:flex;gap:12px">
       <button class="menu-btn" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></button>
       <button class="icon-btn" onclick="toggleCart(event)"><i class="fa-solid fa-cart-shopping"></i><span id="cartCount" class="cart-count">0</span></button>
       <a href="https://wa.me/+971544066811" target="_blank"><button class="whatsapp-btn"><i class="fa-brands fa-whatsapp"></i> تواصل</button></a>
@@ -119,7 +120,7 @@ body.admin-toggle{display:block}
     </div>
 
     <div class="brand">
-      <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=200" alt="روبوت">
+      <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=200" alt="روبوت">
       <h1><i class="fa-solid fa-microchip"></i> مركز اوسكار التقني</h1>
     </div>
   </div>
@@ -198,7 +199,7 @@ body.admin-toggle{display:block}
 
       <div class="admin-section">
         <h3>6. تعديل النص المتحرك</h3>
-        <textarea id="marqueeText" rows="2"></textarea>
+        <textarea id="marqueeText" rows="3"></textarea>
         <button onclick="saveMarquee()" style="background:var(--blue)">حفظ</button>
       </div>
 
@@ -231,31 +232,35 @@ function getDefaultData(){
   return {
     marquee: "مركز اوسكار التقني يقدم خدمات صيانة جوالات طافية معالجات خدمة تبديل باغات الشاشات المكسورة وكل مايخص الجوال وبرمجة الجوال والسوفتوير",
     categories: [
-      {id:"phones", name:"بيع جوالات 100+", icon:"fa-mobile-screen-button", img:"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400"},
-      {id:"accessories", name:"اكسسوارات 150+", icon:"fa-headphones", img:"https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400"},
-      {id:"repair", name:"الصيانة", icon:"fa-screwdriver-wrench", img:"https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400"},
-      {id:"pubg", name:"شحن ببجي + برامج", icon:"fa-gamepad", img:"https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400"}
+      {id:"phones", name:"بيع جوالات 100+", icon:"fa-mobile-screen-button", img:"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=400"},
+      {id:"accessories", name:"اكسسوارات 150+", icon:"fa-headphones", img:"https://images.unsplash.com/photo-1498049794561-7780e7231661?q=80&w=400"},
+      {id:"repair", name:"الصيانة", icon:"fa-screwdriver-wrench", img:"https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=400"},
+      {id:"pubg", name:"شحن ببجي + برامج", icon:"fa-gamepad", img:"https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=400"}
     ],
     products: {
       phones: [
-        {name:"ايفون 15 برو ماكس 256GB", specs:"iOS 17 | كاميرا احترافية", price:13000000, img:"https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=100"},
-        {name:"سامسونج S24 الترا 512GB", specs:"الرام: 12GB | الذاكرة: 512GB", price:11000000, img:"https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=100"},
-        {name:"شاومي 14 برو", specs:"الرام: 12GB | الكاميرا: 50MP", price:7000000, img:"https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=100"}
+        {name:"ايفون 15 برو ماكس 256GB", specs:"iOS 17 | كاميرا احترافية 48MP", price:13000000, img:"https://images.unsplash.com/photo-1592750475338-74b7b21085ab?q=80&w=100"},
+        {name:"سامسونج S24 الترا 512GB", specs:"الرام: 12GB | قلم S-Pen", price:11000000, img:"https://images.unsplash.com/photo-1592750475338-74b7b21085ab?q=80&w=100"},
+        {name:"شاومي 14 برو", specs:"الرام: 12GB | الكاميرا: 50MP Leica", price:7000000, img:"https://images.unsplash.com/photo-1592750475338-74b7b21085ab?q=80&w=100"},
+        {name:"اوبو Reno 11", specs:"شحن سريع 67W | كاميرا 64MP", price:4500000, img:"https://images.unsplash.com/photo-1592750475338-74b7b21085ab?q=80&w=100"}
       ],
       accessories: [
-        {name:"سماعة AirPods Pro", specs:"عزل ضجيج | بطارية 24 ساعة", price:800000, img:"https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?w=100"},
-        {name:"شاحن 65W سريع", specs:"PD + QC 3.0", price:200000, img:"https://images.unsplash.com/photo-1583863788434-e58a36330f0a?w=100"},
-        {name:"كفر ايفون 15", specs:"ضد الصدمات", price:50000, img:"https://images.unsplash.com/photo-1605236453807-ff0ea2f8a9d2?w=100"}
+        {name:"سماعة AirPods Pro 2", specs:"عزل ضجيج | بطارية 24 ساعة", price:800000, img:"https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?q=80&w=100"},
+        {name:"شاحن 65W سريع", specs:"PD + QC 3.0 | منفذين", price:200000, img:"https://images.unsplash.com/photo-1583863788434-e58a36330f0a?q=80&w=100"},
+        {name:"كفر ايفون 15", specs:"ضد الصدمات | شفاف", price:50000, img:"https://images.unsplash.com/photo-1605236453807-ff0ea2f8a9d2?q=80&w=100"},
+        {name:"باور بانك 20000", specs:"شحن سريع 22.5W", price:300000, img:"https://images.unsplash.com/photo-1609094863248-a3be5a5f8e6b?q=80&w=100"}
       ],
       repair: [
-        {name:"تغيير شاشة ايفون", specs:"ضمان 3 شهور", price:500000, img:"https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=100"},
-        {name:"صيانة بطارية", specs:"تبديل اصلي", price:150000, img:"https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=100"},
-        {name:"تبديل باغة", specs:"بدون تغيير الشاشة", price:200000, img:"https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=100"}
+        {name:"تغيير شاشة ايفون", specs:"ضمان 3 شهور | اصلية", price:500000, img:"https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=100"},
+        {name:"صيانة بطارية", specs:"تبديل اصلي | خلال ساعة", price:150000, img:"https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=100"},
+        {name:"تبديل باغة", specs:"بدون تغيير الشاشة | ليزر", price:200000, img:"https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=100"},
+        {name:"صيانة بورد", specs:"معالجات | ذاكرة", price:400000, img:"https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=100"}
       ],
       pubg: [
-        {name:"شحن 60 شدة", specs:"فوري", price:50000, img:"https://images.unsplash.com/photo-1542751371-adc38448a05e?w=100"},
-        {name:"شحن 325 شدة", specs:"فوري", price:250000, img:"https://images.unsplash.com/photo-1542751371-adc38448a05e?w=100"},
-        {name:"شحن 660 شدة", specs:"فوري", price:500000, img:"https://images.unsplash.com/photo-1542751371-adc38448a05e?w=100"}
+        {name:"شحن 60 شدة", specs:"فوري | ID", price:50000, img:"https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=100"},
+        {name:"شحن 325 شدة", specs:"فوري | ID", price:250000, img:"https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=100"},
+        {name:"شحن 660 شدة", specs:"فوري | ID", price:500000, img:"https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=100"},
+        {name:"شحن 1800 شدة", specs:"فوري | ID", price:1300000, img:"https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=100"}
       ]
     }
   }
@@ -322,7 +327,7 @@ function quickEditCat(id){toggleAdminPanel();document.getElementById('editCatSel
 function quickEditProd(cat,i){toggleAdminPanel();document.getElementById('editProdCat').value=cat;loadProductsForEdit();document.getElementById('editProdSelect').value=i;loadProdForEdit();}
 
 function addToCart(item){let existing = cart.find(p=>p.name==item.name);if(existing) existing.qty++;else cart.push({...item, qty:1});updateCart();}
-function updateCart(){let html = ''; let total = 0;cart.forEach((item,i)=>{total += item.price * item.qty;html += `<div class="cart-item"><img src="${item.img}"><div style="flex:1"><div>${item.name}</div><div style="color:var(--green)">${item.price.toLocaleString()} ل.س x ${item.qty}</div></div><button onclick="cart.splice(${i},1);updateCart()" style="background:red;color:#fff;border:none;border-radius:5px;padding:3px 8px">x</button></div>`;});document.getElementById('cartItems').innerHTML = html || '<p style="text-align:center">السلة فارغة</p>';document.getElementById('cartTotal').innerText = `المجموع: ${total.toLocaleString()} ل.س`;document.getElementById('cartCount').innerText = cart.reduce((a,b)=>a+b.qty,0);}
+function updateCart(){let html = ''; let total = 0;cart.forEach((item,i)=>{total += item.price * item.qty;html += `<div class="cart-item"><img src="${item.img}"><div style="flex:1"><div>${item.name}</div><div style="color:var(--green)">${item.price.toLocaleString()} ل.س x ${item.qty}</div></div><button onclick="cart.splice(${i},1);updateCart()" style="background:red;color:#fff;border:none;border-radius:5px;padding:4px 9px">x</button></div>`;});document.getElementById('cartItems').innerHTML = html || '<p style="text-align:center">السلة فارغة</p>';document.getElementById('cartTotal').innerText = `المجموع: ${total.toLocaleString()} ل.س`;document.getElementById('cartCount').innerText = cart.reduce((a,b)=>a+b.qty,0);}
 function toggleCart(e){ e.stopPropagation(); document.getElementById('cartBox').classList.toggle('show'); }
 document.addEventListener('click', ()=>{document.getElementById('cartBox').classList.remove('show');document.getElementById('searchResults').style.display='none'});
 
@@ -339,7 +344,7 @@ function searchProduct(){
 
   if(val.length < 2){box.style.display='none';return}
   let results = allProducts.filter(p=>p.name.toLowerCase().includes(val)).slice(0,12);
-  results.forEach(p=>{box.innerHTML += `<div class="search-item" onclick="addToCart(${JSON.stringify(p).replace(/"/g,'&quot;')})"><img src="${p.img}" width="40"><div><div>${p.name}</div><div style="color:var(--green)">${p.price.toLocaleString()} ل.س</div></div></div>`;});
+  results.forEach(p=>{box.innerHTML += `<div class="search-item" onclick="addToCart(${JSON.stringify(p).replace(/"/g,'&quot;')})"><img src="${p.img}"><div><div>${p.name}</div><div style="color:var(--green)">${p.price.toLocaleString()} ل.س</div></div></div>`;});
   box.style.display = results.length? 'block' : 'none';
 }
 
@@ -362,8 +367,8 @@ function payWithShamCash(){if(cart.length == 0){ alert("السلة فارغة");
 function toggleMenu(){document.getElementById('sideMenu').classList.toggle('show');document.getElementById('overlay').classList.toggle('show');}
 function toggleTheme(){document.body.classList.toggle('light');localStorage.setItem('theme', document.body.classList.contains('light')?'light':'dark');}
 
-function addCategory(){let name=document.getElementById('newCatName').value;let icon=document.getElementById('newCatIcon').value;let img=tempCatImg || 'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400';let id=document.getElementById('newCatId').value;if(!name||!id){alert('كمل البيانات');return}siteData.categories.push({id,name,icon,img});siteData.products[id]=[];saveData();alert('تم اضافة القسم');location.reload();}
-function addProduct(){let cat=document.getElementById('productCat').value;let name=document.getElementById('productName').value;let specs=document.getElementById('productSpecs').value;let price=parseInt(document.getElementById('productPrice').value);let img=tempProdImg || 'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=100';if(!name||!price){alert('كمل البيانات');return}siteData.products[cat].push({name,specs,price,img});saveData();alert('تم اضافة المنتج');location.reload();}
+function addCategory(){let name=document.getElementById('newCatName').value;let icon=document.getElementById('newCatIcon').value;let img=tempCatImg || 'https://images.unsplash.com/photo-1498049794561-7780e7231661?q=80&w=400';let id=document.getElementById('newCatId').value;if(!name||!id){alert('كمل البيانات');return}siteData.categories.push({id,name,icon,img});siteData.products[id]=[];saveData();alert('تم اضافة القسم');location.reload();}
+function addProduct(){let cat=document.getElementById('productCat').value;let name=document.getElementById('productName').value;let specs=document.getElementById('productSpecs').value;let price=parseInt(document.getElementById('productPrice').value);let img=tempProdImg || 'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?q=80&w=100';if(!name||!price){alert('كمل البيانات');return}siteData.products[cat].push({name,specs,price,img});saveData();alert('تم اضافة المنتج');location.reload();}
 
 function updateEditSelects(){
   let sel1=document.getElementById('editCatSelect');sel1.innerHTML='';
@@ -381,34 +386,3 @@ function saveCatEdit(){
   let id=document.getElementById('editCatSelect').value;
   let cat=siteData.categories.find(c=>c.id==id);
   cat.name=document.getElementById('editCatName').value;
-  cat.icon=document.getElementById('editCatIcon').value;
-  if(tempEditCatImg) cat.img=tempEditCatImg;
-  saveData();alert('تم التعديل');location.reload();
-}
-function deleteCategoryFromPanel(){let id=document.getElementById('editCatSelect').value;if(confirm('حذف القسم وكل منتجاته؟')){siteData.categories=siteData.categories.filter(c=>c.id!=id);delete siteData.products[id];saveData();location.reload();}}
-
-function loadProductsForEdit(){
-  let cat=document.getElementById('editProdCat').value;
-  let sel=document.getElementById('editProdSelect');sel.innerHTML='';
-  siteData.products[cat].forEach((p,i)=>{sel.innerHTML+=`<option value="${i}">${p.name}</option>`;});
-}
-function loadProdForEdit(){
-  let cat=document.getElementById('editProdCat').value;
-  let i=document.getElementById('editProdSelect').value;
-  let p=siteData.products[cat][i];
-  document.getElementById('editProdName').value=p.name;
-  document.getElementById('editProdSpecs').value=p.specs;
-  document.getElementById('editProdPrice').value=p.price;
-  document.getElementById('editProdPreview').src=p.img;
-}
-function saveProdEdit(){
-  let cat=document.getElementById('editProdCat').value;
-  let i=document.getElementById('editProdSelect').value;
-  let p=siteData.products[cat][i];
-  p.name=document.getElementById('editProdName').value;
-  p.specs=document.getElementById('editProdSpecs').value;
-  p.price=parseInt(document.getElementById('editProdPrice').value);
-  if(tempEditProdImg) p.img=tempEditProdImg;
-  saveData();alert('تم التعديل');location.reload();
-}
-function deleteProdFromPanel(){let cat=document.getElementById('editProdCat
