@@ -15,11 +15,11 @@ body{
   color:#fff
 }
 header{text-align:center;padding:10px;background:linear-gradient(90deg,#00d4ff22,#111827);border-bottom:2px solid var(--blue);position:sticky;top:0;z-index:999;backdrop-filter:blur(5px)}
-.header-top{display:flex;justify-content:space-between;align-items:center;max-width:1400px;margin:auto;gap:10px;flex-wrap:wrap;align-items:center}
+.header-top{display:flex;justify-content:space-between;align-items:center;max-width:1400px;margin:auto;gap:10px;flex-wrap:wrap}
 .brand{display:flex;align-items:center;gap:12px}
 .brand img{width:50px;height:50px;border-radius:50%;border:2px solid var(--blue)}
 header h1{font-size:2.2rem;font-weight:900;color:var(--blue);text-shadow:0 0 20px #00d4ff88}
-.search-box{flex:1;min-width:250px;max-width:500px;position:relative;margin-top:-5px}
+.search-box{flex:1;min-width:250px;max-width:500px;position:relative}
 .search-box input{width:100%;padding:10px 40px 10px 15px;border-radius:25px;border:2px solid var(--blue);background:#0a0f1a;color:#fff;outline:none}
 .search-box i{position:absolute;right:15px;top:50%;transform:translateY(-50%);color:var(--blue)}
 .search-results{position:absolute;top:45px;left:0;right:0;background:var(--card);border:2px solid var(--blue);border-radius:10px;max-height:400px;overflow-y:auto;display:none;z-index:1000}
@@ -40,18 +40,23 @@ header h1{font-size:2.2rem;font-weight:900;color:var(--blue);text-shadow:0 0 20p
 @keyframes marquee{0%{transform:translateX(10px)}100%{transform:translateX(-10px)}}
 
 .container{max-width:1400px;margin:30px auto;padding:0 20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
-.card{background:var(--card);border-radius:20px;overflow:hidden;border:2px solid #00d4ff33;transition:all 0.4s ease;cursor:pointer;text-align:center;backdrop-filter:blur(5px)}
+.card{background:var(--card);border-radius:20px;overflow:hidden;border:2px solid #00d4ff33;transition:all 0.4s ease;cursor:pointer;text-align:center;backdrop-filter:blur(5px);position:relative}
 .card:hover{transform:translateY(-10px);border-color:var(--blue);box-shadow:0 0 30px #00d4ff66}
 .card img{width:100%;height:160px;object-fit:cover}
 .card-content{padding:18px}
 .card-content.icon{font-size:2.8rem;color:var(--blue);margin-bottom:10px}
+.card-delete{position:absolute;top:5px;left:5px;background:var(--red);color:#fff;border:none;border-radius:50%;width:30px;height:30px;cursor:pointer;display:none}
+body.admin.card-delete{display:block}
 
 .page{display:none;padding:20px;max-width:1400px;margin:20px auto}
 .back-btn{background:var(--blue);color:#000;border:none;padding:10px 20px;border-radius:10px;font-weight:700;cursor:pointer;margin-bottom:20px;font-size:1rem}
 .page-title{text-align:center;margin-bottom:25px;font-size:1.8rem;color:var(--blue)}
 .sub-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:15px;margin-bottom:30px}
-.sub-card{background:#0a0f1a;border:2px solid #00d4ff33;border-radius:15px;padding:20px;text-align:center;cursor:pointer;transition:all 0.3s}
+.sub-card{background:#0a0f1a;border:2px solid #00d4ff33;border-radius:15px;padding:20px;text-align:center;cursor:pointer;transition:all 0.3s;position:relative}
 .sub-card:hover{background:var(--blue);color:#000}
+.sub-delete{position:absolute;top:5px;left:5px;background:var(--red);color:#fff;border:none;border-radius:50%;width:25px;height:25px;cursor:pointer;display:none;font-size:0.8rem}
+body.admin.sub-delete{display:block}
+
 .products{display:none;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:15px}
 .item{display:flex;align-items:center;gap:12px;padding:12px;background:#0a0f1a;border-radius:12px;border:1px solid #00d4ff22;position:relative}
 .item:hover{border-color:var(--blue)}
@@ -61,17 +66,20 @@ header h1{font-size:2.2rem;font-weight:900;color:var(--blue);text-shadow:0 0 20p
 .price{color:var(--green);font-weight:900;font-size:1rem;white-space:nowrap}
 .add-btn{background:var(--green);color:#000;border:none;padding:8px 12px;border-radius:8px;font-weight:900;cursor:pointer;font-size:0.85rem}
 .edit-btn{position:absolute;top:5px;left:5px;background:var(--yellow);color:#000;border:none;padding:3px 8px;border-radius:5px;font-size:0.7rem;cursor:pointer;display:none}
-body.admin .edit-btn{display:block}
+.delete-btn{position:absolute;top:5px;right:5px;background:var(--red);color:#fff;border:none;padding:3px 8px;border-radius:5px;font-size:0.7rem;cursor:pointer;display:none}
+body.admin.edit-btn, body.admin.delete-btn{display:block}
 
 .pubg-banner{background:linear-gradient(90deg,#ff8800,#ff2200);padding:15px;border-radius:12px;text-align:center;margin:15px 0;font-weight:900;font-size:1.2rem}
 footer{text-align:center;padding:30px;background:#0a0f1a;margin-top:40px;border-top:2px solid var(--blue)}
-@media(max-width:768px){.search-box{order:3;width:100%;margin-top:0} header h1{font-size:1.8rem}}
+@media(max-width:768px){.search-box{order:3;width:100%} header h1{font-size:1.8rem}}
 
 /* لوحة التحكم */
 #adminPanel{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000000ee;z-index:99999;overflow-y:auto;padding:20px}
-.admin-box{background:#111827;border:2px solid var(--blue);border-radius:15px;padding:20px;max-width:800px;margin:20px auto}
-.admin-box input{width:100%;padding:8px;margin:5px 0;border-radius:5px;border:1px solid var(--blue);background:#0a0f1a;color:#fff}
-.admin-box button{padding:8px 15px;margin:5px;border-radius:5px;border:none;font-weight:700;cursor:pointer}
+.admin-box{background:#111827;border:2px solid var(--blue);border-radius:15px;padding:20px;max-width:900px;margin:20px auto}
+.admin-box h2{color:var(--blue);text-align:center;margin-bottom:15px}
+.admin-box input,.admin-box textarea,.admin-box select{width:100%;padding:10px;margin:8px 0;border-radius:8px;border:1px solid var(--blue);background:#0a0f1a;color:#fff}
+.admin-box button{padding:10px 20px;margin:5px;border-radius:8px;border:none;font-weight:700;cursor:pointer}
+.admin-section{border:1px solid #00d4ff33;padding:15px;border-radius:10px;margin:15px 0}
 </style>
 </head>
 <body>
@@ -80,9 +88,9 @@ footer{text-align:center;padding:30px;background:#0a0f1a;margin-top:40px;border-
   <div class="header-top">
     <div style="display:flex;gap:10px">
       <button class="icon-btn" onclick="toggleCart(event)"><i class="fa-solid fa-cart-shopping"></i><span id="cartCount" class="cart-count">0</span></button>
-      <button class="admin-btn" onclick="openAdmin()">لوحة التحكم</button>
+      <button class="admin-btn" onclick="openAdmin()"><i class="fa-solid fa-gear"></i> لوحة التحكم</button>
     </div>
-    
+
     <div id="cartBox" class="cart-box" onclick="event.stopPropagation()">
       <h3 style="text-align:center;color:var(--blue)">سلة المشتريات</h3>
       <div id="cartItems"></div>
@@ -92,7 +100,7 @@ footer{text-align:center;padding:30px;background:#0a0f1a;margin-top:40px;border-
 
     <div class="search-box">
       <i class="fa-solid fa-magnifying-glass"></i>
-      <input type="text" id="searchInput" placeholder="ابحث عن 250+ منتج..." onkeyup="searchProduct()">
+      <input type="text" id="searchInput" placeholder="ابحث عن منتج..." onkeyup="searchProduct()">
       <div id="searchResults" class="search-results"></div>
     </div>
 
@@ -106,151 +114,146 @@ footer{text-align:center;padding:30px;background:#0a0f1a;margin-top:40px;border-
 <!-- لوحة التحكم -->
 <div id="adminPanel">
   <div class="admin-box">
-    <h2 style="color:var(--blue);text-align:center">لوحة التحكم</h2>
-    <input type="password" id="adminPass" placeholder="كلمة السر: 1234">
+    <h2>لوحة التحكم الكاملة</h2>
+    <input type="password" id="adminPass" placeholder="كلمة السر: admin123">
     <button onclick="loginAdmin()" style="background:var(--green)">دخول</button>
     <button onclick="closeAdmin()" style="background:var(--red)">اغلاق</button>
-    
-    <div id="adminContent" style="display:none;margin-top:20px">
-      <h3>تعديل منتج</h3>
-      <p>اضغط على زر "تعديل" اللي بيظهر فوق اي منتج</p>
-      <button onclick="saveData()" style="background:var(--green);width:100%">حفظ التغييرات</button>
+
+    <div id="adminContent" style="display:none">
+
+      <div class="admin-section">
+        <h3>1. اضافة قسم جديد في الصفحة الرئيسية</h3>
+        <input type="text" id="newCatName" placeholder="اسم القسم: مثال اكسسوارات">
+        <input type="text" id="newCatIcon" placeholder="ايقونة FontAwesome: مثال fa-headphones">
+        <input type="text" id="newCatImg" placeholder="رابط الصورة">
+        <input type="text" id="newCatId" placeholder="id للقسم بالانجليزي: مثال accessories">
+        <button onclick="addCategory()" style="background:var(--green)">اضافة قسم</button>
+      </div>
+
+      <div class="admin-section">
+        <h3>2. اضافة منتج جديد</h3>
+        <select id="productCat"></select>
+        <input type="text" id="productName" placeholder="اسم المنتج">
+        <input type="text" id="productSpecs" placeholder="المواصفات">
+        <input type="number" id="productPrice" placeholder="السعر">
+        <input type="text" id="productImg" placeholder="رابط الصورة">
+        <button onclick="addProduct()" style="background:var(--green)">اضافة منتج</button>
+      </div>
+
+      <div class="admin-section">
+        <h3>3. تعديل النص المتحرك</h3>
+        <textarea id="marqueeText" rows="2"></textarea>
+        <button onclick="saveMarquee()" style="background:var(--blue)">حفظ</button>
+      </div>
+
+      <button onclick="saveData()" style="background:var(--green);width:100%">حفظ كل التغييرات</button>
+      <button onclick="exportData()" style="background:var(--blue);width:100%">تصدير نسخة احتياطية</button>
       <button onclick="resetData()" style="background:var(--red);width:100%">ارجاع الافتراضي</button>
     </div>
   </div>
 </div>
 
 <div class="marquee">
-  <span>مركز اوسكار التقني يقدم خدمات صيانة جوالات طافية معالجات خدمة تبديل باغات الشاشات المكسورة وكل مايخص الجوال وبرمجة الجوال والسوفتوير</span>
+  <span id="marqueeSpan">مركز اوسكار التقني يقدم خدمات صيانة جوالات طافية معالجات خدمة تبديل باغات الشاشات المكسورة وكل مايخص الجوال وبرمجة الجوال والسوفتوير</span>
 </div>
 
-<div id="home" class="container">
-  <div class="card" onclick="openPage('phones')"><img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400"><div class="card-content"><div class="icon"><i class="fa-solid fa-mobile-screen-button"></i></div><h2>بيع جوالات 100+</h2></div></div>
-  <div class="card" onclick="openPage('accessories')"><img src="https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400"><div class="card-content"><div class="icon"><i class="fa-solid fa-headphones"></i></div><h2>اكسسوارات 150+</h2></div></div>
-  <div class="card" onclick="openPage('repair')"><img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400"><div class="card-content"><div class="icon"><i class="fa-solid fa-screwdriver-wrench"></i></div><h2>الصيانة</h2></div></div>
-  <div class="card" onclick="openPage('pubg')"><img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400"><div class="card-content"><div class="icon"><i class="fa-solid fa-gamepad"></i></div><h2>شحن ببجي + برامج</h2></div></div>
-  <div class="card" onclick="openPage('packages')"><img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjE2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMwMGQ0ZmYiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwMGZmODgiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjE2MCIgZmlsbD0idXJsKCNnKSIvPjxyZWN0IHg9IjQwIiB5PSIyMCIgd2lkdGg9IjkwIiBoZWlnaHQ9IjEyMCIgZmlsbD0iIzExMTgyNyIgcng9IjE1Ii8+PHJlY3QgeD0iNTAiIHk9IjMwIiB3aWR0aD0iNzAiIGhlaWdodD0iMTAwIiBmaWxsPSIjMDBkNGZmIiByeD0iOCIvPjxyZWN0IHg9IjE2MCIgeT0iNDAiIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgZmlsbD0iI2ZmYzEwNyIgcng9IjEwIi8+PHRleHQgeD0iMjAwIiB5PSI4NSIgZm9udC1zaXplPSIzMCIgZmlsbD0iIzAwMCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+MTBHQjwvdGV4dD48L3N2Zz4="><div class="card-content"><div class="icon"><i class="fa-solid fa-sim-card"></i></div><h2>الباقات 15 باقة</h2></div></div>
-  <div class="card" onclick="openPage('sim')"><img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=400"><div class="card-content"><div class="icon"><i class="fa-solid fa-signal"></i></div><h2>شرائح</h2></div></div>
-  <div class="card" onclick="openPage('parts')"><img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjE2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNmZjg4MDAiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmZjIyMDAiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjE2MCIgZmlsbD0idXJsKCNnKSIvPjxyZWN0IHg9IjMwIiB5PSIzMCIgd2lkdGg9IjEwMCIgaGVpZ2h0PSI5MCIgZmlsbD0iIzAwMCIgcng9IjgiLz48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI2IiBmaWxsPSIjMDBkNGZmIi8+PGNpcmNsZSBjeD0iOTAiIGN5PSI1MCIgcj0iNiIgZmlsbD0iIzAwZDRmZiIvPjxjaXJjbGUgY3g9IjUwIiBjeT0iOTAiIHI9IjYiIGZpbGw9IiMwMGQ0ZmYiLz48Y2lyY2xlIGN4PSI5MCIgY3k9IjkwIiByPSI2IiBmaWxsPSIjMDBkNGZmIi8+PHJlY3QgeD0iMTYwIiB5PSIyMCIgd2lkdGg9IjgwIiBoZWlnaHQ9IjExMCIgZmlsbD0iIzExMTgyNyIgcng9IjEwIi8+PHJlY3QgeD0iMTcwIiB5PSIzMCIgd2lkdGg9IjYwIiBoZWlnaHQ9IjkwIiBmaWxsPSIjMDBmZjg4Ii8+PGNpcmNsZSBjeD0iMzAwIiBjeT0iODAiIHI9IjE4IiBmaWxsPSIjZmZjMTA3Ii8+PC9zdmc+"><div class="card-content"><div class="icon"><i class="fa-solid fa-microchip"></i></div><h2>قطع غيار</h2></div></div>
-</div>
+<div id="home" class="container"></div>
 
-<div id="phones" class="page">
-  <button class="back-btn" onclick="goHome()"><i class="fa-solid fa-arrow-right"></i> رجوع</button>
-  <h2 class="page-title">بيع جوالات - 100 جوال</h2>
-  <div class="sub-grid">
-    <div class="sub-card" onclick="showProducts('iphone')"><i class="fa-brands fa-apple"></i><div>ايفون 20</div></div>
-    <div class="sub-card" onclick="showProducts('samsung')"><i class="fa-solid fa-mobile"></i><div>سامسونج 20</div></div>
-    <div class="sub-card" onclick="showProducts('xiaomi')"><i class="fa-solid fa-mobile-screen"></i><div>شاومي 20</div></div>
-    <div class="sub-card" onclick="showProducts('infinix')"><i class="fa-solid fa-phone"></i><div>انفنكس 20</div></div>
-    <div class="sub-card" onclick="showProducts('realme')"><i class="fa-solid fa-mobile-screen"></i><div>ريلمي 20</div></div>
-  </div>
-  <div id="iphone" class="products"></div>
-  <div id="samsung" class="products"></div>
-  <div id="xiaomi" class="products"></div>
-  <div id="infinix" class="products"></div>
-  <div id="realme" class="products"></div>
-</div>
-
-<div id="accessories" class="page">
-  <button class="back-btn" onclick="goHome()">رجوع</button>
-  <h2 class="page-title">اكسسوارات - 150 قطعة</h2>
-  <div class="sub-grid">
-    <div class="sub-card" onclick="showProducts('earbuds')"><i class="fa-solid fa-headphones"></i><div>سماعات 50</div></div>
-    <div class="sub-card" onclick="showProducts('charger')"><i class="fa-solid fa-bolt"></i><div>شواحن 50</div></div>
-    <div class="sub-card" onclick="showProducts('case')"><i class="fa-solid fa-mobile-retro"></i><div>كفرات 50</div></div>
-  </div>
-  <div id="earbuds" class="products"></div>
-  <div id="charger" class="products"></div>
-  <div id="case" class="products"></div>
-</div>
-
-<div id="pubg" class="page">
-  <button class="back-btn" onclick="goHome()">رجوع</button>
-  <h2 class="page-title">شحن ببجي + اشتراكات البرامج</h2>
-  <div class="pubg-banner"><i class="fa-solid fa-gamepad"></i> شحن فوري</div>
-  <div id="pubg-list" class="products" style="display:grid"></div>
-</div>
-
-<div id="packages" class="page">
-  <button class="back-btn" onclick="goHome()">رجوع</button>
-  <h2 class="page-title">الباقات - 15 باقة</h2>
-  <div id="packages-list" class="products" style="display:grid"></div>
-</div>
-
-<div id="repair" class="page">
-  <button class="back-btn" onclick="goHome()">رجوع</button>
-  <h2 class="page-title">الصيانة</h2>
-  <div id="repair-list" class="products" style="display:grid"></div>
-</div>
-
-<div id="sim" class="page">
-  <button class="back-btn" onclick="goHome()">رجوع</button>
-  <h2 class="page-title">شرائح</h2>
-  <div id="sim-list" class="products" style="display:grid"></div>
-</div>
-
-<div id="parts" class="page">
-  <button class="back-btn" onclick="goHome()">رجوع</button>
-  <h2 class="page-title">قطع غيار</h2>
-  <div id="parts-list" class="products" style="display:grid"></div>
-</div>
+<div id="dynamicPages"></div>
 
 <footer><p>جميع الحقوق محفوظة © مركز اوسكار التقني 2026 | الدفع عبر شام كاش | واتساب: +971544066811</p></footer>
 
 <script>
 let cart = [];
 let allProducts = [];
-let data = {}; // رح نحملها من localStorage
+let siteData = JSON.parse(localStorage.getItem('oskarSiteData')) || getDefaultData();
 
-const defaultData = {
-iphone: Array.from({length:20}, (_,i)=>({name:`ايفون ${i+12} ${['64GB','128GB','256GB','512GB','1TB'][i%5]}`, specs:`iOS 17 | كاميرا احترافية`, price: 12000000 + i*50000, img:`https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=100`})),
-samsung: Array.from({length:20}, (_,i)=>({name:`سامسونج موديل ${i+1} ${['64GB','128GB','256GB','512GB','1TB'][i%5]}`, specs:`الرام: ${['4GB','6GB','8GB','12GB','16GB'][i%5]} | الذاكرة: ${['64GB','128GB','256GB','512GB','1TB'][i%5]}`, price: 10000000 + i*50000, img:`https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=100`})),
-xiaomi: Array.from({length:20}, (_,i)=>({name:`شاومي موديل ${i+1} ${['64GB','128GB','256GB','512GB','1TB'][i%5]}`, specs:`الرام: ${['4GB','6GB','8GB','12GB','16GB'][i%5]} | الذاكرة: ${['64GB','128GB','256GB','512GB','1TB'][i%5]}`, price: 5000000 + i*50000, img:`https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=100`})),
-infinix: Array.from({length:20}, (_,i)=>({name:`انفنكس موديل ${i+1} ${['64GB','128GB','256GB','512GB','1TB'][i%5]}`, specs:`الرام: ${['4GB','6GB','8GB','12GB','16GB'][i%5]} | الذاكرة: ${['64GB','128GB','256GB','512GB','1TB'][i%5]}`, price: 3000000 + i*50000, img:`https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=100`})),
-realme: Array.from({length:20}, (_,i)=>({name:`ريلمي موديل ${i+1} ${['64GB','128GB','256GB','512GB','1TB'][i%5]}`, specs:`الرام: ${['4GB','6GB','8GB','12GB','16GB'][i%5]} | الذاكرة: ${['64GB','128GB','256GB','512GB','1TB'][i%5]}`, price: 4000000 + i*50000, img:`https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=100`})),
+function getDefaultData(){
+  return {
+    marquee: "مركز اوسكار التقني يقدم خدمات صيانة جوالات طافية معالجات خدمة تبديل باغات الشاشات المكسورة وكل مايخص الجوال وبرمجة الجوال والسوفتوير",
+    categories: [
+      {id:"phones", name:"بيع جوالات 100+", icon:"fa-mobile-screen-button", img:"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400"},
+      {id:"accessories", name:"اكسسوارات 150+", icon:"fa-headphones", img:"https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400"},
+      {id:"repair", name:"الصيانة", icon:"fa-screwdriver-wrench", img:"https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400"},
+      {id:"pubg", name:"شحن ببجي + برامج", icon:"fa-gamepad", img:"https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400"}
+    ],
+    products: {
+      phones: [
+        {name:"ايفون 15 برو ماكس 256GB", specs:"iOS 17 | كاميرا احترافية", price:13000000, img:"https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=100"},
+        {name:"سامسونج S24 الترا 512GB", specs:"الرام: 12GB | الذاكرة: 512GB", price:11000000, img:"https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=100"}
+      ],
+      accessories: [
+        {name:"سماعة AirPods Pro", specs:"عزل ضجيج | بطارية 24 ساعة", price:800000, img:"https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?w=100"},
+        {name:"شاحن 65W سريع", specs:"PD + QC 3.0", price:200000, img:"https://images.unsplash.com/photo-1583863788434-e58a36330f0a?w=100"}
+      ]
+    }
+  }
+}
 
-earbuds: Array.from({length:50}, (_,i)=>({name:`سماعة بلوتوث موديل ${i+1}`, specs:`بلوتوث 5.3 | بطارية 24 ساعة`, price: 300000 + i*10000, img:`https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?w=100`})),
-charger: Array.from({length:50}, (_,i)=>({name:`شاحن سريع ${20+i}W`, specs:`PD + QC 3.0 | كيبل تايب سي`, price: 150000 + i*5000, img:`https://images.unsplash.com/photo-1583863788434-e58a36330f0a?w=100`})),
-case: Array.from({length:50}, (_,i)=>({name:`كفر جوال موديل ${i+1}`, specs:`ضد الصدمات | شفاف`, price: 25000 + i*1000, img:`https://images.unsplash.com/photo-1556656793-08538906a9f8?w=100`})),
+function renderHome(){
+  let html = '';
+  siteData.categories.forEach(cat=>{
+    html += `<div class="card" onclick="openPage('${cat.id}')"><button class="card-delete" onclick="deleteCategory('${cat.id}');event.stopPropagation()">x</button><img src="${cat.img}"><div class="card-content"><div class="icon"><i class="fa-solid ${cat.icon}"></i></div><h2>${cat.name}</h2></div></div>`;
+  });
+  html += `<div class="card" onclick="openAdmin()" style="border:2px dashed var(--green)"><div class="card-content"><div class="icon"><i class="fa-solid fa-plus"></i></div><h2>اضافة قسم جديد</h2></div></div>`;
+  document.getElementById('home').innerHTML = html;
+  document.getElementById('marqueeSpan').innerText = siteData.marquee;
+}
 
-'pubg-list': [
-{name:"60 شدة UC", specs:`بجي موبايل`, price:140000, img:`https://images.unsplash.com/photo-1542751371-adc38448a05e?w=100`},
-{name:"325 شدة UC", specs:`بجي موبايل`, price:700000, img:`https://images.unsplash.com/photo-1542751371-adc38448a05e?w=100`},
-{name:"660 شدة UC", specs:`بجي موبايل`, price:1400000, img:`https://images.unsplash.com/photo-1542751371-adc38448a05e?w=100`},
-{name:"1800 شدة UC", specs:`بجي موبايل`, price:3500000, img:`https://images.unsplash.com/photo-1542751371-adc38448a05e?w=100`},
-{name:"4000 شدة UC", specs:`بجي موبايل`, price:7000000, img:`https://images.unsplash.com/photo-1542751371-adc38448a05e?w=100`},
-{name:"اشتراك نتفلكس شهر", specs:`4K + 4 شاشات`, price:800000, img:`https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=100`},
-{name:"اشتراك شاهد VIP شهر", specs:`حصري + بدون اعلانات`, price:350000, img:`https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?w=100`},
-{name:"شحن تيك توك 70 عملة", specs:`تيك توك`, price:100000, img:`https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=100`},
-{name:"شحن تيك توك 350 عملة", specs:`تيك توك`, price:500000, img:`https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=100`},
-{name:"شحن سوغو 100 جوهرة", specs:`سوغو لايف`, price:200000, img:`https://images.unsplash.com/photo-1611162616475-46d986353203?w=100`}
-],
+function renderPages(){
+  let pagesHtml = '';
+  siteData.categories.forEach(cat=>{
+    pagesHtml += `<div id="${cat.id}" class="page"><button class="back-btn" onclick="goHome()"><i class="fa-solid fa-arrow-right"></i> رجوع</button><h2 class="page-title">${cat.name}</h2><div class="products" id="products-${cat.id}" style="display:grid"></div><button onclick="showAddProduct('${cat.id}')" style="background:var(--green);padding:10px 20px;border:none;border-radius:10px;margin-top:20px;cursor:pointer">+ اضافة منتج لهذا القسم</button></div>`;
+  });
+  document.getElementById('dynamicPages').innerHTML = pagesHtml;
 
-'packages-list': [
-{name:"MTN باقة 1$", specs:`مكالمات + انترنت`, price:28000, img:`https://images.unsplash.com/photo-1556740733091-2c1a32b6aea1?w=100`},{name:"MTN باقة 5$", specs:`مكالمات + انترنت`, price:140000, img:`https://images.unsplash.com/photo-1556740733091-2c1a32b6aea1?w=100`},
-{name:"MTN باقة 10$", specs:`مكالمات + انترنت`, price:280000, img:`https://images.unsplash.com/photo-1556740733091-2c1a32b6aea1?w=100`},{name:"MTN باقة 20$", specs:`مكالمات + انترنت`, price:560000, img:`https://images.unsplash.com/photo-1556740733091-2c1a32b6aea1?w=100`},
-{name:"Syriatel باقة 1$", specs:`مكالمات + انترنت`, price:28000, img:`https://images.unsplash.com/photo-1556740733091-2c1a32b6aea1?w=100`},{name:"Syriatel باقة 5$", specs:`مكالمات + انترنت`, price:140000, img:`https://images.unsplash.com/photo-1556740733091-2c1a32b6aea1?w=100`},
-{name:"Syriatel باقة 10$", specs:`مكالمات + انترنت`, price:280000, img:`https://images.unsplash.com/photo-1556740733091-2c1a32b6aea1?w=100`},{name:"Syriatel باقة 20$", specs:`مكالمات + انترنت`, price:560000, img:`https://images.unsplash.com/photo-1556740733091-2c1a32b6aea1?w=100`},
-{name:"انترنت MTN 2GB", specs:`صلاحية 30 يوم`, price:50000, img:`https://images.unsplash.com/photo-1556740733091-2c1a32b6aea1?w=100`},{name:"انترنت MTN 10GB", specs:`صلاحية 30 يوم`, price:200000, img:`https://images.unsplash.com/photo-1556740733091-2c1a32b6aea1?w=100`},
-{name:"انترنت Syriatel 2GB", specs:`صلاحية 30 يوم`, price:50000, img:`https://images.unsplash.com/photo-1556740733091-2c1a32b6aea1?w=100`},{name:"انترنت Syriatel 10GB", specs:`صلاحية 30 يوم`, price:200000, img:`https://images.unsplash.com/photo-1556740733091-2c1a32b6aea1?w=100`},
-{name:"باقة مكالمات شهر", specs:`1000 دقيقة`, price:150000, img:`https://images.unsplash.com/photo-1556740733091-2c1a32b6aea1?w=100`}
-],
+  // تعبئة المنتجات
+  for(let catId in siteData.products){
+    let productsHtml = '';
+    siteData.products[catId].forEach((p,i)=>{
+      productsHtml += `<div class="item"><button class="edit-btn" onclick="editProduct('${catId}',${i})">تعديل</button><button class="delete-btn" onclick="deleteProduct('${catId}',${i})">حذف</button><img src="${p.img}"><div class="item-info"><div>${p.name}</div><div class="specs">${p.specs}</div></div><div class="price">${p.price.toLocaleString()} ل.س</div><button class="add-btn" onclick='addToCart(${JSON.stringify(p)})'>اضافة</button></div>`;
+      allProducts.push(p);
+    });
+    if(document.getElementById('products-'+catId)) document.getElementById('products-'+catId).innerHTML = productsHtml;
+  }
 
-'repair-list': [
-{name:"تغيير شاشة ايفون 15", specs:`اصلية + ضمان 3 شهور`, price:2800000, img:`https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=100`},
-{name:"تغيير شاشة سامسونج S24", specs:`اصلية + ضمان 3 شهور`, price:2500000, img:`https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=100`},
-{name:"تغيير بطارية", specs:`اصلية + تركيب مجاني`, price:875000, img:`https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=100`},
-{name:"فك ايكلاود", specs:`ضمان عدم القفل`, price:1050000, img:`https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=100`},
-{name:"سوفت وير كامل", specs:`تحديث + فورمات`, price:350000, img:`https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=100`},
-{name:"تغيير كاميرا", specs:`امية وخلفية`, price:600000, img:`https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=100`},
-{name:"تغيير منفذ شحن", specs:`تايب سي + مايكرو`, price:450000, img:`https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=100`}
-],
+  // تعبئة قائمة الاقسام في لوحة التحكم
+  let select = document.getElementById('productCat');
+  select.innerHTML = '';
+  siteData.categories.forEach(cat=>{
+    select.innerHTML += `<option value="${cat.id}">${cat.name}</option>`;
+  });
+}
 
-'sim-list': [
-{name:"شريحة MTN جديدة", specs:`رقم مميز`, price:100000, img:`https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=100`},
-{name:"شريحة Syriatel جديدة", specs:`رقم مميز`, price:100000, img:`https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=100`},
-{name:"شريحة MTN مع باقة", specs:`5$ رصيد مجاني`, price:200000, img:`https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=100`},
-{name:"شريحة Syriatel مع باقة", specs:`5$ رصيد مجاني`, price:200000, img:`https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=100`}
-],
+function openPage(id){document.getElementById('home').style.display = 'none';document.querySelectorAll('.page').forEach(s => s.style.display = 'none');document.getElementById(id).style.display = 'block';window.scrollTo(0,0);}
+function goHome(){document.getElementById('home').style.display = 'grid';document.querySelectorAll('.page').forEach(s => s.style.display = 'none');}
 
-'parts-list':
+function addToCart(item){let existing = cart.find(p=>p.name==item.name);if(existing) existing.qty++;else cart.push({...item, qty:1});updateCart();}
+function updateCart(){let html = ''; let total = 0;cart.forEach((item,i)=>{total += item.price * item.qty;html += `<div class="cart-item"><img src="${item.img}"><div style="flex:1"><div>${item.name}</div><div style="color:var(--green)">${item.price.toLocaleString()} ل.س x ${item.qty}</div></div><button onclick="cart.splice(${i},1);updateCart()" style="background:red;color:#fff;border:none;border-radius:5px;padding:3px 8px">x</button></div>`;});document.getElementById('cartItems').innerHTML = html || '<p style="text-align:center">السلة فارغة</p>';document.getElementById('cartTotal').innerText = `المجموع: ${total.toLocaleString()} ل.س`;document.getElementById('cartCount').innerText = cart.reduce((a,b)=>a+b.qty,0);}
+function toggleCart(e){ e.stopPropagation(); document.getElementById('cartBox').classList.toggle('show'); }
+document.addEventListener('click', ()=>{document.getElementById('cartBox').classList.remove('show');document.getElementById('searchResults').style.display='none'});
+
+function searchProduct(){let val = document.getElementById('searchInput').value.toLowerCase();let box = document.getElementById('searchResults');box.innerHTML = '';if(val.length < 2){box.style.display='none';return}let results = allProducts.filter(p=>p.name.toLowerCase().includes(val)).slice(0,12);results.forEach(p=>{box.innerHTML += `<div class="search-item" onclick="addToCart(${JSON.stringify(p).replace(/"/g,'&quot;')})"><img src="${p.img}" width="40"><div><div>${p.name}</div><div style="color:var(--green)">${p.price.toLocaleString()} ل.س</div></div></div>`;});box.style.display = results.length? 'block' : 'none';}
+
+function payWithShamCash(){if(cart.length == 0){ alert("السلة فارغة"); return; }let total = cart.reduce((a,b)=>a + b.price * b.qty, 0);let message = `مرحبا مركز اوسكار التقني\nاريد الدفع عبر شام كاش\nالمبلغ: ${total.toLocaleString()} ل.س\nعدد المنتجات: ${cart.reduce((a,b)=>a+b.qty,0)}`;window.open(`https://wa.me/+971544066811?text=${encodeURIComponent(message)}`, '_blank');}
+
+// لوحة التحكم
+function openAdmin(){document.getElementById('adminPanel').style.display='block';}
+function closeAdmin(){document.getElementById('adminPanel').style.display='none';}
+function loginAdmin(){if(document.getElementById('adminPass').value=='admin123'){document.body.classList.add('admin');document.getElementById('adminContent').style.display='block';document.getElementById('marqueeText').value=siteData.marquee;}else{alert('كلمة السر غلط')}}
+
+function addCategory(){let name=document.getElementById('newCatName').value;let icon=document.getElementById('newCatIcon').value;let img=document.getElementById('newCatImg').value;let id=document.getElementById('newCatId').value;if(!name||!id){alert('كمل البيانات');return}siteData.categories.push({id,name,icon,img});siteData.products[id]=[];saveData();alert('تم اضافة القسم');location.reload();}
+function deleteCategory(id){if(confirm('متاكد؟')){siteData.categories=siteData.categories.filter(c=>c.id!=id);delete siteData.products[id];saveData();location.reload();}}
+
+function addProduct(){let cat=document.getElementById('productCat').value;let name=document.getElementById('productName').value;let specs=document.getElementById('productSpecs').value;let price=parseInt(document.getElementById('productPrice').value);let img=document.getElementById('productImg').value;if(!name||!price){alert('كمل البيانات');return}siteData.products[cat].push({name,specs,price,img});saveData();alert('تم اضافة المنتج');location.reload();}
+function deleteProduct(cat,i){if(confirm('حذف المنتج؟')){siteData.products[cat].splice(i,1);saveData();location.reload();}}
+function editProduct(cat,i){let p=siteData.products[cat][i];let name=prompt('الاسم',p.name);let specs=prompt('المواصفات',p.specs);let price=prompt('السعر',p.price);let img=prompt('الصورة',p.img);if(name){p.name=name;p.specs=specs;p.price=parseInt(price);p.img=img;saveData();location.reload();}}
+
+function saveMarquee(){siteData.marquee=document.getElementById('marqueeText').value;saveData();alert('تم الحفظ');}
+function saveData(){localStorage.setItem('oskarSiteData',JSON.stringify(siteData));}
+function resetData(){if(confirm('ارجاع كل شي للافتراضي؟')){localStorage.removeItem('oskarSiteData');location.reload();}}
+function exportData(){let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(siteData));let a = document.createElement('a');a.href=dataStr;a.download="backup-oskar.json";a.click();}
+
+window.onload = function(){renderHome();renderPages();}
+</script>
+</body></html>
