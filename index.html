@@ -16,12 +16,17 @@ body.light{background: linear-gradient(rgba(240,242,245,0.9), rgba(240,242,245,0
 header{text-align:center;padding:10px;background:linear-gradient(90deg,#00d4ff22,#111827);border-bottom:2px solid var(--blue);position:sticky;top:0;z-index:999;backdrop-filter:blur(5px)}
 .header-top{display:flex;justify-content:space-between;align-items:center;max-width:1400px;margin:auto;gap:10px;flex-wrap:wrap}
 .brand{display:flex;align-items:center;gap:12px}
-.brand img{width:50px;height:50px;border-radius:50%;border:2px solid var(--blue);cursor:pointer}
+.brand img{width:60px;height:60px;border-radius:12px;border:2px solid var(--blue);cursor:pointer;object-fit:cover}
 header h1{font-size:2.2rem;font-weight:900;color:var(--blue);text-shadow:0 0 20px #00d4ff88}
 .search-box{flex:1;min-width:250px;max-width:500px;position:relative;display:flex;gap:8px;align-items:center}
-.search-box input{flex:1;padding:10px 15px;border-radius:25px;border:2px solid var(--blue);background:#0a0f1a;color:var(--text);outline:none}
+.search-box input{flex:1;padding:10px 40px 10px 15px;border-radius:25px;border:2px solid var(--blue);background:#0a0f1a;color:var(--text);outline:none}
 body.light.search-box input{background:#fff}
+.search-box i{position:absolute;right:55px;top:50%;transform:translateY(-50%);color:var(--blue)}
 .back-search-btn{background:var(--blue);color:#000;border:none;padding:10px 12px;border-radius:50%;cursor:pointer;font-size:1rem}
+.search-results{position:absolute;top:45px;left:0;right:50px;background:var(--card);border:2px solid var(--blue);border-radius:10px;max-height:400px;overflow-y:auto;display:none;z-index:1000}
+.search-item{display:flex;gap:10px;padding:10px;cursor:pointer;border-bottom:1px solid #00d4ff22}
+.search-item:hover{background:#00d4ff11}
+
 .icon-btn{background:none;border:none;color:var(--blue);font-size:1.6rem;cursor:pointer;padding:8px;position:relative}
 .whatsapp-btn{background:#25D366;color:#fff;border:none;padding:8px 15px;border-radius:8px;font-weight:900;cursor:pointer}
 .menu-btn{background:none;border:none;color:var(--blue);font-size:1.8rem;cursor:pointer}
@@ -77,7 +82,7 @@ body.light footer{background:#ddd}
 .admin-toggle{position:fixed;top:50%;left:0;transform:translateY(-50%);background:var(--blue);color:#000;border:none;padding:15px 8px;border-radius:0 10px 10px 0;font-size:1.5rem;cursor:pointer;z-index:100000;font-weight:900;display:none}
 .admin-toggle.show{display:block}
 .admin-box h2{color:var(--blue);text-align:center;margin-bottom:15px;display:flex;align-items:center;justify-content:center;gap:10px}
-.admin-box h2 img{width:40px;height:40px;border-radius:50%;border:2px solid var(--blue);cursor:pointer}
+.admin-box h2 img{width:40px;height:40px;border-radius:12px;border:2px solid var(--blue);cursor:pointer;object-fit:cover}
 .admin-box input,.admin-box textarea,.admin-box select{width:100%;padding:10px;margin:8px 0;border-radius:8px;border:1px solid var(--blue);background:#0a0f1a;color:#fff}
 .admin-box button{padding:10px 20px;margin:5px;border-radius:8px;border:none;font-weight:700;cursor:pointer}
 .admin-section{border:1px solid #00d4ff33;padding:15px;border-radius:10px;margin:15px 0}
@@ -95,7 +100,9 @@ body.light footer{background:#ddd}
 
     <div class="search-box">
       <button class="back-search-btn" onclick="backPage()" title="رجوع للخلف"><i class="fa-solid fa-arrow-right"></i></button>
-      <input type="text" id="searchInput" placeholder="ابحث..." onkeyup="searchCat()">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" id="searchInput" placeholder="ابحث عن منتج..." onkeyup="searchProduct()">
+      <div id="searchResults" class="search-results"></div>
     </div>
 
     <div class="brand">
@@ -187,6 +194,7 @@ let tempCatImg = '';
 let tempProdImg = '';
 let adminActive = localStorage.getItem('adminActive') === 'true';
 let pageHistory = ['home'];
+let allProducts = [];
 const SECRET_CODE = "oskad0099";
 
 function getDefaultData(){
@@ -274,6 +282,7 @@ function renderHome(){
 
 function renderPages(){
   let pagesHtml = '';
+  allProducts = [];
   siteData.categories.forEach(cat=>{
     pagesHtml += `<div id="${cat.id}" class="page">
       <div class="page-header">
@@ -295,6 +304,7 @@ function renderPages(){
           <button class="del" onclick="deleteProduct('${catId}',${i})"><i class="fa-solid fa-trash"></i></button>
         </div>
         <img src="${p.img}"><div class="item-info"><div>${p.name}</div><div class="specs">${p.specs}</div></div><div class="price">${p.price.toLocaleString()} ل.س</div></div>`;
+      allProducts.push({...p, catId:catId});
     });
     if(document.getElementById('products-'+catId)) document.getElementById('products-'+catId).innerHTML = productsHtml;
   }
@@ -329,13 +339,28 @@ function quickAddProduct(catId){
   document.getElementById('adminContent').scrollIntoView();
 }
 
-function searchCat(){
+function searchProduct(){
   let val = document.getElementById('searchInput').value.toLowerCase();
+  let box = document.getElementById('searchResults');
+  box.innerHTML = '';
+
   if(val === SECRET_CODE){
     activateAdmin();
+    box.style.display = 'none';
     document.getElementById('searchInput').value = '';
+    return;
   }
+
+  if(val.length < 2){box.style.display='none';return}
+  let results = allProducts.filter(p=>p.name.toLowerCase().includes(val)).slice(0,12);
+  results.forEach(p=>{
+    let catName = siteData.categories.find(c=>c.id==p.catId).name;
+    box.innerHTML += `<div class="search-item" onclick="openPage('${p.catId}')"><img src="${p.img}" width="40"><div><div>${p.name}</div><div style="color:#aaa;font-size:0.8rem">${catName} - ${p.price.toLocaleString()} ل.س</div></div></div>`;
+  });
+  box.style.display = results.length? 'block' : 'none';
 }
+
+document.addEventListener('click', ()=>{document.getElementById('searchResults').style.display='none'});
 
 function activateAdmin(){
   adminActive = true;
