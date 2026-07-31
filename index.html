@@ -18,11 +18,12 @@ header{text-align:center;padding:10px;background:linear-gradient(90deg,#00d4ff22
 .brand{display:flex;align-items:center;gap:12px}
 .brand img{width:50px;height:50px;border-radius:50%;border:2px solid var(--blue)}
 header h1{font-size:2.2rem;font-weight:900;color:var(--blue);text-shadow:0 0 20px #00d4ff88}
-.search-box{flex:1;min-width:250px;max-width:500px;position:relative}
-.search-box input{width:100%;padding:10px 40px 10px 15px;border-radius:25px;border:2px solid var(--blue);background:#0a0f1a;color:var(--text);outline:none}
+.search-box{flex:1;min-width:250px;max-width:500px;position:relative;display:flex;gap:8px;align-items:center}
+.search-box input{flex:1;padding:10px 40px 10px 15px;border-radius:25px;border:2px solid var(--blue);background:#0a0f1a;color:var(--text);outline:none}
 body.light.search-box input{background:#fff}
-.search-box i{position:absolute;right:15px;top:50%;transform:translateY(-50%);color:var(--blue)}
-.search-results{position:absolute;top:45px;left:0;right:0;background:var(--card);border:2px solid var(--blue);border-radius:10px;max-height:400px;overflow-y:auto;display:none;z-index:1000}
+.search-box i{position:absolute;right:55px;top:50%;transform:translateY(-50%);color:var(--blue)}
+.back-search-btn{background:var(--blue);color:#000;border:none;padding:10px 12px;border-radius:50%;cursor:pointer;font-size:1rem}
+.search-results{position:absolute;top:45px;left:0;right:50px;background:var(--card);border:2px solid var(--blue);border-radius:10px;max-height:400px;overflow-y:auto;display:none;z-index:1000}
 .search-item{display:flex;gap:10px;padding:10px;cursor:pointer;border-bottom:1px solid #00d4ff22}
 .search-item:hover{background:#00d4ff11}
 .icon-btn{background:none;border:none;color:var(--blue);font-size:1.6rem;cursor:pointer;padding:8px;position:relative}
@@ -94,7 +95,6 @@ body.light footer{background:#ddd}
 .admin-box button{padding:10px 20px;margin:5px;border-radius:8px;border:none;font-weight:700;cursor:pointer}
 .admin-section{border:1px solid #00d4ff33;padding:15px;border-radius:10px;margin:15px 0}
 .preview-img{width:80px;height:80px;border-radius:8px;object-fit:cover;margin:5px;border:2px solid var(--blue)}
-.edit-preview{width:60px;height:60px;border-radius:8px;object-fit:cover;border:2px solid var(--yellow);margin:5px 0}
 </style>
 </head>
 <body>
@@ -115,6 +115,7 @@ body.light footer{background:#ddd}
     </div>
 
     <div class="search-box">
+      <button class="back-search-btn" onclick="backPage()" title="رجوع للخلف"><i class="fa-solid fa-arrow-right"></i></button>
       <i class="fa-solid fa-magnifying-glass"></i>
       <input type="text" id="searchInput" placeholder="ابحث عن منتج..." onkeyup="searchProduct()">
       <div id="searchResults" class="search-results"></div>
@@ -200,9 +201,8 @@ let allProducts = [];
 let siteData = JSON.parse(localStorage.getItem('oskarSiteData')) || getDefaultData();
 let tempCatImg = '';
 let tempProdImg = '';
-let tempEditCatImg = '';
-let tempEditProdImg = '';
-let adminActive = false;
+let adminActive = localStorage.getItem('adminActive') === 'true';
+let pageHistory = ['home']; // لتتبع الصفحات للرجوع
 const SECRET_CODE = "oskad0099";
 
 function getDefaultData(){
@@ -248,8 +248,6 @@ function previewFile(input, previewId){
     document.getElementById(previewId).style.display = 'block';
     if(previewId=='catPreview') tempCatImg = e.target.result;
     if(previewId=='prodPreview') tempProdImg = e.target.result;
-    if(previewId=='editCatPreview') tempEditCatImg = e.target.result;
-    if(previewId=='editProdPreview') tempEditProdImg = e.target.result;
   }
   reader.readAsDataURL(file);
 }
@@ -275,7 +273,7 @@ function renderPages(){
   siteData.categories.forEach(cat=>{
     pagesHtml += `<div id="${cat.id}" class="page">
       <div class="page-header">
-        <button class="back-btn" onclick="goHome()"><i class="fa-solid fa-arrow-right"></i> رجوع</button>
+        <button class="back-btn" onclick="backPage()"><i class="fa-solid fa-arrow-right"></i> رجوع</button>
         <h2 class="page-title">${cat.name}</h2>
         <button class="edit-cat-btn" style="display:${adminActive?'block':'none'}" onclick="editCategory('${cat.id}')"><i class="fa-solid fa-pen"></i> تعديل القسم</button>
       </div>
@@ -306,10 +304,24 @@ function renderPages(){
   });
 }
 
-function openPage(id){document.getElementById('home').style.display = 'none';document.querySelectorAll('.page').forEach(s => s.style.display = 'none');document.getElementById(id).style.display = 'block';window.scrollTo(0,0);}
-function goHome(){document.getElementById('home').style.display = 'grid';document.querySelectorAll('.page').forEach(s => s.style.display = 'none');}
+function openPage(id){
+  pageHistory.push(id);
+  document.getElementById('home').style.display = 'none';
+  document.querySelectorAll('.page').forEach(s => s.style.display = 'none');
+  document.getElementById(id).style.display = 'block';
+  window.scrollTo(0,0);
+}
+function goHome(){pageHistory = ['home'];document.getElementById('home').style.display = 'grid';document.querySelectorAll('.page').forEach(s => s.style.display = 'none');}
+function backPage(){
+  if(pageHistory.length > 1){
+    pageHistory.pop();
+    let lastPage = pageHistory[pageHistory.length - 1];
+    if(lastPage == 'home') goHome();
+    else openPage(lastPage);
+  }else{ goHome(); }
+}
 
-function quickAddProduct(catId){toggleAdminPanel();document.getElementById('productCat').value = catId;document.getElementById('adminContent').scrollIntoView();}
+function quickAddProduct(catId){document.getElementById('productCat').value = catId;document.getElementById('adminContent').scrollIntoView();}
 
 function addToCart(item){let existing = cart.find(p=>p.name==item.name);if(existing) existing.qty++;else cart.push({...item, qty:1});updateCart();}
 function updateCart(){let html = ''; let total = 0;cart.forEach((item,i)=>{total += item.price * item.qty;html += `<div class="cart-item"><img src="${item.img}"><div style="flex:1"><div>${item.name}</div><div style="color:var(--green)">${item.price.toLocaleString()} ل.س x ${item.qty}</div></div><button onclick="cart.splice(${i},1);updateCart()" style="background:red;color:#fff;border:none;border-radius:5px;padding:3px 8px">x</button></div>`;});document.getElementById('cartItems').innerHTML = html || '<p style="text-align:center">السلة فارغة</p>';document.getElementById('cartTotal').innerText = `المجموع: ${total.toLocaleString()} ل.س`;document.getElementById('cartCount').innerText = cart.reduce((a,b)=>a+b.qty,0);}
@@ -335,14 +347,14 @@ function searchProduct(){
 
 function activateAdmin(){
   adminActive = true;
+  localStorage.setItem('adminActive','true');
   document.getElementById('adminToggleBtn').classList.add('show');
-  toggleAdminPanel();
+  document.getElementById('adminPanel').classList.add('show');
   renderHome();
   renderPages();
   document.getElementById('searchInput').value = '';
   document.getElementById('searchResults').style.display = 'none';
   document.getElementById('marqueeText').value=siteData.marquee;
-  alert('تم تفعيل لوحة التحكم. الان تقدر تعدل من الازرار على الاقسام والمنتجات');
 }
 
 function focusSearch(){document.getElementById('searchInput').focus();toggleMenu();}
@@ -353,10 +365,10 @@ function toggleMenu(){document.getElementById('sideMenu').classList.toggle('show
 function toggleTheme(){document.body.classList.toggle('light');localStorage.setItem('theme', document.body.classList.contains('light')?'light':'dark');}
 function toggleAdminPanel(){document.getElementById('adminPanel').classList.toggle('show');}
 function hideAdminPanel(){document.getElementById('adminPanel').classList.remove('show');}
-function closeAdminPanel(){hideAdminPanel();saveData();alert('تم حفظ كل التعديلات')}
+function closeAdminPanel(){hideAdminPanel();adminActive=false;localStorage.setItem('adminActive','false');saveData();alert('تم اغلاق اللوحة وحفظ كل التعديلات')}
 
-function addCategory(){let name=document.getElementById('newCatName').value;let icon=document.getElementById('newCatIcon').value;let img=tempCatImg || 'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400';let id=document.getElementById('newCatId').value;if(!name||!id){alert('كمل البيانات');return}siteData.categories.push({id,name,icon,img});siteData.products[id]=[];saveData();alert('تم اضافة القسم');location.reload();}
-function deleteCategory(id){if(confirm('متاكد من حذف القسم وكل منتجاته؟')){siteData.categories=siteData.categories.filter(c=>c.id!=id);delete siteData.products[id];saveData();location.reload();}}
+function addCategory(){let name=document.getElementById('newCatName').value;let icon=document.getElementById('newCatIcon').value;let img=tempCatImg || 'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400';let id=document.getElementById('newCatId').value;if(!name||!id){alert('كمل البيانات');return}siteData.categories.push({id,name,icon,img});siteData.products[id]=[];saveData();renderHome();renderPages();document.getElementById('newCatName').value='';document.getElementById('newCatIcon').value='';document.getElementById('newCatId').value='';document.getElementById('catPreview').style.display='none';alert('تم اضافة القسم')}
+function deleteCategory(id){if(confirm('متاكد من حذف القسم وكل منتجاته؟')){siteData.categories=siteData.categories.filter(c=>c.id!=id);delete siteData.products[id];saveData();renderHome();renderPages();}}
 
 function changeCatImage(id){
   let cat = siteData.categories.find(c=>c.id==id);
@@ -379,19 +391,17 @@ function changeCatImage(id){
 }
 
 function editCategory(id){
-  tempEditCatImg = '';
   let cat = siteData.categories.find(c=>c.id==id);
   let newName = prompt('الاسم الجديد للقسم:', cat.name);
   if(newName==null) return;
   let newIcon = prompt('الايقونة الجديدة FontAwesome:', cat.icon);
   if(newIcon==null) return;
-  cat.name=newName;cat.icon=newIcon;saveData();location.reload();
+  cat.name=newName;cat.icon=newIcon;saveData();renderHome();renderPages();
 }
 
-function addProduct(){let cat=document.getElementById('productCat').value;let name=document.getElementById('productName').value;let specs=document.getElementById('productSpecs').value;let price=parseInt(document.getElementById('productPrice').value);let img=tempProdImg || 'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=100';if(!name||!price){alert('كمل البيانات');return}siteData.products[cat].push({name,specs,price,img});saveData();alert('تم اضافة المنتج');location.reload();}
-function deleteProduct(cat,i){if(confirm('حذف المنتج؟')){siteData.products[cat].splice(i,1);saveData();location.reload();}}
+function addProduct(){let cat=document.getElementById('productCat').value;let name=document.getElementById('productName').value;let specs=document.getElementById('productSpecs').value;let price=parseInt(document.getElementById('productPrice').value);let img=tempProdImg || 'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=100';if(!name||!price){alert('كمل البيانات');return}siteData.products[cat].push({name,specs,price,img});saveData();renderPages();document.getElementById('productName').value='';document.getElementById('productSpecs').value='';document.getElementById('productPrice').value='';document.getElementById('prodPreview').style.display='none';tempProdImg='';alert('تم اضافة المنتج')}
+function deleteProduct(cat,i){if(confirm('حذف المنتج؟')){siteData.products[cat].splice(i,1);saveData();renderPages();}}
 function editProduct(cat,i){
-  tempEditProdImg = '';
   let p=siteData.products[cat][i];
   let newName=prompt('الاسم الجديد:',p.name);
   if(newName==null) return;
@@ -399,42 +409,11 @@ function editProduct(cat,i){
   if(newSpecs==null) return;
   let newPrice=prompt('السعر الجديد:',p.price);
   if(newPrice==null) return;
-
-  let fileInput = document.createElement('input');
-  fileInput.type = 'file';
-  fileInput.accept = 'image/*';
-  fileInput.onchange = function(e){
-    previewFile(e.target, 'editProdPreview');
-    setTimeout(()=>{
-      p.name=newName;p.specs=newSpecs;p.price=parseInt(newPrice);if(tempEditProdImg) p.img=tempEditProdImg;
-      saveData();alert('تم التعديل');location.reload();
-    },500);
-  };
-  fileInput.click();
+  p.name=newName;p.specs=newSpecs;p.price=parseInt(newPrice);
+  saveData();renderPages();alert('تم التعديل');
 }
 
 function saveMarquee(){siteData.marquee=document.getElementById('marqueeText').value;saveData();alert('تم الحفظ');}
 function saveData(){localStorage.setItem('oskarSiteData',JSON.stringify(siteData));}
-function resetData(){if(confirm('ارجاع كل شي للافتراضي؟')){localStorage.removeItem('oskarSiteData');location.reload();}}
-function exportData(){let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(siteData));let a = document.createElement('a');a.href=dataStr;a.download="backup-oskar.json";a.click();}
-function importData(event){
-  const file = event.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = function(e){
-    try{
-      siteData = JSON.parse(e.target.result);
-      saveData();
-      alert('تم الاستيراد بنجاح');
-      location.reload();
-    }catch{alert('الملف خطأ')}
-  }
-  reader.readAsText(file);
-}
-
-window.onload = function(){
-  renderHome();renderPages();
-  if(localStorage.getItem('theme')=='light') document.body.classList.add('light');
-}
-</script>
-</
+function resetData(){if(confirm('ارجاع كل شي للافتراضي؟')){localStorage.removeItem('oskarSiteData');localStorage.removeItem('adminActive');location.reload();}}
+function exportData(){let data
