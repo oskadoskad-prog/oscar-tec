@@ -272,6 +272,8 @@ function previewFile(input, previewId){
     document.getElementById(previewId).style.display = 'block';
     if(previewId=='catPreview') tempCatImg = e.target.result;
     if(previewId=='prodPreview') tempProdImg = e.target.result;
+    if(previewId=='editCatPreview') tempEditCatImg = e.target.result;
+    if(previewId=='editProdPreview') tempEditProdImg = e.target.result;
   }
   reader.readAsDataURL(file);
 }
@@ -401,6 +403,7 @@ function activateAdmin(){
   document.getElementById('searchInput').value = '';
   document.getElementById('searchResults').style.display = 'none';
   document.getElementById('marqueeText').value=siteData.marquee;
+  alert('تم تفعيل لوحة التحكم. الان تقدر تعدل من الازرار على الاقسام والمنتجات');
 }
 
 function focusSearch(){document.getElementById('searchInput').focus();toggleMenu();}
@@ -440,10 +443,4 @@ function editCategory(id){
   tempEditCatImg = '';
   let cat = siteData.categories.find(c=>c.id==id);
   let newName = prompt('الاسم الجديد للقسم:', cat.name);
-  if(newName==null) return;
-  let newIcon = prompt('الايقونة الجديدة FontAwesome:', cat.icon);
-  if(newIcon==null) return;
-  cat.name=newName;cat.icon=newIcon;saveData();location.reload();
-}
-
-function addProduct(){let cat=document.getElementById('productCat').value;let name=document.getElementById('productName').value;let specs=document.getElementById('productSpecs').value;let price=parseInt(document.getElementById('productPrice').value);let img=tempProdImg || 'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=100';if(!name||!price){alert('كمل البيانات');return}siteData.products[cat].push
+  if(newName==null)
