@@ -10,15 +10,8 @@
 :root{--bg:#070710;--card:#111827dd;--blue:#00d4ff;--green:#00ff88; --red:#ff4444; --yellow:#ffc107; --text:#fff}
 body.light{--bg:#f0f2f5;--card:#ffffffdd;--text:#000}
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Cairo',sans-serif}
-body{
-  background: linear-gradient(rgba(7,7,16,0.8), rgba(7,7,16,0.8)),
-  url('https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1920') center/cover fixed;
-  color:var(--text)
-}
-body.light{
-  background: linear-gradient(rgba(240,242,245,0.9), rgba(240,242,245,0.9)),
-  url('https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1920') center/cover fixed;
-}
+body{background: linear-gradient(rgba(7,7,16,0.8), rgba(7,7,16,0.8)),url('https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1920') center/cover fixed;color:var(--text)}
+body.light{background: linear-gradient(rgba(240,242,245,0.9), rgba(240,242,245,0.9)),url('https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1920') center/cover fixed;}
 
 header{text-align:center;padding:10px;background:linear-gradient(90deg,#00d4ff22,#111827);border-bottom:2px solid var(--blue);position:sticky;top:0;z-index:999;backdrop-filter:blur(5px)}
 .header-top{display:flex;justify-content:space-between;align-items:center;max-width:1400px;margin:auto;gap:10px;flex-wrap:wrap}
@@ -56,12 +49,17 @@ body.light.cart-item{background:#f0f0f0}
 .card img{width:100%;height:160px;object-fit:cover}
 .card-content{padding:18px}
 .card-content.icon{font-size:2.8rem;color:var(--blue);margin-bottom:10px}
-.card-delete{position:absolute;top:5px;left:5px;background:var(--red);color:#fff;border:none;border-radius:50%;width:30px;height:30px;cursor:pointer;display:none}
-body.admin.card-delete{display:block}
+.card-admin{position:absolute;top:5px;left:5px;display:none;gap:5px}
+body.admin.card-admin{display:flex}
+.card-admin button{background:var(--yellow);color:#000;border:none;border-radius:50%;width:30px;height:30px;cursor:pointer;font-size:0.9rem}
+.card-admin.del{background:var(--red);color:#fff}
 
 .page{display:none;padding:20px;max-width:1400px;margin:20px auto}
-.back-btn{background:var(--blue);color:#000;border:none;padding:10px 20px;border-radius:10px;font-weight:700;cursor:pointer;margin-bottom:20px;font-size:1rem}
-.page-title{text-align:center;margin-bottom:25px;font-size:1.8rem;color:var(--blue)}
+.page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap}
+.back-btn{background:var(--blue);color:#000;border:none;padding:10px 20px;border-radius:10px;font-weight:700;cursor:pointer;font-size:1rem}
+.page-title{text-align:center;margin-bottom:25px;font-size:1.8rem;color:var(--blue);flex:1}
+.edit-cat-btn{background:var(--yellow);color:#000;border:none;padding:10px 20px;border-radius:10px;font-weight:900;cursor:pointer;display:none;font-size:1rem}
+body.admin.edit-cat-btn{display:block}
 .add-product-btn{background:var(--green);color:#000;border:none;padding:12px 25px;border-radius:10px;font-weight:900;cursor:pointer;margin:20px auto;display:none;font-size:1rem}
 body.admin.add-product-btn{display:block}
 
@@ -75,9 +73,10 @@ body.light.item{background:#f0f0f0}
 body.light.item-info.specs{color:#555}
 .price{color:var(--green);font-weight:900;font-size:1rem;white-space:nowrap}
 .add-btn{background:var(--green);color:#000;border:none;padding:8px 12px;border-radius:8px;font-weight:900;cursor:pointer;font-size:0.85rem}
-.edit-btn{position:absolute;top:5px;left:5px;background:var(--yellow);color:#000;border:none;padding:3px 8px;border-radius:5px;font-size:0.7rem;cursor:pointer;display:none}
-.delete-btn{position:absolute;top:5px;right:5px;background:var(--red);color:#fff;border:none;padding:3px 8px;border-radius:5px;font-size:0.7rem;cursor:pointer;display:none}
-body.admin.edit-btn, body.admin.delete-btn{display:block}
+.item-admin{position:absolute;top:5px;left:5px;display:none;gap:5px}
+body.admin.item-admin{display:flex}
+.item-admin button{background:var(--yellow);color:#000;border:none;padding:3px 8px;border-radius:5px;font-size:0.7rem;cursor:pointer}
+.item-admin.del{background:var(--red);color:#fff}
 
 footer{text-align:center;padding:30px;background:#0a0f1a;margin-top:40px;border-top:2px solid var(--blue)}
 body.light footer{background:#ddd}
@@ -131,7 +130,6 @@ body.light footer{background:#ddd}
   </div>
 </header>
 
-<!-- قائمة 3 خطوط - شلنا منها الاستيراد والتصدير -->
 <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
 <div id="sideMenu">
   <h3><i class="fa-solid fa-gear"></i> الاعدادات</h3>
@@ -139,7 +137,6 @@ body.light footer{background:#ddd}
   <button onclick="focusSearch()"><i class="fa-solid fa-magnifying-glass"></i> البحث</button>
 </div>
 
-<!-- لوحة التحكم -->
 <div id="adminPanel">
   <div class="admin-box">
     <h2>لوحة التحكم السرية</h2>
@@ -216,10 +213,24 @@ function getDefaultData(){
     ],
     products: {
       phones: [
-        {name:"ايفون 15 برو ماكس 256GB", specs:"iOS 17 | كاميرا احترافية", price:13000000, img:"https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=100"}
+        {name:"ايفون 15 برو ماكس 256GB", specs:"iOS 17 | كاميرا احترافية", price:13000000, img:"https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=100"},
+        {name:"سامسونج S24 الترا 512GB", specs:"الرام: 12GB | الذاكرة: 512GB", price:11000000, img:"https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=100"},
+        {name:"شاومي 14 برو", specs:"الرام: 12GB | الكاميرا: 50MP", price:7000000, img:"https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=100"}
       ],
       accessories: [
-        {name:"سماعة AirPods Pro", specs:"عزل ضجيج | بطارية 24 ساعة", price:800000, img:"https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?w=100"}
+        {name:"سماعة AirPods Pro", specs:"عزل ضجيج | بطارية 24 ساعة", price:800000, img:"https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?w=100"},
+        {name:"شاحن 65W سريع", specs:"PD + QC 3.0", price:200000, img:"https://images.unsplash.com/photo-1583863788434-e58a36330f0a?w=100"},
+        {name:"كفر ايفون 15", specs:"ضد الصدمات", price:50000, img:"https://images.unsplash.com/photo-1605236453807-ff0ea2f8a9d2?w=100"}
+      ],
+      repair: [
+        {name:"تغيير شاشة ايفون", specs:"ضمان 3 شهور", price:500000, img:"https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=100"},
+        {name:"صيانة بطارية", specs:"تبديل اصلي", price:150000, img:"https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=100"},
+        {name:"تبديل باغة", specs:"بدون تغيير الشاشة", price:200000, img:"https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=100"}
+      ],
+      pubg: [
+        {name:"شحن 60 شدة", specs:"فوري", price:50000, img:"https://images.unsplash.com/photo-1542751371-adc38448a05e?w=100"},
+        {name:"شحن 325 شدة", specs:"فوري", price:250000, img:"https://images.unsplash.com/photo-1542751371-adc38448a05e?w=100"},
+        {name:"شحن 660 شدة", specs:"فوري", price:500000, img:"https://images.unsplash.com/photo-1542751371-adc38448a05e?w=100"}
       ]
     }
   }
@@ -241,7 +252,12 @@ function previewFile(input, previewId){
 function renderHome(){
   let html = '';
   siteData.categories.forEach(cat=>{
-    html += `<div class="card" onclick="openPage('${cat.id}')"><button class="card-delete" onclick="deleteCategory('${cat.id}');event.stopPropagation()">x</button><img src="${cat.img}"><div class="card-content"><div class="icon"><i class="fa-solid ${cat.icon}"></i></div><h2>${cat.name}</h2></div></div>`;
+    html += `<div class="card" onclick="openPage('${cat.id}')">
+      <div class="card-admin">
+        <button onclick="editCategory('${cat.id}');event.stopPropagation()"><i class="fa-solid fa-pen"></i></button>
+        <button class="del" onclick="deleteCategory('${cat.id}');event.stopPropagation()"><i class="fa-solid fa-trash"></i></button>
+      </div>
+      <img src="${cat.img}"><div class="card-content"><div class="icon"><i class="fa-solid ${cat.icon}"></i></div><h2>${cat.name}</h2></div></div>`;
   });
   document.getElementById('home').innerHTML = html;
   document.getElementById('marqueeSpan').innerText = siteData.marquee;
@@ -249,15 +265,29 @@ function renderHome(){
 
 function renderPages(){
   let pagesHtml = '';
+  allProducts = [];
   siteData.categories.forEach(cat=>{
-    pagesHtml += `<div id="${cat.id}" class="page"><button class="back-btn" onclick="goHome()"><i class="fa-solid fa-arrow-right"></i> رجوع</button><h2 class="page-title">${cat.name}</h2><button class="add-product-btn" onclick="quickAddProduct('${cat.id}')"><i class="fa-solid fa-plus"></i> اضافة منتج لهذا القسم</button><div class="products" id="products-${cat.id}"></div></div>`;
+    pagesHtml += `<div id="${cat.id}" class="page">
+      <div class="page-header">
+        <button class="back-btn" onclick="goHome()"><i class="fa-solid fa-arrow-right"></i> رجوع</button>
+        <h2 class="page-title">${cat.name}</h2>
+        <button class="edit-cat-btn" onclick="editCategory('${cat.id}')"><i class="fa-solid fa-pen"></i> تعديل القسم</button>
+      </div>
+      <button class="add-product-btn" onclick="quickAddProduct('${cat.id}')"><i class="fa-solid fa-plus"></i> اضافة منتج لهذا القسم</button>
+      <div class="products" id="products-${cat.id}"></div>
+    </div>`;
   });
   document.getElementById('dynamicPages').innerHTML = pagesHtml;
 
   for(let catId in siteData.products){
     let productsHtml = '';
     siteData.products[catId].forEach((p,i)=>{
-      productsHtml += `<div class="item"><button class="edit-btn" onclick="editProduct('${catId}',${i})">تعديل</button><button class="delete-btn" onclick="deleteProduct('${catId}',${i})">حذف</button><img src="${p.img}"><div class="item-info"><div>${p.name}</div><div class="specs">${p.specs}</div></div><div class="price">${p.price.toLocaleString()} ل.س</div><button class="add-btn" onclick='addToCart(${JSON.stringify(p)})'>اضافة</button></div>`;
+      productsHtml += `<div class="item">
+        <div class="item-admin">
+          <button onclick="editProduct('${catId}',${i})"><i class="fa-solid fa-pen"></i></button>
+          <button class="del" onclick="deleteProduct('${catId}',${i})"><i class="fa-solid fa-trash"></i></button>
+        </div>
+        <img src="${p.img}"><div class="item-info"><div>${p.name}</div><div class="specs">${p.specs}</div></div><div class="price">${p.price.toLocaleString()} ل.س</div><button class="add-btn" onclick='addToCart(${JSON.stringify(p)})'>اضافة</button></div>`;
       allProducts.push(p);
     });
     if(document.getElementById('products-'+catId)) document.getElementById('products-'+catId).innerHTML = productsHtml;
@@ -308,20 +338,32 @@ function focusSearch(){document.getElementById('searchInput').focus();toggleMenu
 
 function payWithShamCash(){if(cart.length == 0){ alert("السلة فارغة"); return; }let total = cart.reduce((a,b)=>a + b.price * b.qty, 0);let message = `مرحبا مركز اوسكار التقني\nاريد الدفع عبر شام كاش\nالمبلغ: ${total.toLocaleString()} ل.س\nعدد المنتجات: ${cart.reduce((a,b)=>a+b.qty,0)}`;window.open(`https://wa.me/+971544066811?text=${encodeURIComponent(message)}`, '_blank');}
 
-// قائمة واعدادات
 function toggleMenu(){document.getElementById('sideMenu').classList.toggle('show');document.getElementById('overlay').classList.toggle('show');}
 function toggleTheme(){document.body.classList.toggle('light');localStorage.setItem('theme', document.body.classList.contains('light')?'light':'dark');}
 
-// لوحة التحكم
 function openAdmin(){document.getElementById('adminPanel').style.display='block';document.getElementById('marqueeText').value=siteData.marquee;}
 function closeAdmin(){document.getElementById('adminPanel').style.display='none';}
 
 function addCategory(){let name=document.getElementById('newCatName').value;let icon=document.getElementById('newCatIcon').value;let img=tempCatImg || 'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400';let id=document.getElementById('newCatId').value;if(!name||!id){alert('كمل البيانات');return}siteData.categories.push({id,name,icon,img});siteData.products[id]=[];saveData();alert('تم اضافة القسم');location.reload();}
-function deleteCategory(id){if(confirm('متاكد؟')){siteData.categories=siteData.categories.filter(c=>c.id!=id);delete siteData.products[id];saveData();location.reload();}}
+function deleteCategory(id){if(confirm('متاكد من حذف القسم وكل منتجاته؟')){siteData.categories=siteData.categories.filter(c=>c.id!=id);delete siteData.products[id];saveData();location.reload();}}
+function editCategory(id){
+  let cat = siteData.categories.find(c=>c.id==id);
+  let name = prompt('الاسم الجديد للقسم:', cat.name);
+  let icon = prompt('الايقونة الجديدة FontAwesome:', cat.icon);
+  let newImg = prompt('الصق رابط الصورة الجديدة او اتركه فاضي:', cat.img);
+  if(name){cat.name=name;cat.icon=icon;if(newImg) cat.img=newImg;saveData();location.reload();}
+}
 
 function addProduct(){let cat=document.getElementById('productCat').value;let name=document.getElementById('productName').value;let specs=document.getElementById('productSpecs').value;let price=parseInt(document.getElementById('productPrice').value);let img=tempProdImg || 'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=100';if(!name||!price){alert('كمل البيانات');return}siteData.products[cat].push({name,specs,price,img});saveData();alert('تم اضافة المنتج');location.reload();}
 function deleteProduct(cat,i){if(confirm('حذف المنتج؟')){siteData.products[cat].splice(i,1);saveData();location.reload();}}
-function editProduct(cat,i){let p=siteData.products[cat][i];let name=prompt('الاسم',p.name);let specs=prompt('المواصفات',p.specs);let price=prompt('السعر',p.price);if(name){p.name=name;p.specs=specs;p.price=parseInt(price);saveData();location.reload();}}
+function editProduct(cat,i){
+  let p=siteData.products[cat][i];
+  let name=prompt('الاسم الجديد:',p.name);
+  let specs=prompt('المواصفات الجديدة:',p.specs);
+  let price=prompt('السعر الجديد:',p.price);
+  let newImg=prompt('الصق رابط الصورة الجديدة او اتركه فاضي:',p.img);
+  if(name){p.name=name;p.specs=specs;p.price=parseInt(price);if(newImg) p.img=newImg;saveData();location.reload();}
+}
 
 function saveMarquee(){siteData.marquee=document.getElementById('marqueeText').value;saveData();alert('تم الحفظ');}
 function saveData(){localStorage.setItem('oskarSiteData',JSON.stringify(siteData));}
