@@ -16,7 +16,7 @@ body.light{background: linear-gradient(rgba(240,242,245,0.9), rgba(240,242,245,0
 header{text-align:center;padding:8px 10px;background:linear-gradient(90deg,#00d4ff22,#111827);border-bottom:2px solid var(--blue);position:sticky;top:0;z-index:999;backdrop-filter:blur(5px)}
 .header-top{display:flex;justify-content:space-between;align-items:center;max-width:1400px;margin:auto;gap:8px;flex-wrap:wrap}
 .brand{display:flex;align-items:center;gap:10px}
-.brand img{width:70px;height:70px;border-radius:12px;border:2px solid var(--blue);cursor:pointer;object-fit:cover}
+.brand img{width:80px;height:80px;border-radius:12px;border:2px solid var(--blue);cursor:pointer;object-fit:cover}
 header h1{font-size:1.9rem;font-weight:900;color:var(--blue);text-shadow:0 0 20px #00d4ff88}
 
 .left-icons{display:flex;gap:8px;align-items:center}
@@ -25,7 +25,7 @@ header h1{font-size:1.9rem;font-weight:900;color:var(--blue);text-shadow:0 0 20p
 .icon-btn{position:relative}
 .cart-count{position:absolute;top:-5px;right:-5px;background:var(--red);color:#fff;border-radius:50%;width:18px;height:18px;font-size:0.7rem;display:flex;align-items:center;justify-content:center;font-weight:900}
 
-.search-wrapper{display:flex;flex-direction:column;align-items:center;gap:5px;flex:1;min-width:160px;max-width:280px}
+.search-wrapper{display:flex;flex-direction:column;align-items:center;gap:5px;flex:1;min-width:160px;max-width:280px;position:relative}
 .search-box{width:100%;position:relative;display:flex;gap:6px;align-items:center}
 .search-box input{width:100%;padding:7px 38px 7px 12px;border-radius:20px;border:2px solid var(--blue);background:#0a0f1a;color:var(--text);outline:none;font-size:0.85rem}
 body.light.search-box input{background:#fff}
@@ -83,7 +83,13 @@ body.light.item-info.specs{color:#555}
 footer{text-align:center;padding:30px;background:#0a0f1a;margin-top:40px;border-top:2px solid var(--blue)}
 body.light footer{background:#ddd}
 
-/* قائمة 3 خطوط */
+/* موبايل */
+@media (max-width: 768px){
+ .products{grid-template-columns:1fr}
+ .item{flex-wrap:wrap}
+ .search-wrapper{max-width:200px}
+}
+
 #sideMenu{display:none;position:fixed;top:0;right:0;width:300px;height:100%;background:var(--card);z-index:10001;padding:20px;border-left:2px solid var(--blue);backdrop-filter:blur(10px)}
 #sideMenu.show{display:block}
 #sideMenu h3{color:var(--blue);margin:15px 0}
@@ -91,7 +97,6 @@ body.light footer{background:#ddd}
 .overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000aa;z-index:10000}
 .overlay.show{display:block}
 
-/* لوحة التحكم الجانبية */
 #adminPanel{position:fixed;top:0;left:-450px;width:450px;height:100%;background:#111827;z-index:99999;overflow-y:auto;padding:20px;border-right:3px solid var(--blue);transition:left 0.4s ease;box-shadow:5px 0 30px #000}
 #adminPanel.show{left:0}
 .admin-toggle{position:fixed;top:50%;left:0;transform:translateY(-50%);background:var(--blue);color:#000;border:none;padding:15px 8px;border-radius:0 10px 10px 0;font-size:1.5rem;cursor:pointer;z-index:100000;font-weight:900;display:none}
@@ -119,8 +124,8 @@ body.light footer{background:#ddd}
         <button class="back-search-btn" onclick="backPage()" title="رجوع"><i class="fa-solid fa-arrow-right"></i>رجوع</button>
         <i class="fa-solid fa-magnifying-glass"></i>
         <input type="text" id="searchInput" placeholder="ابحث..." onkeyup="searchProduct()">
-        <div id="searchResults" class="search-results"></div>
       </div>
+      <div id="searchResults" class="search-results"></div>
 
       <div id="cartBox" class="cart-box" onclick="event.stopPropagation()">
         <h3 style="text-align:center;color:var(--blue)">سلة المشتريات</h3>
@@ -286,6 +291,15 @@ function changeAdminLogo(){
   fileInput.click();
 }
 
+function buildAllProducts(){
+  allProducts = [];
+  for(let catId in siteData.products){
+    siteData.products[catId].forEach(p=>{
+      allProducts.push({...p, catId:catId});
+    });
+  }
+}
+
 function renderHome(){
   let html = '';
   siteData.categories.forEach(cat=>{
@@ -303,7 +317,6 @@ function renderHome(){
 
 function renderPages(){
   let pagesHtml = '';
-  allProducts = [];
   siteData.categories.forEach(cat=>{
     pagesHtml += `<div id="${cat.id}" class="page">
       <div class="page-header">
@@ -325,7 +338,6 @@ function renderPages(){
           <button class="del" onclick="deleteProduct('${catId}',${i})"><i class="fa-solid fa-trash"></i></button>
         </div>
         <img src="${p.img}"><div class="item-info"><div>${p.name}</div><div class="specs">${p.specs}</div></div><div class="price">${p.price.toLocaleString()} ل.س</div><button class="add-btn" onclick='addToCart(${JSON.stringify(p)})'>اضافة</button></div>`;
-      allProducts.push({...p, catId:catId});
     });
     if(document.getElementById('products-'+catId)) document.getElementById('products-'+catId).innerHTML = productsHtml;
   }
@@ -335,6 +347,8 @@ function renderPages(){
   siteData.categories.forEach(cat=>{
     select.innerHTML += `<option value="${cat.id}">${cat.name}</option>`;
   });
+
+  buildAllProducts(); // مهم عشان البحث يشتغل بالموبايل
 }
 
 function openPage(id){
@@ -433,8 +447,8 @@ function editCategory(id){
   cat.name=newName;cat.icon=newIcon;saveData();renderHome();renderPages();
 }
 
-function addProduct(){let cat=document.getElementById('productCat').value;let name=document.getElementById('productName').value;let specs=document.getElementById('productSpecs').value;let price=parseInt(document.getElementById('productPrice').value);let img=tempProdImg || 'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=100';if(!name||!price){alert('كمل البيانات');return}siteData.products[cat].push({name,specs,price,img});saveData();renderPages();document.getElementById('productName').value='';document.getElementById('productSpecs').value='';document.getElementById('productPrice').value='';document.getElementById('prodPreview').style.display='none';tempProdImg='';alert('تم اضافة المنتج')}
-function deleteProduct(cat,i){if(confirm('حذف المنتج؟')){siteData.products[cat].splice(i,1);saveData();renderPages();}}
+function addProduct(){let cat=document.getElementById('productCat').value;let name=document.getElementById('productName').value;let specs=document.getElementById('productSpecs').value;let price=parseInt(document.getElementById('productPrice').value);let img=tempProdImg || 'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=100';if(!name||!price){alert('كمل البيانات');return}siteData.products[cat].push({name,specs,price,img});saveData();renderPages();buildAllProducts();document.getElementById('productName').value='';document.getElementById('productSpecs').value='';document.getElementById('productPrice').value='';document.getElementById('prodPreview').style.display='none';tempProdImg='';alert('تم اضافة المنتج')}
+function deleteProduct(cat,i){if(confirm('حذف المنتج؟')){siteData.products[cat].splice(i,1);saveData();renderPages();buildAllProducts();}}
 function editProduct(cat,i){
   let p=siteData.products[cat][i];
   let newName=prompt('الاسم الجديد:',p.name);
@@ -444,7 +458,7 @@ function editProduct(cat,i){
   let newPrice=prompt('السعر الجديد:',p.price);
   if(newPrice==null) return;
   p.name=newName;p.specs=newSpecs;p.price=parseInt(newPrice);
-  saveData();renderPages();alert('تم التعديل');
+  saveData();renderPages();buildAllProducts();alert('تم التعديل');
 }
 
 function saveMarquee(){siteData.marquee=document.getElementById('marqueeText').value;saveData();alert('تم الحفظ');}
@@ -477,10 +491,6 @@ function importData(event){
 
 window.onload = function(){
   applyData();
-  renderHome();renderPages();updateCart();
+  renderHome();renderPages();updateCart();buildAllProducts();
   if(localStorage.getItem('theme')=='light') document.body.classList.add('light');
-  if(adminActive){document.getElementById('adminToggleBtn').classList.add('show');document.getElementById('adminPanel').classList.add('show')}
-}
-</script>
-</body>
-</html>
+  if(adminActive){document.getElementById('adminToggleBtn
