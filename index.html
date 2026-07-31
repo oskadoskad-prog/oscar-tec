@@ -22,7 +22,7 @@ header h1{font-size:2.2rem;font-weight:900;color:var(--blue);text-shadow:0 0 20p
 .search-box input{flex:1;padding:10px 40px 10px 15px;border-radius:25px;border:2px solid var(--blue);background:#0a0f1a;color:var(--text);outline:none}
 body.light.search-box input{background:#fff}
 .search-box i{position:absolute;right:55px;top:50%;transform:translateY(-50%);color:var(--blue)}
-.search-box.back-search-btn{background:var(--blue);color:#000;border:none;padding:10px 12px;border-radius:50%;cursor:pointer;font-size:1rem}
+.back-search-btn{background:var(--blue);color:#000;border:none;padding:10px 12px;border-radius:50%;cursor:pointer;font-size:1rem}
 .search-results{position:absolute;top:45px;left:0;right:50px;background:var(--card);border:2px solid var(--blue);border-radius:10px;max-height:400px;overflow-y:auto;display:none;z-index:1000}
 .search-item{display:flex;gap:10px;padding:10px;cursor:pointer;border-bottom:1px solid #00d4ff22}
 .search-item:hover{background:#00d4ff11}
@@ -444,4 +444,4 @@ function editCategory(id){
   cat.name=newName;cat.icon=newIcon;saveData();location.reload();
 }
 
-function addProduct(){let cat=document.getElementById('productCat').value;let name=document.getElementById('productName').value;let specs=document.getElementById('productSpecs').value;let
+function addProduct(){let cat=document.getElementById('productCat').value;let name=document.getElementById('productName').value;let specs=document.getElementById('productSpecs').value;let price=parseInt(document.getElementById
