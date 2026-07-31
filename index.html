@@ -87,7 +87,7 @@ body.light footer{background:#ddd}
 #sideMenu.show{display:block}
 #sideMenu h3{color:var(--blue);margin:15px 0}
 #sideMenu button{width:100%;padding:12px;margin:8px 0;border:none;border-radius:8px;background:#00d4ff22;color:var(--text);font-weight:700;cursor:pointer;text-align:right}
-.overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000000aa;z-index:10000}
+.overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000aa;z-index:10000}
 .overlay.show{display:block}
 
 /* لوحة التحكم */
@@ -137,19 +137,16 @@ body.light footer{background:#ddd}
   <h3><i class="fa-solid fa-gear"></i> الاعدادات</h3>
   <button onclick="toggleTheme()"><i class="fa-solid fa-circle-half-stroke"></i> الوضع الليلي / النهاري</button>
   <button onclick="focusSearch()"><i class="fa-solid fa-magnifying-glass"></i> البحث</button>
-  <button onclick="openAdmin()"><i class="fa-solid fa-user-shield"></i> دخول الادمن</button>
   <button onclick="exportData()"><i class="fa-solid fa-download"></i> تصدير نسخة احتياطية</button>
 </div>
 
 <!-- لوحة التحكم -->
 <div id="adminPanel">
   <div class="admin-box">
-    <h2>لوحة التحكم الكاملة</h2>
-    <input type="password" id="adminPass" placeholder="كلمة السر: admin123">
-    <button onclick="loginAdmin()" style="background:var(--green)">دخول</button>
+    <h2>لوحة التحكم السرية</h2>
     <button onclick="closeAdmin()" style="background:var(--red)">اغلاق</button>
 
-    <div id="adminContent" style="display:none">
+    <div id="adminContent">
       <div class="admin-section">
         <h3>1. اضافة قسم جديد</h3>
         <input type="text" id="newCatName" placeholder="اسم القسم">
@@ -200,6 +197,7 @@ let allProducts = [];
 let siteData = JSON.parse(localStorage.getItem('oskarSiteData')) || getDefaultData();
 let tempCatImg = '';
 let tempProdImg = '';
+const SECRET_CODE = "oskad0099";
 
 function getDefaultData(){
   return {
@@ -269,14 +267,38 @@ function renderPages(){
 function openPage(id){document.getElementById('home').style.display = 'none';document.querySelectorAll('.page').forEach(s => s.style.display = 'none');document.getElementById(id).style.display = 'block';window.scrollTo(0,0);}
 function goHome(){document.getElementById('home').style.display = 'grid';document.querySelectorAll('.page').forEach(s => s.style.display = 'none');}
 
-function quickAddProduct(catId){openAdmin();loginAdmin();document.getElementById('productCat').value = catId;document.getElementById('adminContent').scrollIntoView();}
+function quickAddProduct(catId){openAdmin();document.getElementById('productCat').value = catId;document.getElementById('adminContent').scrollIntoView();}
 
 function addToCart(item){let existing = cart.find(p=>p.name==item.name);if(existing) existing.qty++;else cart.push({...item, qty:1});updateCart();}
 function updateCart(){let html = ''; let total = 0;cart.forEach((item,i)=>{total += item.price * item.qty;html += `<div class="cart-item"><img src="${item.img}"><div style="flex:1"><div>${item.name}</div><div style="color:var(--green)">${item.price.toLocaleString()} ل.س x ${item.qty}</div></div><button onclick="cart.splice(${i},1);updateCart()" style="background:red;color:#fff;border:none;border-radius:5px;padding:3px 8px">x</button></div>`;});document.getElementById('cartItems').innerHTML = html || '<p style="text-align:center">السلة فارغة</p>';document.getElementById('cartTotal').innerText = `المجموع: ${total.toLocaleString()} ل.س`;document.getElementById('cartCount').innerText = cart.reduce((a,b)=>a+b.qty,0);}
 function toggleCart(e){ e.stopPropagation(); document.getElementById('cartBox').classList.toggle('show'); }
 document.addEventListener('click', ()=>{document.getElementById('cartBox').classList.remove('show');document.getElementById('searchResults').style.display='none'});
 
-function searchProduct(){let val = document.getElementById('searchInput').value.toLowerCase();let box = document.getElementById('searchResults');box.innerHTML = '';if(val.length < 2){box.style.display='none';return}let results = allProducts.filter(p=>p.name.toLowerCase().includes(val)).slice(0,12);results.forEach(p=>{box.innerHTML += `<div class="search-item" onclick="addToCart(${JSON.stringify(p).replace(/"/g,'&quot;')})"><img src="${p.img}" width="40"><div><div>${p.name}</div><div style="color:var(--green)">${p.price.toLocaleString()} ل.س</div></div></div>`;});box.style.display = results.length? 'block' : 'none';}
+function searchProduct(){
+  let val = document.getElementById('searchInput').value.toLowerCase();
+  let box = document.getElementById('searchResults');
+  box.innerHTML = '';
+
+  // الكود السري لفتح لوحة التحكم
+  if(val === SECRET_CODE){
+    box.innerHTML = `<div class="search-item" onclick="openSecretAdmin()"><i class="fa-solid fa-user-shield"></i> فتح لوحة التحكم السرية</div>`;
+    box.style.display = 'block';
+    return;
+  }
+
+  if(val.length < 2){box.style.display='none';return}
+  let results = allProducts.filter(p=>p.name.toLowerCase().includes(val)).slice(0,12);
+  results.forEach(p=>{box.innerHTML += `<div class="search-item" onclick="addToCart(${JSON.stringify(p).replace(/"/g,'&quot;')})"><img src="${p.img}" width="40"><div><div>${p.name}</div><div style="color:var(--green)">${p.price.toLocaleString()} ل.س</div></div></div>`;});
+  box.style.display = results.length? 'block' : 'none';
+}
+
+function openSecretAdmin(){
+  document.body.classList.add('admin');
+  openAdmin();
+  document.getElementById('searchInput').value = '';
+  document.getElementById('searchResults').style.display = 'none';
+}
+
 function focusSearch(){document.getElementById('searchInput').focus();toggleMenu();}
 
 function payWithShamCash(){if(cart.length == 0){ alert("السلة فارغة"); return; }let total = cart.reduce((a,b)=>a + b.price * b.qty, 0);let message = `مرحبا مركز اوسكار التقني\nاريد الدفع عبر شام كاش\nالمبلغ: ${total.toLocaleString()} ل.س\nعدد المنتجات: ${cart.reduce((a,b)=>a+b.qty,0)}`;window.open(`https://wa.me/+971544066811?text=${encodeURIComponent(message)}`, '_blank');}
@@ -286,9 +308,8 @@ function toggleMenu(){document.getElementById('sideMenu').classList.toggle('show
 function toggleTheme(){document.body.classList.toggle('light');localStorage.setItem('theme', document.body.classList.contains('light')?'light':'dark');}
 
 // لوحة التحكم
-function openAdmin(){document.getElementById('adminPanel').style.display='block';}
+function openAdmin(){document.getElementById('adminPanel').style.display='block';document.getElementById('marqueeText').value=siteData.marquee;}
 function closeAdmin(){document.getElementById('adminPanel').style.display='none';}
-function loginAdmin(){if(document.getElementById('adminPass').value=='admin123'){document.body.classList.add('admin');document.getElementById('adminContent').style.display='block';document.getElementById('marqueeText').value=siteData.marquee;}else{alert('كلمة السر غلط')}}
 
 function addCategory(){let name=document.getElementById('newCatName').value;let icon=document.getElementById('newCatIcon').value;let img=tempCatImg || 'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400';let id=document.getElementById('newCatId').value;if(!name||!id){alert('كمل البيانات');return}siteData.categories.push({id,name,icon,img});siteData.products[id]=[];saveData();alert('تم اضافة القسم');location.reload();}
 function deleteCategory(id){if(confirm('متاكد؟')){siteData.categories=siteData.categories.filter(c=>c.id!=id);delete siteData.products[id];saveData();location.reload();}}
