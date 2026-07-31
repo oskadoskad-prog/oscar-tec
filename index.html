@@ -51,13 +51,10 @@ body.admin.card-delete{display:block}
 .page{display:none;padding:20px;max-width:1400px;margin:20px auto}
 .back-btn{background:var(--blue);color:#000;border:none;padding:10px 20px;border-radius:10px;font-weight:700;cursor:pointer;margin-bottom:20px;font-size:1rem}
 .page-title{text-align:center;margin-bottom:25px;font-size:1.8rem;color:var(--blue)}
-.sub-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:15px;margin-bottom:30px}
-.sub-card{background:#0a0f1a;border:2px solid #00d4ff33;border-radius:15px;padding:20px;text-align:center;cursor:pointer;transition:all 0.3s;position:relative}
-.sub-card:hover{background:var(--blue);color:#000}
-.sub-delete{position:absolute;top:5px;left:5px;background:var(--red);color:#fff;border:none;border-radius:50%;width:25px;height:25px;cursor:pointer;display:none;font-size:0.8rem}
-body.admin.sub-delete{display:block}
+.add-product-btn{background:var(--green);color:#000;border:none;padding:12px 25px;border-radius:10px;font-weight:900;cursor:pointer;margin:20px auto;display:block;font-size:1rem}
+.add-product-btn:hover{background:#00cc70}
 
-.products{display:none;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:15px}
+.products{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:15px}
 .item{display:flex;align-items:center;gap:12px;padding:12px;background:#0a0f1a;border-radius:12px;border:1px solid #00d4ff22;position:relative}
 .item:hover{border-color:var(--blue)}
 .item img{width:70px;height:70px;border-radius:10px;object-fit:cover}
@@ -74,7 +71,7 @@ footer{text-align:center;padding:30px;background:#0a0f1a;margin-top:40px;border-
 @media(max-width:768px){.search-box{order:3;width:100%} header h1{font-size:1.8rem}}
 
 /* لوحة التحكم */
-#adminPanel{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000ee;z-index:99999;overflow-y:auto;padding:20px}
+#adminPanel{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000000ee;z-index:99999;overflow-y:auto;padding:20px}
 .admin-box{background:#111827;border:2px solid var(--blue);border-radius:15px;padding:20px;max-width:900px;margin:20px auto}
 .admin-box h2{color:var(--blue);text-align:center;margin-bottom:15px}
 .admin-box input,.admin-box textarea,.admin-box select{width:100%;padding:10px;margin:8px 0;border-radius:8px;border:1px solid var(--blue);background:#0a0f1a;color:#fff}
@@ -174,6 +171,7 @@ let allProducts = [];
 let siteData = JSON.parse(localStorage.getItem('oskarSiteData')) || getDefaultData();
 let tempCatImg = '';
 let tempProdImg = '';
+let currentCatForAdd = '';
 
 function getDefaultData(){
   return {
@@ -223,7 +221,7 @@ function renderHome(){
 function renderPages(){
   let pagesHtml = '';
   siteData.categories.forEach(cat=>{
-    pagesHtml += `<div id="${cat.id}" class="page"><button class="back-btn" onclick="goHome()"><i class="fa-solid fa-arrow-right"></i> رجوع</button><h2 class="page-title">${cat.name}</h2><div class="products" id="products-${cat.id}" style="display:grid"></div><button onclick="showAddProduct('${cat.id}')" style="background:var(--green);padding:10px 20px;border:none;border-radius:10px;margin-top:20px;cursor:pointer">+ اضافة منتج لهذا القسم</button></div>`;
+    pagesHtml += `<div id="${cat.id}" class="page"><button class="back-btn" onclick="goHome()"><i class="fa-solid fa-arrow-right"></i> رجوع</button><h2 class="page-title">${cat.name}</h2><button class="add-product-btn" onclick="quickAddProduct('${cat.id}')"><i class="fa-solid fa-plus"></i> اضافة منتج لهذا القسم</button><div class="products" id="products-${cat.id}"></div></div>`;
   });
   document.getElementById('dynamicPages').innerHTML = pagesHtml;
 
@@ -245,6 +243,14 @@ function renderPages(){
 
 function openPage(id){document.getElementById('home').style.display = 'none';document.querySelectorAll('.page').forEach(s => s.style.display = 'none');document.getElementById(id).style.display = 'block';window.scrollTo(0,0);}
 function goHome(){document.getElementById('home').style.display = 'grid';document.querySelectorAll('.page').forEach(s => s.style.display = 'none');}
+
+function quickAddProduct(catId){
+  currentCatForAdd = catId;
+  openAdmin();
+  loginAdmin();
+  document.getElementById('productCat').value = catId;
+  document.getElementById('adminContent').scrollIntoView();
+}
 
 function addToCart(item){let existing = cart.find(p=>p.name==item.name);if(existing) existing.qty++;else cart.push({...item, qty:1});updateCart();}
 function updateCart(){let html = ''; let total = 0;cart.forEach((item,i)=>{total += item.price * item.qty;html += `<div class="cart-item"><img src="${item.img}"><div style="flex:1"><div>${item.name}</div><div style="color:var(--green)">${item.price.toLocaleString()} ل.س x ${item.qty}</div></div><button onclick="cart.splice(${i},1);updateCart()" style="background:red;color:#fff;border:none;border-radius:5px;padding:3px 8px">x</button></div>`;});document.getElementById('cartItems').innerHTML = html || '<p style="text-align:center">السلة فارغة</p>';document.getElementById('cartTotal').innerText = `المجموع: ${total.toLocaleString()} ل.س`;document.getElementById('cartCount').innerText = cart.reduce((a,b)=>a+b.qty,0);}
