@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مركز اوسكار التقني - سوق الجوالات</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+:root{--bg:#070710;--card:#111827dd;--blue:#00d4ff;--green:#00ff88; --red:#ff4444; --yellow:#ffc107}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Cairo',sans-serif}
+body{
+  background: linear-gradient(rgba(7,7,16,0.8), rgba(7,7,16,0.8)),
+  url('https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1920') center/cover fixed;
+  color:#fff
+}
+header{text-align:center;padding:10px;background:linear-gradient(90deg,#00d4ff22,#111827);border-bottom:2px solid var(--blue);position:sticky;top:0;z-index:999;backdrop-filter:blur(5px)}
+.header-top{display:flex;justify-content:space-between;align-items:center;max-width:1400px;margin:auto;gap:10px;flex-wrap:wrap;align-items:center}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:50px;height:50px;border-radius:50%;border:2px solid var(--blue)}
+header h1{font-size:2.2rem;font-weight:900;color:var(--blue);text-shadow:0 0 20px #00d4ff88}
+.search-box{flex:1;min-width:250px;max-width:500px;position:relative;margin-top:-5px}
+.search-box input{width:100%;padding:10px 40px 10px 15px;border-radius:25px;border:2px solid var(--blue);background:#0a0f1a;color:#fff;outline:none}
+.search-box i{position:absolute;right:15px;top:50%;transform:translateY(-50%);color:var(--blue)}
+.search-results{position:absolute;top:45px;left:0;right:0;background:var(--card);border:2px solid var(--blue);border-radius:10px;max-height:400px;overflow-y:auto;display:none;z-index:1000}
+.search-item{display:flex;gap:10px;padding:10px;cursor:pointer;border-bottom:1px solid #00d4ff22}
+.search-item:hover{background:#00d4ff11}
+.icon-btn{background:none;border:none;color:var(--blue);font-size:1.6rem;cursor:pointer;padding:8px;position:relative}
+.cart-count{position:absolute;top:0;right:0;background:var(--red);color:#fff;border-radius:50%;width:20px;height:20px;font-size:0.8rem;display:flex;align-items:center;justify-content:center;font-weight:900}
+.cart-box{position:absolute;top:60px;left:10px;background:var(--card);border:2px solid var(--blue);border-radius:15px;padding:15px;display:none;z-index:10000;width:380px;max-height:600px;overflow-y:auto;text-align:right;backdrop-filter:blur(10px)}
+.cart-box.show{display:block}
+.cart-item{display:flex;gap:10px;align-items:center;background:#0a0f1a;padding:10px;border-radius:10px;margin:8px 0}
+.cart-item img{width:50px;height:50px;border-radius:8px;object-fit:cover}
+.cart-total{font-weight:900;color:var(--green);text-align:center;margin:10px 0;font-size:1.2rem}
+.pay-btn{background:var(--yellow);color:#000;border:none;padding:12px;width:100%;border-radius:10px;font-weight:900;font-size:1.1rem;cursor:pointer;margin-top:10px}
+
+.marquee{width:100%;background:#00d4ff11;border-top:1px solid #00d4ff33;border-bottom:1px solid #00d4ff33;padding:10px 0;text-align:center;overflow:hidden}
+.marquee span{display:inline-block;font-weight:800;font-size:1.1rem;color:var(--blue);animation:marquee 6s ease-in-out infinite alternate}
+@keyframes marquee{0%{transform:translateX(10px)}100%{transform:translateX(-10px)}}
+
+.container{max-width:1400px;margin:30px auto;padding:0 20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
+.card{background:var(--card);border-radius:20px;overflow:hidden;border:2px solid #00d4ff33;transition:all 0.4s ease;cursor:pointer;text-align:center;backdrop-filter:blur(5px)}
+.card:hover{transform:translateY(-10px);border-color:var(--blue);box-shadow:0 0 30px #00d4ff66}
+.card img{width:100%;height:160px;object-fit:cover}
+.card-content{padding:18px}
+.card-content.icon{font-size:2.8rem;color:var(--blue);margin-bottom:10px}
+
+.page{display:none;padding:20px;max-width:1400px;margin:20px auto}
+.back-btn{background:var(--blue);color:#000;border:none;padding:10px 20px;border-radius:10px;font-weight:700;cursor:pointer;margin-bottom:20px;font-size:1rem}
+.page-title{text-align:center;margin-bottom:25px;font-size:1.8rem;color:var(--blue)}
+.sub-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:15px;margin-bottom:30px}
+.sub-card{background:#0a0f1a;border:2px solid #00d4ff33;border-radius:15px;padding:20px;text-align:center;cursor:pointer;transition:all 0.3s}
+.sub-card:hover{background:var(--blue);color:#000}
+.products{display:none;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:15px}
+.item{display:flex;align-items:center;gap:12px;padding:12px;background:#0a0f1a;border-radius:12px;border:1px solid #00d4ff22}
+.item:hover{border-color:var(--blue)}
+.item img{width:70px;height:70px;border-radius:10px;object-fit:cover}
+.item-info{flex:1;text-align:right;font-size:0.9rem}
+.item-info.specs{font-size:0.8rem;color:#aaa;margin-top:3px}
+.price{color:var(--green);font-weight:900;font-size:1rem;white-space:nowrap}
+.add-btn{background:var(--green);color:#000;border:none;padding:8px 12px;border-radius:8px;font-weight:900;cursor:pointer;font-size:0.85rem}
+.pubg-banner{background:linear-gradient(90deg,#ff8800,#ff2200);padding:15px;border-radius:12px;text-align:center;margin:15px 0;font-weight:900;font-size:1.2rem}
+footer{text-align:center;padding:30px;background:#0a0f1a;margin-top:40px;border-top:2px solid var(--blue)}
+@media(max-width:768px){.search-box{order:3;width:100%;margin-top:0} header h1{font-size:1.8rem}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <button class="icon-btn" onclick="toggleCart(event)"><i class="fa-solid fa-cart-shopping"></i><span id="cartCount" class="cart-count">0</span></button>
+    <div id="cartBox" class="cart-box" onclick="event.stopPropagation()">
+      <h3 style="text-align:center;color:var(--blue)">سلة المشتريات</h3>
+      <div id="cartItems"></div>
+      <div id="cartTotal" class="cart-total">المجموع: 0 ل.س</div>
+      <button class="pay-btn" onclick="payWithShamCash()"><i class="fa-solid fa-wallet"></i> الدفع عبر شام كاش</button>
+    </div>
+
+    <div class="search-box">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" id="searchInput" placeholder="ابحث عن 250+ منتج..." onkeyup="searchProduct()">
+      <div id="searchResults" class="search-results"></div>
+    </div>
+
+    <div class="brand">
+      <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=200" alt="روبوت">
+      <h1><i class="fa-solid fa-microchip"></i> مركز اوسكار التقني</h1>
+    </div>
+  </div>
+</header>
+
+<div class="marquee">
+  <span>مركز اوسكار التقني يقدم خدمات صيانة جوالات طافية معالجات خدمة تبديل باغات الشاشات المكسورة وكل مايخص الجوال وبرمجة الجوال والسوفتوير</span>
+</div>
+
+<div id="home" class="container">
+  <div class="card" onclick="openPage('phones')"><img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400"><div class="card-content"><div class="icon"><i class="fa-solid fa-mobile-screen-button"></i></div><h2>بيع جوالات 100+</h2></div></div>
+  <div class="card" onclick="openPage('accessories')"><img src="https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400"><div class="card-content"><div class="icon"><i class="fa-solid fa-headphones"></i></div><h2>اكسسوارات 150+</h2></div></div>
+  <div class="card" onclick="openPage('repair')"><img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400"><div class="card-content"><div class="icon"><i class="fa-solid fa-screwdriver-wrench"></i></div><h2>الصيانة</h2></div></div>
+  <div class="card" onclick="openPage('pubg')"><img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400"><div class="card-content"><div class="icon"><i class="fa-solid fa-gamepad"></i></div><h2>شحن ببجي + برامج</h2></div></div>
+
+  <!-- صورة الباقات base64 -->
+  <div class="card" onclick="openPage('packages')"><img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjE2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMwMGQ0ZmYiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwMGZmODgiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjE2MCIgZmlsbD0idXJsKCNnKSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LXNpemU9IjgwIiBmaWxsPSIjMDAwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+8J+UpTwvdGV4dD48L3N2Zz4="><div class="card-content"><div class="icon"><i class="fa-solid fa-sack-dollar"></i></div><h2>الباقات 15 باقة</h2></div></div>
+
+  <div class="card" onclick="openPage('sim')"><img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=400"><div class="card-content"><div class="icon"><i class="fa-solid fa-signal"></i></div><h2>شرائح</h2></div></div>
+
+  <!-- صورة قطع الغيار base64 -->
+  <div class="card" onclick="openPage('parts')"><img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjE2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNmZjg4MDAiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmZjIyMDAiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjE2MCIgZmlsbD0idXJsKCNnKSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LXNpemU9IjgwIiBmaWxsPSIjMDAwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+8J+MqTwvdGV4dD48L3N2Zz4="><div class="card-content"><div class="icon"><i class="fa-solid fa-microchip"></i></div><h2>قطع غيار</h2></div></div>
+</div>
+
+<div id="phones" class="page">
+  <button class="back-btn" onclick="goHome()"><i class="fa-solid fa-arrow-right"></i> رجوع</button>
+  <h2 class="page-title">بيع جوالات - 100 جوال</h2>
+  <div class="sub-grid">
+    <div class="sub-card" onclick="showProducts('iphone')"><i class="fa-brands fa-apple"></i><div>ايفون 20</div></div>
+    <div class="sub-card" onclick="showProducts('samsung')"><i class="fa-solid fa-mobile"></i><div>سامسونج 20</div></div>
+    <div class="sub-card" onclick="showProducts('xiaomi')"><i class="fa-solid fa-mobile-screen"></i><div>شاومي 20</div></div>
+    <div class="sub-card" onclick="showProducts('infinix')"><i class="fa-solid fa-phone"></i><div>انفنكس 20</div></div>
+    <div class="sub-card" onclick="showProducts('realme')"><i class="fa-solid fa-mobile-screen"></i><div>ريلمي 20</div></div>
+  </div>
+  <div id="iphone" class="products"></div>
+  <div id="samsung" class="products"></div>
+  <div id="xiaomi" class="products"></div>
+  <div id="infinix" class="products"></div>
+  <div id="realme" class="products"></div>
+</div>
+
+<div id="accessories" class="page">
+  <button class="back-btn" onclick="goHome()">رجوع</button>
+  <h2 class="page-title">اكسسوارات - 150 قطعة</h2>
+  <div class="sub-grid">
+    <div class="sub-card" onclick="showProducts('earbuds')"><i class="fa-solid fa-headphones"></i><div>سماعات 50</div></div>
+    <div class="sub-card" onclick="showProducts('charger')"><i class="fa-solid fa-bolt"></i><div>شواحن 50</div></div>
+    <div class="sub-card" onclick="showProducts('case')"><i class="fa-solid fa-mobile-retro"></i><div>كفرات 50</div></div>
+  </div>
+  <div id="earbuds" class="products"></div>
+  <div id="charger" class="products"></div>
+  <div id="case" class="products"></div>
+</div>
+
+<div id="pubg" class="page">
+  <button class="back-btn" onclick="goHome()">رجوع</button>
+  <h2 class="page-title">شحن ببجي + اشتراكات البرامج</h2>
+  <div class="pubg-banner"><i class="fa-solid fa-gamepad"></i> شحن فوري</div>
+  <div id="pubg-list" class="products" style="display:grid"></div>
+</div>
+
+<div id="packages" class="page">
+  <button class="back-btn" onclick="goHome()">رجوع</button>
+  <h2 class="page-title">الباقات - 15 باقة</h2>
+  <div id="packages-list" class="products" style="display:grid"></div>
+</div>
+
+<div id="repair" class="page">
+  <button class="back-btn" onclick="goHome()">رجوع</button>
+  <h2 class="page-title">الصيانة</h2>
+  <div id="repair-list" class="products" style="display:grid"></div>
+</div>
+
+<div id="sim" class="page">
+  <button class="back-btn" onclick="goHome()">رجوع</button>
+  <h2 class="page-title">شرائح</h2>
+  <div id="sim-list" class="products" style="display:grid"></div>
+</div>
+
+<div id="parts" class="page">
+  <button class="back-btn" onclick="goHome()">رجوع</button>
+  <h2 class="page-title">قطع غيار</h2>
+  <div id="parts-list" class="products" style="display:grid"></div>
+</div>
+
+<footer><p>جميع الحقوق محفوظة © مركز اوسكار التقني 2026 | الدفع عبر شام كاش | واتساب: +971544066811</p></footer>
+
+<script>
+let cart = [];
+let allProducts = [];
+
+const iphoneNames = ["ايفون 12", "ايفون 12 برو", "ايفون 12 برو ماكس", "ايفون 13", "ايفون 13 برو", "ايفون 13 برو ماكس", "ايفون 14", "ايفون 14 برو", "ايفون 14 برو ماكس", "ايفون 15", "ايفون 15 برو", "ايفون 15 برو ماكس", "ايفون 16", "ايفون 16 برو", "ايفون 16 برو ماكس", "ايفون 11", "ايفون 11 برو", "ايفون X", "ايفون 8 بلس", "ايفون SE"];
+
+function genPhones(brand, count, basePrice, isIphone=false){
+  let rams = ["4GB", "6GB", "8GB", "12GB", "16GB"];
+  let storages = ["64GB", "128GB", "256GB", "512GB", "1TB"];
+  let arr = [];
+  for(let i=1; i<=count; i++){
+    let ram = rams[i % rams.length];
+    let storage = storages[i % storages.length];
+    let name = isIphone? `${iphoneNames[i-1]} ${storage}` : `${brand} موديل ${i} ${storage}`;
+    let specs = isIphone? `iOS 17 | كاميرا احترافية` : `الرام: ${ram} | الذاكرة: ${storage}`;
+    arr.push({name:name, specs:specs, price: basePrice + i*50000, img:`https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=100`});
+  }
+  return arr;
+}
+
+const data = {
+iphone: genPhones("ايفون", 20, 12000000, true),
+samsung: genPhones("سامسونج", 20, 10000000),
+xiaomi: genPhones("شاومي", 20, 5000000),
+infinix: genPhones("انفنكس", 20, 3000000),
+realme: genPhones("ريلمي", 20, 4000000),
+
+earbuds: Array.from({length:50}, (_,i)=>({name:`سماعة بلوتوث موديل ${i+1}`, specs:`بلوتوث 5.3 | بطارية 24 ساعة`, price: 300000 + i*10000, img:`https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?w=100`})),
+charger: Array.from({length:50}, (_,i)=>({name:`شاحن سريع ${20+i}W`, specs:`PD + QC 3.0 | كيبل تايب سي`, price: 150000 + i*5000, img:`https://images.unsplash.com/photo-1583863788434-e58a36330f0a?w=100`})),
+case: Array.from({length:50}, (_,i)=>({name:`كفر جوال موديل ${i+1}`, specs:`ضد الصدمات | شفاف`, price: 25000 + i*1000, img:`https://images.unsplash.com/photo-1556656793-08538906a9f8?w=100`})),
+
+'pubg-list': [
+{name:"60 شدة UC", specs:`بجي موبايل`, price:140000, img:`https://images.unsplash.com/photo-1542751371-adc38448a05e?w=100`},
+{name:"325 شدة UC", specs:`بجي موبايل`, price:700000, img:`https://images.unsplash.com/photo-1542751371-adc38448a05e?w=100`},
+{name:"660 شدة UC", specs:`بجي موبايل`, price:1400000, img:`https://images.unsplash.com/photo-1542751371-adc38448a05e?w=100`},
+{name:"1800 شدة UC", specs:`بجي موبايل`, price:3500000, img:`https://images.unsplash.com/photo-1542751371-adc38448a05e?w=100`},
+{name:"4000 شدة UC", specs:`بجي موبايل`, price:7000000, img:`https://images.unsplash.com/photo-1542751371-adc38448a05e?w=100`},
+{name:"اشتراك نتفلكس شهر", specs:`4K + 4 شاشات`, price:800000, img:`https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=100`},
+{name:"اشتراك شاهد VIP شهر", specs:`حصري + بدون اعلانات`, price:350000, img:`https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?w=100`},
+{name:"شحن تيك توك 70 عملة", specs:`تيك توك`, price:100000, img:`https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=100`},
+{name:"شحن تيك توك 350 عملة", specs:`تيك توك`, price:500000, img:`https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=100`},
+{name:"شحن سوغو 100 جوهرة", specs:`سوغو لايف`, price:200000, img:`https://images.unsplash.com/photo-1611162616475-46d986353203?w=100`}
+],
+
+'packages-list': [
+{name:"MTN باقة 1$", specs:`مكالمات + انترنت`, price:28000, img:`https://images.unsplash.com/photo-1556740733091-2c1a32b6aea1?w=100`},{name:"MTN باقة 5$", specs:`مكالمات + انترنت`, price:140000, img:`https://images.unsplash.com/photo-1556740733091-2c1a32b6aea1?w=100`},
+{name:"MTN باقة 10$", specs:`مكالمات + انترنت`, price:280000, img:`https://images.unsplash.com/photo-1556740733091-2c1a32b6aea1?w=100`},{name:"MTN باقة 20$", specs:`مكالمات + انترنت`, price:560000, img:`https://images.unsplash.com/photo-1556740733091-2c1a32b6aea1?w=100`},
+{name:"Syriatel باقة 1$", specs:`مكالمات + انترنت`, price:28000, img:`https://images.unsplash.com/photo-1556740733091-2c1a32b6aea1?w=100`},{name:"Syriatel باقة 5$", specs:`مكالمات + انترنت`, price:140000, img:`https://images.unsplash.com/photo-1556740733091-2c1a32b6aea1?w=100`},
+{name:"Syriatel باقة 10$", specs:`مكالمات + انترنت`, price:280000, img:`https://images.unsplash.com/photo-1556740733091-2c1a32b6aea1?w=100`},{name:"Syriatel باقة 20$", specs:`مكالمات + انترنت`, price:560000, img:`https://images.unsplash.com/photo-1556740733091-2c1a32b6aea1?w=100`},
+{name:"انترنت MTN 2GB", specs:`صلاحية 30 يوم`, price:50000, img:`https://images.unsplash.com/photo-1556740733091-2c1a32b6aea1?w=100`},{name:"انترنت MTN 10GB", specs:`صلاحية 30 يوم`, price:200000, img:`https://images.unsplash.com/photo-1556740733091-2c1a32b6aea1?w=100`},
+{name:"انترنت Syriatel 2GB", specs:`صلاحية 30 يوم`, price:50000, img:`https://images.unsplash.com/photo-1556740733091-2c1a32b6aea1?w=100`},{name:"انترنت Syriatel 10GB", specs:`صلاحية 30 يوم`, price:200000, img:`https://images.unsplash.com/photo-1556740733091-2c1a32b6aea1?w=100`},
+{name:"باقة مكالمات شهر", specs:`1000 دقيقة`, price:150000, img:`https://images.unsplash.com/photo-1556740733091-2c1a32b6aea1?w=100`}
+],
+
+'repair-list': [
+{name:"تغيير شاشة ايفون 15", specs:`اصلية + ضمان 3 شهور`, price:2800000, img:`https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=100`},
+{name:"تغيير شاشة سامسونج S24", specs:`اصلية + ضمان 3 شهور`, price:2500000, img:`https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=100`},
+{name:"تغيير بطارية", specs:`اصلية + تركيب مجاني`, price:875000, img:`https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=100`},
+{name:"فك ايكلاود", specs:`ضمان عدم القفل`, price:1050000, img:`https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=100`},
+{name:"سوفت وير كامل", specs:`تحديث + فورمات`, price:350000, img:`https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=100`},
+{name:"تغيير كاميرا", specs:`امية وخلفية`, price:600000, img:`https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=100`},
+{name:"تغيير منفذ شحن", specs:`تايب سي + مايكرو`, price:450000, img:`https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=100`}
+],
+
+'sim-list': [
+{name:"شريحة MTN جديدة", specs:`رقم مميز`, price:100000, img:`https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=100`},
+{name:"شريحة Syriatel جديدة", specs:`رقم مميز`, price:100000, img:`https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=100`},
+{name:"شريحة MTN مع باقة", specs:`5$ رصيد مجاني`, price:200000, img:`https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=100`},
+{name:"شريحة Syriatel مع باقة", specs:`5$ رصيد مجاني`, price:200000, img:`https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=100`}
+],
+
+'parts-list': [
+{name:"بطارية ايفون 15 اصلية", specs:`5000mAh | ضمان سنة`, price:900000, img:`https://images.unsplash.com/photo-1555617981-dac3880eac6f?w=100`},
+{name:"شاشة سامسونج S24 اصلية", specs:`AMOLED | 120Hz`, price:3000000, img:`https://images.unsplash.com/photo-1555617981-dac3880eac6f?w=100`},
+{name:"كاميرا خلفية ايفون 14", specs:`48MP`, price:700000, img:`https://images.unsplash.com/photo-1555617981-dac3880eac6f?w=100`},
+{name:"فلاتة شحن", specs:`لجميع الاجهزة`, price:250000, img:`https://images.unsplash.com/photo-1555617981-dac3880eac6f?w=100`},
+{name:"سماعة داخلية", specs:`اصلية`, price:200000, img:`https://images.unsplash.com/photo-1555617981-dac3880eac6f?w=100`}
+]
+};
+
+function openPage(id){
+  document.getElementById('home').style.display = 'none';
+  document.querySelectorAll('.page').forEach(s => s.style.display = 'none');
+  document.getElementById(id).style.display = 'block';
+  window.scrollTo(0,0);
+}
+function goHome(){
+  document.getElementById('home').style.display = 'grid';
+  document.querySelectorAll('.page').forEach(s => s.style.display = 'none');
+}
+function showProducts(id){
+  document.querySelectorAll('.products').forEach(p => p.style.display = 'none');
+  document.getElementById(id).style.display = 'grid';
+}
+
+function createProducts(listId, items){
+  let html = '';
+  items.forEach(item=>{
+    html += `<div class="item"><img src="${item.img}"><div class="item-info"><div>${item.name}</div><div class="specs">${item.specs}</div></div><div class="price">${item.price.toLocaleString()} ل.س</div><button class="add-btn" onclick='addToCart(${JSON.stringify(item)})'>اضافة</button></div>`;
+    allProducts.push(item);
+  });
+  document.getElementById(listId).innerHTML = html;
+}
+
+function addToCart(item){
+  let existing = cart.find(p=>p.name==item.name);
+  if(existing) existing.qty++;
+  else cart.push({...item, qty:1});
+  updateCart();
+}
+
+function updateCart(){
+  let html = ''; let total = 0;
+  cart.forEach((item,i)=>{
+    total += item.price * item.qty;
+    html += `<div class="cart-item"><img src="${item.img}"><div style="flex:1"><div>${item.name}</div><div style="color:var(--green)">${item.price.toLocaleString()} ل.س x ${item.qty}</div></div><button onclick="cart.splice(${i},1);updateCart()" style="background:red;color:#fff;border:none;border-radius:5px;padding:3px 8px">x</button></div>`;
+  });
+  document.getElementById('cartItems').innerHTML = html || '<p style="text-align:center">السلة فارغة</p>';
+  document.getElementById('cartTotal').innerText = `المجموع: ${total.toLocaleString()} ل.س`;
+  document.getElementById('cartCount').innerText = cart.reduce((a,b)=>a+b.qty,0);
+}
+
+function toggleCart(e){ e.stopPropagation(); document.getElementById('cartBox').classList.toggle('show'); }
+document.addEventListener('click', ()=>{document.getElementById('cartBox').classList.remove('show');document.getElementById('searchResults').style.display='none'});
+
+function searchProduct(){
+  let val = document.getElementById('searchInput').value.toLowerCase();
+  let box = document.getElementById('searchResults');
+  box.innerHTML = '';
+  if(val.length < 2){box.style.display='none';return}
+  let results = allProducts.filter(p=>p.name.toLowerCase().includes(val)).slice(0,12);
+  results.forEach(p=>{
+    box.innerHTML += `<div class="search-item" onclick="addToCart(${JSON.stringify(p).replace(/"/g,'&quot;')})"><img src="${p.img}" width="40"><div><div>${p.name}</div><div style="color:var(--green)">${p.price.toLocaleString()} ل.س</div></div></div>`;
+  });
+  box.style.display = results.length? 'block' : 'none';
+}
+
+function payWithShamCash(){
+  if(cart.length == 0){ alert("السلة فارغة"); return; }
+  let total = cart.reduce((a,b)=>a + b.price * b.qty, 0);
+  let message = `مرحبا مركز اوسكار التقني\nاريد الدفع عبر شام كاش\nالمبلغ: ${total.toLocaleString()} ل.س\nعدد المنتجات: ${cart.reduce((a,b)=>a+b.qty,0)}`;
+  window.open(`https://wa.me/+971544066811?text=${encodeURIComponent(message)}`, '_blank');
+}
+
+window.onload = function(){
+  for(let key in data){ createProducts(key, data[key]); }
+}
+</script>
+</body></html>
