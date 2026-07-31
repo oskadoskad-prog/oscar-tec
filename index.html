@@ -7,30 +7,41 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
-:root{--bg:#070710;--card:#111827dd;--blue:#00d4ff;--green:#00ff88; --red:#ff4444; --yellow:#ffc107}
+:root{--bg:#070710;--card:#111827dd;--blue:#00d4ff;--green:#00ff88; --red:#ff4444; --yellow:#ffc107; --text:#fff}
+body.light{--bg:#f0f2f5;--card:#ffffffdd;--text:#000}
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Cairo',sans-serif}
 body{
   background: linear-gradient(rgba(7,7,16,0.8), rgba(7,7,16,0.8)),
   url('https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1920') center/cover fixed;
-  color:#fff
+  color:var(--text)
 }
+body.light{
+  background: linear-gradient(rgba(240,242,245,0.9), rgba(240,242,245,0.9)),
+  url('https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1920') center/cover fixed;
+}
+
 header{text-align:center;padding:10px;background:linear-gradient(90deg,#00d4ff22,#111827);border-bottom:2px solid var(--blue);position:sticky;top:0;z-index:999;backdrop-filter:blur(5px)}
 .header-top{display:flex;justify-content:space-between;align-items:center;max-width:1400px;margin:auto;gap:10px;flex-wrap:wrap}
 .brand{display:flex;align-items:center;gap:12px}
 .brand img{width:50px;height:50px;border-radius:50%;border:2px solid var(--blue)}
 header h1{font-size:2.2rem;font-weight:900;color:var(--blue);text-shadow:0 0 20px #00d4ff88}
 .search-box{flex:1;min-width:250px;max-width:500px;position:relative}
-.search-box input{width:100%;padding:10px 40px 10px 15px;border-radius:25px;border:2px solid var(--blue);background:#0a0f1a;color:#fff;outline:none}
+.search-box input{width:100%;padding:10px 40px 10px 15px;border-radius:25px;border:2px solid var(--blue);background:#0a0f1a;color:var(--text);outline:none}
+body.light.search-box input{background:#fff}
 .search-box i{position:absolute;right:15px;top:50%;transform:translateY(-50%);color:var(--blue)}
 .search-results{position:absolute;top:45px;left:0;right:0;background:var(--card);border:2px solid var(--blue);border-radius:10px;max-height:400px;overflow-y:auto;display:none;z-index:1000}
 .search-item{display:flex;gap:10px;padding:10px;cursor:pointer;border-bottom:1px solid #00d4ff22}
 .search-item:hover{background:#00d4ff11}
 .icon-btn{background:none;border:none;color:var(--blue);font-size:1.6rem;cursor:pointer;padding:8px;position:relative}
-.admin-btn{background:var(--yellow);color:#000;border:none;padding:8px 15px;border-radius:8px;font-weight:900;cursor:pointer}
+.admin-btn{background:var(--yellow);color:#000;border:none;padding:8px 15px;border-radius:8px;font-weight:900;cursor:pointer;display:none}
+body.admin.admin-btn{display:block}
+.whatsapp-btn{background:#25D366;color:#fff;border:none;padding:8px 15px;border-radius:8px;font-weight:900;cursor:pointer}
+.menu-btn{background:none;border:none;color:var(--blue);font-size:1.8rem;cursor:pointer}
 .cart-count{position:absolute;top:0;right:0;background:var(--red);color:#fff;border-radius:50%;width:20px;height:20px;font-size:0.8rem;display:flex;align-items:center;justify-content:center;font-weight:900}
 .cart-box{position:absolute;top:60px;left:10px;background:var(--card);border:2px solid var(--blue);border-radius:15px;padding:15px;display:none;z-index:10000;width:380px;max-height:600px;overflow-y:auto;text-align:right;backdrop-filter:blur(10px)}
 .cart-box.show{display:block}
 .cart-item{display:flex;gap:10px;align-items:center;background:#0a0f1a;padding:10px;border-radius:10px;margin:8px 0}
+body.light.cart-item{background:#f0f0f0}
 .cart-item img{width:50px;height:50px;border-radius:8px;object-fit:cover}
 .cart-total{font-weight:900;color:var(--green);text-align:center;margin:10px 0;font-size:1.2rem}
 .pay-btn{background:var(--yellow);color:#000;border:none;padding:12px;width:100%;border-radius:10px;font-weight:900;font-size:1.1rem;cursor:pointer;margin-top:10px}
@@ -51,24 +62,33 @@ body.admin.card-delete{display:block}
 .page{display:none;padding:20px;max-width:1400px;margin:20px auto}
 .back-btn{background:var(--blue);color:#000;border:none;padding:10px 20px;border-radius:10px;font-weight:700;cursor:pointer;margin-bottom:20px;font-size:1rem}
 .page-title{text-align:center;margin-bottom:25px;font-size:1.8rem;color:var(--blue)}
-.add-product-btn{background:var(--green);color:#000;border:none;padding:12px 25px;border-radius:10px;font-weight:900;cursor:pointer;margin:20px auto;display:block;font-size:1rem}
-.add-product-btn:hover{background:#00cc70}
+.add-product-btn{background:var(--green);color:#000;border:none;padding:12px 25px;border-radius:10px;font-weight:900;cursor:pointer;margin:20px auto;display:none;font-size:1rem}
+body.admin.add-product-btn{display:block}
 
 .products{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:15px}
 .item{display:flex;align-items:center;gap:12px;padding:12px;background:#0a0f1a;border-radius:12px;border:1px solid #00d4ff22;position:relative}
+body.light.item{background:#f0f0f0}
 .item:hover{border-color:var(--blue)}
 .item img{width:70px;height:70px;border-radius:10px;object-fit:cover}
 .item-info{flex:1;text-align:right;font-size:0.9rem}
 .item-info.specs{font-size:0.8rem;color:#aaa;margin-top:3px}
+body.light.item-info.specs{color:#555}
 .price{color:var(--green);font-weight:900;font-size:1rem;white-space:nowrap}
 .add-btn{background:var(--green);color:#000;border:none;padding:8px 12px;border-radius:8px;font-weight:900;cursor:pointer;font-size:0.85rem}
 .edit-btn{position:absolute;top:5px;left:5px;background:var(--yellow);color:#000;border:none;padding:3px 8px;border-radius:5px;font-size:0.7rem;cursor:pointer;display:none}
 .delete-btn{position:absolute;top:5px;right:5px;background:var(--red);color:#fff;border:none;padding:3px 8px;border-radius:5px;font-size:0.7rem;cursor:pointer;display:none}
 body.admin.edit-btn, body.admin.delete-btn{display:block}
 
-.pubg-banner{background:linear-gradient(90deg,#ff8800,#ff2200);padding:15px;border-radius:12px;text-align:center;margin:15px 0;font-weight:900;font-size:1.2rem}
 footer{text-align:center;padding:30px;background:#0a0f1a;margin-top:40px;border-top:2px solid var(--blue)}
-@media(max-width:768px){.search-box{order:3;width:100%} header h1{font-size:1.8rem}}
+body.light footer{background:#ddd}
+
+/* قائمة 3 خطوط */
+#sideMenu{display:none;position:fixed;top:0;right:0;width:300px;height:100%;background:var(--card);z-index:10001;padding:20px;border-left:2px solid var(--blue);backdrop-filter:blur(10px)}
+#sideMenu.show{display:block}
+#sideMenu h3{color:var(--blue);margin:15px 0}
+#sideMenu button{width:100%;padding:12px;margin:8px 0;border:none;border-radius:8px;background:#00d4ff22;color:var(--text);font-weight:700;cursor:pointer;text-align:right}
+.overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000000aa;z-index:10000}
+.overlay.show{display:block}
 
 /* لوحة التحكم */
 #adminPanel{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000000ee;z-index:99999;overflow-y:auto;padding:20px}
@@ -85,8 +105,10 @@ footer{text-align:center;padding:30px;background:#0a0f1a;margin-top:40px;border-
 <header>
   <div class="header-top">
     <div style="display:flex;gap:10px">
+      <button class="menu-btn" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></button>
       <button class="icon-btn" onclick="toggleCart(event)"><i class="fa-solid fa-cart-shopping"></i><span id="cartCount" class="cart-count">0</span></button>
-      <button class="admin-btn" onclick="openAdmin()"><i class="fa-solid fa-gear"></i> لوحة التحكم</button>
+      <a href="https://wa.me/+971544066811" target="_blank"><button class="whatsapp-btn"><i class="fa-brands fa-whatsapp"></i> تواصل</button></a>
+      <button class="admin-btn" onclick="openAdmin()"><i class="fa-solid fa-gear"></i> الادمن</button>
     </div>
 
     <div id="cartBox" class="cart-box" onclick="event.stopPropagation()">
@@ -109,6 +131,16 @@ footer{text-align:center;padding:30px;background:#0a0f1a;margin-top:40px;border-
   </div>
 </header>
 
+<!-- قائمة 3 خطوط -->
+<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+<div id="sideMenu">
+  <h3><i class="fa-solid fa-gear"></i> الاعدادات</h3>
+  <button onclick="toggleTheme()"><i class="fa-solid fa-circle-half-stroke"></i> الوضع الليلي / النهاري</button>
+  <button onclick="focusSearch()"><i class="fa-solid fa-magnifying-glass"></i> البحث</button>
+  <button onclick="openAdmin()"><i class="fa-solid fa-user-shield"></i> دخول الادمن</button>
+  <button onclick="exportData()"><i class="fa-solid fa-download"></i> تصدير نسخة احتياطية</button>
+</div>
+
 <!-- لوحة التحكم -->
 <div id="adminPanel">
   <div class="admin-box">
@@ -118,15 +150,14 @@ footer{text-align:center;padding:30px;background:#0a0f1a;margin-top:40px;border-
     <button onclick="closeAdmin()" style="background:var(--red)">اغلاق</button>
 
     <div id="adminContent" style="display:none">
-
       <div class="admin-section">
         <h3>1. اضافة قسم جديد</h3>
-        <input type="text" id="newCatName" placeholder="اسم القسم: مثال اكسسوارات">
-        <input type="text" id="newCatIcon" placeholder="ايقونة FontAwesome: مثال fa-headphones">
+        <input type="text" id="newCatName" placeholder="اسم القسم">
+        <input type="text" id="newCatIcon" placeholder="ايقونة FontAwesome: fa-headphones">
         <label>رفع صورة القسم:</label>
         <input type="file" id="newCatImgFile" accept="image/*" onchange="previewFile(this,'catPreview')">
         <img id="catPreview" class="preview-img" style="display:none">
-        <input type="text" id="newCatId" placeholder="id للقسم بالانجليزي: مثال accessories">
+        <input type="text" id="newCatId" placeholder="id بالانجليزي: accessories">
         <button onclick="addCategory()" style="background:var(--green)">اضافة قسم</button>
       </div>
 
@@ -149,7 +180,6 @@ footer{text-align:center;padding:30px;background:#0a0f1a;margin-top:40px;border-
       </div>
 
       <button onclick="saveData()" style="background:var(--green);width:100%">حفظ كل التغييرات</button>
-      <button onclick="exportData()" style="background:var(--blue);width:100%">تصدير نسخة احتياطية</button>
       <button onclick="resetData()" style="background:var(--red);width:100%">ارجاع الافتراضي</button>
     </div>
   </div>
@@ -160,7 +190,6 @@ footer{text-align:center;padding:30px;background:#0a0f1a;margin-top:40px;border-
 </div>
 
 <div id="home" class="container"></div>
-
 <div id="dynamicPages"></div>
 
 <footer><p>جميع الحقوق محفوظة © مركز اوسكار التقني 2026 | الدفع عبر شام كاش | واتساب: +971544066811</p></footer>
@@ -171,7 +200,6 @@ let allProducts = [];
 let siteData = JSON.parse(localStorage.getItem('oskarSiteData')) || getDefaultData();
 let tempCatImg = '';
 let tempProdImg = '';
-let currentCatForAdd = '';
 
 function getDefaultData(){
   return {
@@ -184,12 +212,10 @@ function getDefaultData(){
     ],
     products: {
       phones: [
-        {name:"ايفون 15 برو ماكس 256GB", specs:"iOS 17 | كاميرا احترافية", price:13000000, img:"https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=100"},
-        {name:"سامسونج S24 الترا 512GB", specs:"الرام: 12GB | الذاكرة: 512GB", price:11000000, img:"https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=100"}
+        {name:"ايفون 15 برو ماكس 256GB", specs:"iOS 17 | كاميرا احترافية", price:13000000, img:"https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=100"}
       ],
       accessories: [
-        {name:"سماعة AirPods Pro", specs:"عزل ضجيج | بطارية 24 ساعة", price:800000, img:"https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?w=100"},
-        {name:"شاحن 65W سريع", specs:"PD + QC 3.0", price:200000, img:"https://images.unsplash.com/photo-1583863788434-e58a36330f0a?w=100"}
+        {name:"سماعة AirPods Pro", specs:"عزل ضجيج | بطارية 24 ساعة", price:800000, img:"https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?w=100"}
       ]
     }
   }
@@ -213,7 +239,6 @@ function renderHome(){
   siteData.categories.forEach(cat=>{
     html += `<div class="card" onclick="openPage('${cat.id}')"><button class="card-delete" onclick="deleteCategory('${cat.id}');event.stopPropagation()">x</button><img src="${cat.img}"><div class="card-content"><div class="icon"><i class="fa-solid ${cat.icon}"></i></div><h2>${cat.name}</h2></div></div>`;
   });
-  html += `<div class="card" onclick="openAdmin()" style="border:2px dashed var(--green)"><div class="card-content"><div class="icon"><i class="fa-solid fa-plus"></i></div><h2>اضافة قسم جديد</h2></div></div>`;
   document.getElementById('home').innerHTML = html;
   document.getElementById('marqueeSpan').innerText = siteData.marquee;
 }
@@ -244,13 +269,7 @@ function renderPages(){
 function openPage(id){document.getElementById('home').style.display = 'none';document.querySelectorAll('.page').forEach(s => s.style.display = 'none');document.getElementById(id).style.display = 'block';window.scrollTo(0,0);}
 function goHome(){document.getElementById('home').style.display = 'grid';document.querySelectorAll('.page').forEach(s => s.style.display = 'none');}
 
-function quickAddProduct(catId){
-  currentCatForAdd = catId;
-  openAdmin();
-  loginAdmin();
-  document.getElementById('productCat').value = catId;
-  document.getElementById('adminContent').scrollIntoView();
-}
+function quickAddProduct(catId){openAdmin();loginAdmin();document.getElementById('productCat').value = catId;document.getElementById('adminContent').scrollIntoView();}
 
 function addToCart(item){let existing = cart.find(p=>p.name==item.name);if(existing) existing.qty++;else cart.push({...item, qty:1});updateCart();}
 function updateCart(){let html = ''; let total = 0;cart.forEach((item,i)=>{total += item.price * item.qty;html += `<div class="cart-item"><img src="${item.img}"><div style="flex:1"><div>${item.name}</div><div style="color:var(--green)">${item.price.toLocaleString()} ل.س x ${item.qty}</div></div><button onclick="cart.splice(${i},1);updateCart()" style="background:red;color:#fff;border:none;border-radius:5px;padding:3px 8px">x</button></div>`;});document.getElementById('cartItems').innerHTML = html || '<p style="text-align:center">السلة فارغة</p>';document.getElementById('cartTotal').innerText = `المجموع: ${total.toLocaleString()} ل.س`;document.getElementById('cartCount').innerText = cart.reduce((a,b)=>a+b.qty,0);}
@@ -258,8 +277,13 @@ function toggleCart(e){ e.stopPropagation(); document.getElementById('cartBox').
 document.addEventListener('click', ()=>{document.getElementById('cartBox').classList.remove('show');document.getElementById('searchResults').style.display='none'});
 
 function searchProduct(){let val = document.getElementById('searchInput').value.toLowerCase();let box = document.getElementById('searchResults');box.innerHTML = '';if(val.length < 2){box.style.display='none';return}let results = allProducts.filter(p=>p.name.toLowerCase().includes(val)).slice(0,12);results.forEach(p=>{box.innerHTML += `<div class="search-item" onclick="addToCart(${JSON.stringify(p).replace(/"/g,'&quot;')})"><img src="${p.img}" width="40"><div><div>${p.name}</div><div style="color:var(--green)">${p.price.toLocaleString()} ل.س</div></div></div>`;});box.style.display = results.length? 'block' : 'none';}
+function focusSearch(){document.getElementById('searchInput').focus();toggleMenu();}
 
 function payWithShamCash(){if(cart.length == 0){ alert("السلة فارغة"); return; }let total = cart.reduce((a,b)=>a + b.price * b.qty, 0);let message = `مرحبا مركز اوسكار التقني\nاريد الدفع عبر شام كاش\nالمبلغ: ${total.toLocaleString()} ل.س\nعدد المنتجات: ${cart.reduce((a,b)=>a+b.qty,0)}`;window.open(`https://wa.me/+971544066811?text=${encodeURIComponent(message)}`, '_blank');}
+
+// قائمة واعدادات
+function toggleMenu(){document.getElementById('sideMenu').classList.toggle('show');document.getElementById('overlay').classList.toggle('show');}
+function toggleTheme(){document.body.classList.toggle('light');localStorage.setItem('theme', document.body.classList.contains('light')?'light':'dark');}
 
 // لوحة التحكم
 function openAdmin(){document.getElementById('adminPanel').style.display='block';}
@@ -278,6 +302,9 @@ function saveData(){localStorage.setItem('oskarSiteData',JSON.stringify(siteData
 function resetData(){if(confirm('ارجاع كل شي للافتراضي؟')){localStorage.removeItem('oskarSiteData');location.reload();}}
 function exportData(){let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(siteData));let a = document.createElement('a');a.href=dataStr;a.download="backup-oskar.json";a.click();}
 
-window.onload = function(){renderHome();renderPages();}
+window.onload = function(){
+  renderHome();renderPages();
+  if(localStorage.getItem('theme')=='light') document.body.classList.add('light');
+}
 </script>
 </body></html>
