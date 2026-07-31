@@ -13,31 +13,24 @@ body.light{--bg:#f0f2f5;--card:#ffffffdd;--text:#000}
 body{background: linear-gradient(rgba(7,7,16,0.8), rgba(7,7,16,0.8)),var(--bodyBg) center/cover fixed;color:var(--text)}
 body.light{background: linear-gradient(rgba(240,242,245,0.9), rgba(240,242,245,0.9)),var(--bodyBg) center/cover fixed;}
 
-header{text-align:center;padding:8px 10px;background:linear-gradient(90deg,#00d4ff22,#111827);border-bottom:2px solid var(--blue);position:sticky;top:0;z-index:999;backdrop-filter:blur(5px)}
-.header-top{display:flex;justify-content:space-between;align-items:center;max-width:1400px;margin:auto;gap:8px;flex-wrap:wrap}
-.brand{display:flex;align-items:center;gap:10px}
+header{text-align:center;padding:10px;background:linear-gradient(90deg,#00d4ff22,#111827);border-bottom:2px solid var(--blue);position:sticky;top:0;z-index:999;backdrop-filter:blur(5px)}
+.header-top{display:flex;justify-content:space-between;align-items:center;max-width:1400px;margin:auto;gap:10px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px}
 .brand img{width:80px;height:80px;border-radius:12px;border:2px solid var(--blue);cursor:pointer;object-fit:cover}
-header h1{font-size:1.9rem;font-weight:900;color:var(--blue);text-shadow:0 0 20px #00d4ff88}
-
-.left-icons{display:flex;gap:8px;align-items:center}
-.menu-btn,.icon-btn,.whatsapp-btn{background:none;border:2px solid var(--blue);color:var(--blue);width:42px;height:42px;border-radius:10px;cursor:pointer;font-size:1.2rem;display:flex;align-items:center;justify-content:center}
-.whatsapp-btn{background:#25D366;border-color:#25D366;color:#fff}
-.icon-btn{position:relative}
-.cart-count{position:absolute;top:-5px;right:-5px;background:var(--red);color:#fff;border-radius:50%;width:18px;height:18px;font-size:0.7rem;display:flex;align-items:center;justify-content:center;font-weight:900}
-
-.search-wrapper{display:flex;flex-direction:column;align-items:center;gap:5px;flex:1;min-width:160px;max-width:280px;position:relative}
-.search-box{width:100%;position:relative;display:flex;gap:6px;align-items:center}
-.search-box input{width:100%;padding:7px 38px 7px 12px;border-radius:20px;border:2px solid var(--blue);background:#0a0f1a;color:var(--text);outline:none;font-size:0.85rem}
+header h1{font-size:2.2rem;font-weight:900;color:var(--blue);text-shadow:0 0 20px #00d4ff88}
+.search-box{flex:1;min-width:250px;max-width:500px;position:relative;display:flex;gap:8px;align-items:center}
+.search-box input{flex:1;padding:10px 15px;border-radius:25px;border:2px solid var(--blue);background:#0a0f1a;color:var(--text);outline:none}
 body.light.search-box input{background:#fff}
-.search-box i{position:absolute;right:50px;top:50%;transform:translateY(-50%);color:var(--blue);font-size:0.9rem}
-.back-search-btn{display:flex;flex-direction:column;align-items:center;gap:2px;background:var(--blue);color:#000;border:none;padding:4px 8px;border-radius:8px;cursor:pointer;font-size:0.7rem;font-weight:700}
-.back-search-btn i{font-size:1rem}
-
-.search-results{position:absolute;top:40px;left:0;right:0;background:var(--card);border:2px solid var(--blue);border-radius:10px;max-height:400px;overflow-y:auto;display:none;z-index:1000}
+.back-search-btn{background:var(--blue);color:#000;border:none;padding:10px 12px;border-radius:50%;cursor:pointer;font-size:1rem}
+.search-results{position:absolute;top:45px;left:0;right:50px;background:var(--card);border:2px solid var(--blue);border-radius:10px;max-height:400px;overflow-y:auto;display:none;z-index:1000}
 .search-item{display:flex;gap:10px;padding:10px;cursor:pointer;border-bottom:1px solid #00d4ff22}
 .search-item:hover{background:#00d4ff11}
+.icon-btn{background:none;border:none;color:var(--blue);font-size:1.6rem;cursor:pointer;padding:8px;position:relative}
+.cart-count{position:absolute;top:0;right:0;background:var(--red);color:#fff;border-radius:50%;width:20px;height:20px;font-size:0.8rem;display:flex;align-items:center;justify-content:center;font-weight:900}
+.whatsapp-btn{background:#25D366;color:#fff;border:none;padding:8px 15px;border-radius:8px;font-weight:900;cursor:pointer}
+.menu-btn{background:none;border:none;color:var(--blue);font-size:1.8rem;cursor:pointer}
 
-.cart-box{position:absolute;top:50px;left:50%;transform:translateX(-50%);background:var(--card);border:2px solid var(--blue);border-radius:15px;padding:15px;display:none;z-index:10000;width:350px;max-height:600px;overflow-y:auto;text-align:right;backdrop-filter:blur(10px)}
+.cart-box{position:absolute;top:60px;left:10px;background:var(--card);border:2px solid var(--blue);border-radius:15px;padding:15px;display:none;z-index:10000;width:380px;max-height:600px;overflow-y:auto;text-align:right;backdrop-filter:blur(10px)}
 .cart-box.show{display:block}
 .cart-item{display:flex;gap:10px;align-items:center;background:#0a0f1a;padding:10px;border-radius:10px;margin:8px 0}
 body.light.cart-item{background:#f0f0f0}
@@ -85,11 +78,13 @@ body.light footer{background:#ddd}
 
 /* موبايل */
 @media (max-width: 768px){
- .products{grid-template-columns:1fr}
- .item{flex-wrap:wrap}
- .search-wrapper{max-width:200px}
+.products{grid-template-columns:1fr}
+.item{flex-wrap:wrap}
+.header-top{flex-direction:column}
+.search-box{max-width:100%}
 }
 
+/* قائمة 3 خطوط */
 #sideMenu{display:none;position:fixed;top:0;right:0;width:300px;height:100%;background:var(--card);z-index:10001;padding:20px;border-left:2px solid var(--blue);backdrop-filter:blur(10px)}
 #sideMenu.show{display:block}
 #sideMenu h3{color:var(--blue);margin:15px 0}
@@ -97,6 +92,7 @@ body.light footer{background:#ddd}
 .overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000aa;z-index:10000}
 .overlay.show{display:block}
 
+/* لوحة التحكم الجانبية */
 #adminPanel{position:fixed;top:0;left:-450px;width:450px;height:100%;background:#111827;z-index:99999;overflow-y:auto;padding:20px;border-right:3px solid var(--blue);transition:left 0.4s ease;box-shadow:5px 0 30px #000}
 #adminPanel.show{left:0}
 .admin-toggle{position:fixed;top:50%;left:0;transform:translateY(-50%);background:var(--blue);color:#000;border:none;padding:15px 8px;border-radius:0 10px 10px 0;font-size:1.5rem;cursor:pointer;z-index:100000;font-weight:900;display:none}
@@ -113,19 +109,10 @@ body.light footer{background:#ddd}
 
 <header>
   <div class="header-top">
-    <div class="left-icons">
+    <div style="display:flex;gap:10px;position:relative">
       <button class="menu-btn" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></button>
       <button class="icon-btn" onclick="toggleCart(event)"><i class="fa-solid fa-cart-shopping"></i><span id="cartCount" class="cart-count">0</span></button>
-      <a href="https://wa.me/+971544066811" target="_blank"><button class="whatsapp-btn"><i class="fa-brands fa-whatsapp"></i></button></a>
-    </div>
-
-    <div class="search-wrapper">
-      <div class="search-box">
-        <button class="back-search-btn" onclick="backPage()" title="رجوع"><i class="fa-solid fa-arrow-right"></i>رجوع</button>
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" id="searchInput" placeholder="ابحث..." onkeyup="searchProduct()">
-      </div>
-      <div id="searchResults" class="search-results"></div>
+      <a href="https://wa.me/+971544066811" target="_blank"><button class="whatsapp-btn"><i class="fa-brands fa-whatsapp"></i> تواصل</button></a>
 
       <div id="cartBox" class="cart-box" onclick="event.stopPropagation()">
         <h3 style="text-align:center;color:var(--blue)">سلة المشتريات</h3>
@@ -133,6 +120,12 @@ body.light footer{background:#ddd}
         <div id="cartTotal" class="cart-total">المجموع: 0 ل.س</div>
         <button class="pay-btn" onclick="payWithShamCash()"><i class="fa-solid fa-wallet"></i> الدفع عبر شام كاش</button>
       </div>
+    </div>
+
+    <div class="search-box">
+      <button class="back-search-btn" onclick="backPage()" title="رجوع للخلف"><i class="fa-solid fa-arrow-right"></i></button>
+      <input type="text" id="searchInput" placeholder="ابحث عن منتج..." onkeyup="searchProduct()">
+      <div id="searchResults" class="search-results"></div>
     </div>
 
     <div class="brand">
@@ -348,7 +341,7 @@ function renderPages(){
     select.innerHTML += `<option value="${cat.id}">${cat.name}</option>`;
   });
 
-  buildAllProducts(); // مهم عشان البحث يشتغل بالموبايل
+  buildAllProducts();
 }
 
 function openPage(id){
@@ -493,4 +486,8 @@ window.onload = function(){
   applyData();
   renderHome();renderPages();updateCart();buildAllProducts();
   if(localStorage.getItem('theme')=='light') document.body.classList.add('light');
-  if(adminActive){document.getElementById('adminToggleBtn
+  if(adminActive){document.getElementById('adminToggleBtn').classList.add('show');document.getElementById('adminPanel').classList.add('show')}
+}
+</script>
+</body>
+</html>
