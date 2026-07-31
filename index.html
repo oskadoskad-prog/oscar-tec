@@ -13,7 +13,7 @@ body.light{--bg:#f0f2f5;--card:#ffffffdd;--text:#000}
 body{background: linear-gradient(rgba(7,7,16,0.8), rgba(7,7,16,0.8)),var(--bodyBg) center/cover fixed;color:var(--text)}
 body.light{background: linear-gradient(rgba(240,242,245,0.9), rgba(240,242,245,0.9)),var(--bodyBg) center/cover fixed;}
 
-header{text-align:center;padding:10px;background:var(--headerBg);border-bottom:2px solid var(--blue);position:sticky;top:0;z-index:999;backdrop-filter:blur(5px)}
+header{text-align:center;padding:10px;background:linear-gradient(90deg,#00d4ff22,#111827);border-bottom:2px solid var(--blue);position:sticky;top:0;z-index:999;backdrop-filter:blur(5px)}
 .header-top{display:flex;justify-content:space-between;align-items:center;max-width:1400px;margin:auto;gap:10px;flex-wrap:wrap}
 .brand{display:flex;align-items:center;gap:12px}
 .brand img{width:50px;height:50px;border-radius:50%;border:2px solid var(--blue)}
@@ -121,7 +121,7 @@ body.light footer{background:#ddd}
     </div>
 
     <div class="brand">
-      <img id="siteLogo" src="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=200" alt="روبوت">
+      <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=200" alt="روبوت">
       <h1><i class="fa-solid fa-microchip"></i> مركز اوسكار التقني</h1>
     </div>
   </div>
@@ -167,18 +167,11 @@ body.light footer{background:#ddd}
       </div>
 
       <div class="admin-section">
-        <h3>3. تخصيص المظهر</h3>
-        <label>تغيير خلفية الموقع:</label>
+        <h3>3. تغيير خلفية الموقع</h3>
+        <label>رفع صورة خلفية جديدة:</label>
         <input type="file" id="bgFile" accept="image/*" onchange="changeBackground(this)">
         <img id="bgPreview" class="preview-img" style="display:none">
-
-        <label>تغيير اللوغو:</label>
-        <input type="file" id="logoFile" accept="image/*" onchange="changeLogo(this)">
-        <img id="logoPreview" class="preview-img" style="display:none">
-
-        <label>تغيير خلفية الهيدر:</label>
-        <input type="file" id="headerBgFile" accept="image/*" onchange="changeHeaderBg(this)">
-        <img id="headerBgPreview" class="preview-img" style="display:none">
+        <button onclick="resetBackground()" style="background:var(--yellow);color:#000;width:100%">ارجاع الخلفية الافتراضية</button>
       </div>
 
       <div class="admin-section">
@@ -219,13 +212,12 @@ let tempEditCatImg = '';
 let tempEditProdImg = '';
 let adminActive = localStorage.getItem('adminActive') === 'true';
 const SECRET_CODE = "oskad0099";
+const DEFAULT_BG = "url('https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1920')";
 
 function getDefaultData(){
   return {
     marquee: "مركز اوسكار التقني يقدم خدمات صيانة جوالات طافية معالجات خدمة تبديل باغات الشاشات المكسورة وكل مايخص الجوال وبرمجة الجوال والسوفتوير",
-    bodyBg: "url('https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1920')",
-    headerBg: "linear-gradient(90deg,#00d4ff22,#111827)",
-    logo: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=200",
+    bodyBg: DEFAULT_BG,
     categories: [
       {id:"phones", name:"بيع جوالات 100+", icon:"fa-mobile-screen-button", img:"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400"},
       {id:"accessories", name:"اكسسوارات 150+", icon:"fa-headphones", img:"https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400"},
@@ -257,10 +249,8 @@ function getDefaultData(){
   }
 }
 
-function applyTheme(){
+function applyBackground(){
   document.documentElement.style.setProperty('--bodyBg', siteData.bodyBg);
-  document.documentElement.style.setProperty('--headerBg', siteData.headerBg);
-  document.getElementById('siteLogo').src = siteData.logo;
 }
 
 function previewFile(input, previewId){
@@ -285,33 +275,15 @@ function changeBackground(input){
     siteData.bodyBg = `url('${e.target.result}')`;
     document.getElementById('bgPreview').src = e.target.result;
     document.getElementById('bgPreview').style.display = 'block';
-    applyTheme();saveData();
+    applyBackground();saveData();
   }
   reader.readAsDataURL(file);
 }
 
-function changeLogo(input){
-  const file = input.files[0];if(!file) return;
-  const reader = new FileReader();
-  reader.onload = function(e){
-    siteData.logo = e.target.result;
-    document.getElementById('logoPreview').src = e.target.result;
-    document.getElementById('logoPreview').style.display = 'block';
-    applyTheme();saveData();
-  }
-  reader.readAsDataURL(file);
-}
-
-function changeHeaderBg(input){
-  const file = input.files[0];if(!file) return;
-  const reader = new FileReader();
-  reader.onload = function(e){
-    siteData.headerBg = `url('${e.target.result}')`;
-    document.getElementById('headerBgPreview').src = e.target.result;
-    document.getElementById('headerBgPreview').style.display = 'block';
-    applyTheme();saveData();
-  }
-  reader.readAsDataURL(file);
+function resetBackground(){
+  siteData.bodyBg = DEFAULT_BG;
+  document.getElementById('bgPreview').style.display = 'none';
+  applyBackground();saveData();alert('تم ارجاع الخلفية الافتراضية');
 }
 
 function renderHome(){
@@ -445,4 +417,26 @@ function editCategory(id){
   if(newName==null) return;
   let newIcon = prompt('الايقونة الجديدة FontAwesome:', cat.icon);
   if(newIcon==null) return;
-  cat.name=newName;cat.icon=new
+  cat.name=newName;cat.icon=newIcon;saveData();location.reload();
+}
+
+function addProduct(){let cat=document.getElementById('productCat').value;let name=document.getElementById('productName').value;let specs=document.getElementById('productSpecs').value;let price=parseInt(document.getElementById('productPrice').value);let img=tempProdImg || 'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=100';if(!name||!price){alert('كمل البيانات');return}siteData.products[cat].push({name,specs,price,img});saveData();alert('تم اضافة المنتج');location.reload();}
+function deleteProduct(cat,i){if(confirm('حذف المنتج؟')){siteData.products[cat].splice(i,1);saveData();location.reload();}}
+function editProduct(cat,i){
+  tempEditProdImg = '';
+  let p=siteData.products[cat][i];
+  let newName=prompt('الاسم الجديد:',p.name);
+  if(newName==null) return;
+  let newSpecs=prompt('المواصفات الجديدة:',p.specs);
+  if(newSpecs==null) return;
+  let newPrice=prompt('السعر الجديد:',p.price);
+  if(newPrice==null) return;
+
+  let fileInput = document.createElement('input');
+  fileInput.type = 'file';
+  fileInput.accept = 'image/*';
+  fileInput.onchange = function(e){
+    previewFile(e.target, 'editProdPreview');
+    setTimeout(()=>{
+      p.name=newName;p.specs=newSpecs;p.price=parseInt(newPrice);if(tempEditProdImg) p.img=tempEditProdImg;
+      saveData();alert('تم التعديل');location.reload();
