@@ -34,7 +34,7 @@ body.light.search-box input{background:#fff}
 .search-item:hover{background:#00d4ff11}
 .icon-btn{background:none;border:none;color:var(--blue);font-size:1.6rem;cursor:pointer;padding:8px;position:relative}
 .admin-btn{background:var(--yellow);color:#000;border:none;padding:8px 15px;border-radius:8px;font-weight:900;cursor:pointer;display:none}
-body.admin.admin-btn{display:block}
+body.admin-btn{display:block}
 .whatsapp-btn{background:#25D366;color:#fff;border:none;padding:8px 15px;border-radius:8px;font-weight:900;cursor:pointer}
 .menu-btn{background:none;border:none;color:var(--blue);font-size:1.8rem;cursor:pointer}
 .cart-count{position:absolute;top:0;right:0;background:var(--red);color:#fff;border-radius:50%;width:20px;height:20px;font-size:0.8rem;display:flex;align-items:center;justify-content:center;font-weight:900}
@@ -89,11 +89,11 @@ body.light footer{background:#ddd}
 .overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000000aa;z-index:10000}
 .overlay.show{display:block}
 
-/* لوحة التحكم الجانبية */
-#adminPanel{position:fixed;top:0;right:-450px;width:450px;height:100%;background:#111827;z-index:99999;overflow-y:auto;padding:20px;border-left:3px solid var(--blue);transition:right 0.4s ease;box-shadow:-5px 0 30px #000}
-#adminPanel.show{right:0}
-.admin-toggle{position:fixed;top:50%;right:0;transform:translateY(-50%);background:var(--blue);color:#000;border:none;padding:15px 8px;border-radius:10px 0 0 10px;font-size:1.5rem;cursor:pointer;z-index:100000;display:none;font-weight:900}
-body.admin.admin-toggle{display:block}
+/* لوحة التحكم الجانبية يسار */
+#adminPanel{position:fixed;top:0;left:-450px;width:450px;height:100%;background:#111827;z-index:99999;overflow-y:auto;padding:20px;border-right:3px solid var(--blue);transition:left 0.4s ease;box-shadow:5px 0 30px #000}
+#adminPanel.show{left:0}
+.admin-toggle{position:fixed;top:50%;left:0;transform:translateY(-50%);background:var(--blue);color:#000;border:none;padding:15px 8px;border-radius:0 10px 10px 0;font-size:1.5rem;cursor:pointer;z-index:100000;display:none;font-weight:900}
+body.admin-toggle{display:block}
 .admin-box h2{color:var(--blue);text-align:center;margin-bottom:15px}
 .admin-box input,.admin-box textarea,.admin-box select{width:100%;padding:10px;margin:8px 0;border-radius:8px;border:1px solid var(--blue);background:#0a0f1a;color:#fff}
 .admin-box button{padding:10px 20px;margin:5px;border-radius:8px;border:none;font-weight:700;cursor:pointer}
@@ -139,14 +139,14 @@ body.admin.admin-toggle{display:block}
   <button onclick="focusSearch()"><i class="fa-solid fa-magnifying-glass"></i> البحث</button>
 </div>
 
-<!-- زر السهم لاخفاء لوحة التحكم -->
-<button class="admin-toggle" onclick="toggleAdminPanel()"><i class="fa-solid fa-chevron-left"></i></button>
+<!-- زر السهم لاخفاء لوحة التحكم يسار -->
+<button class="admin-toggle" onclick="toggleAdminPanel()"><i class="fa-solid fa-chevron-right"></i></button>
 
-<!-- لوحة التحكم الجانبية -->
+<!-- لوحة التحكم الجانبية يسار -->
 <div id="adminPanel">
   <div class="admin-box">
     <h2><i class="fa-solid fa-user-shield"></i> لوحة التحكم السرية</h2>
-    <button onclick="toggleAdminPanel()" style="background:var(--red);width:100%">اغلاق</button>
+    <button onclick="toggleAdminPanel()" style="background:var(--red);width:100%">اخفاء اللوحة</button>
 
     <div id="adminContent">
       <div class="admin-section">
@@ -173,20 +173,40 @@ body.admin.admin-toggle{display:block}
       </div>
 
       <div class="admin-section">
-        <h3>3. حذف قسم</h3>
-        <select id="deleteCatSelect"></select>
-        <button onclick="deleteCategoryFromPanel()" style="background:var(--red);width:100%">حذف القسم المختار</button>
+        <h3>3. تعديل / حذف قسم</h3>
+        <select id="editCatSelect" onchange="loadCatForEdit()"></select>
+        <input type="text" id="editCatName" placeholder="اسم القسم">
+        <input type="text" id="editCatIcon" placeholder="الايقونة">
+        <label>تغيير صورة القسم:</label>
+        <input type="file" id="editCatImgFile" accept="image/*" onchange="previewFile(this,'editCatPreview')">
+        <img id="editCatPreview" class="preview-img" style="display:none">
+        <button onclick="saveCatEdit()" style="background:var(--blue)">حفظ تعديل القسم</button>
+        <button onclick="deleteCategoryFromPanel()" style="background:var(--red);width:100%">حذف القسم</button>
       </div>
 
       <div class="admin-section">
-        <h3>4. النسخ الاحتياطي</h3>
+        <h3>4. تعديل / حذف منتج</h3>
+        <select id="editProdCat" onchange="loadProductsForEdit()"></select>
+        <select id="editProdSelect" onchange="loadProdForEdit()"></select>
+        <input type="text" id="editProdName" placeholder="اسم المنتج">
+        <input type="text" id="editProdSpecs" placeholder="الوصف">
+        <input type="number" id="editProdPrice" placeholder="السعر">
+        <label>تغيير صورة المنتج:</label>
+        <input type="file" id="editProdImgFile" accept="image/*" onchange="previewFile(this,'editProdPreview')">
+        <img id="editProdPreview" class="preview-img" style="display:none">
+        <button onclick="saveProdEdit()" style="background:var(--blue)">حفظ تعديل المنتج</button>
+        <button onclick="deleteProdFromPanel()" style="background:var(--red);width:100%">حذف المنتج</button>
+      </div>
+
+      <div class="admin-section">
+        <h3>5. النسخ الاحتياطي</h3>
         <button onclick="exportData()" style="background:var(--blue);width:100%"><i class="fa-solid fa-download"></i> تصدير نسخة احتياطية</button>
         <input type="file" id="importFile" accept=".json" onchange="importData(event)" style="display:none">
         <button onclick="document.getElementById('importFile').click()" style="background:var(--yellow);width:100%;color:#000"><i class="fa-solid fa-upload"></i> استيراد نسخة احتياطية</button>
       </div>
 
       <div class="admin-section">
-        <h3>5. تعديل النص المتحرك</h3>
+        <h3>6. تعديل النص المتحرك</h3>
         <textarea id="marqueeText" rows="2"></textarea>
         <button onclick="saveMarquee()" style="background:var(--blue)">حفظ</button>
       </div>
@@ -212,6 +232,8 @@ let allProducts = [];
 let siteData = JSON.parse(localStorage.getItem('oskarSiteData')) || getDefaultData();
 let tempCatImg = '';
 let tempProdImg = '';
+let tempEditCatImg = '';
+let tempEditProdImg = '';
 const SECRET_CODE = "oskad0099";
 
 function getDefaultData(){
@@ -230,7 +252,7 @@ function getDefaultData(){
       ],
       accessories: [
         {name:"سماعة AirPods Pro", specs:"عزل ضجيج | بطارية 24 ساعة", price:800000, img:"https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?w=100"},
-        {name:"شاحن 65W سريع", specs:"PD + QC 3.0", price:200000, img:"https://images.unsplash.com-photo-1583863788434-e58a36330f0a?w=100"}
+        {name:"شاحن 65W سريع", specs:"PD + QC 3.0", price:200000, img:"https://images.unsplash.com/photo-1583863788434-e58a36330f0a?w=100"}
       ],
       repair: [
         {name:"تغيير شاشة ايفون", specs:"ضمان 3 شهور", price:500000, img:"https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=100"},
@@ -253,6 +275,8 @@ function previewFile(input, previewId){
     document.getElementById(previewId).style.display = 'block';
     if(previewId=='catPreview') tempCatImg = e.target.result;
     if(previewId=='prodPreview') tempProdImg = e.target.result;
+    if(previewId=='editCatPreview') tempEditCatImg = e.target.result;
+    if(previewId=='editProdPreview') tempEditProdImg = e.target.result;
   }
   reader.readAsDataURL(file);
 }
@@ -261,12 +285,12 @@ function renderHome(){
   let html = '';
   siteData.categories.forEach(cat=>{
     html += `<div class="card" onclick="openPage('${cat.id}')">
-      <button class="card-edit-btn" onclick="editCategoryFull('${cat.id}');event.stopPropagation()"><i class="fa-solid fa-pen"></i> تعديل</button>
+      <button class="card-edit-btn" onclick="quickEditCat('${cat.id}');event.stopPropagation()"><i class="fa-solid fa-pen"></i> تعديل</button>
       <img src="${cat.img}"><div class="card-content"><div class="icon"><i class="fa-solid ${cat.icon}"></i></div><h2>${cat.name}</h2></div></div>`;
   });
   document.getElementById('home').innerHTML = html;
   document.getElementById('marqueeSpan').innerText = siteData.marquee;
-  updateDeleteSelect();
+  updateEditSelects();
 }
 
 function renderPages(){
@@ -281,7 +305,7 @@ function renderPages(){
     let productsHtml = '';
     siteData.products[catId].forEach((p,i)=>{
       productsHtml += `<div class="item">
-        <button class="item-edit-btn" onclick="editProductFull('${catId}',${i})"><i class="fa-solid fa-pen"></i> تعديل</button>
+        <button class="item-edit-btn" onclick="quickEditProd('${catId}',${i})"><i class="fa-solid fa-pen"></i> تعديل</button>
         <img src="${p.img}"><div class="item-info"><div>${p.name}</div><div class="specs">${p.specs}</div></div><div class="price">${p.price.toLocaleString()} ل.س</div><button class="add-btn" onclick='addToCart(${JSON.stringify(p)})'>اضافة</button></div>`;
       allProducts.push(p);
     });
@@ -299,6 +323,8 @@ function openPage(id){document.getElementById('home').style.display = 'none';doc
 function goHome(){document.getElementById('home').style.display = 'grid';document.querySelectorAll('.page').forEach(s => s.style.display = 'none');}
 
 function quickAddProduct(catId){toggleAdminPanel();document.getElementById('productCat').value = catId;document.getElementById('adminContent').scrollIntoView();}
+function quickEditCat(id){toggleAdminPanel();document.getElementById('editCatSelect').value=id;loadCatForEdit();}
+function quickEditProd(cat,i){toggleAdminPanel();document.getElementById('editProdCat').value=cat;loadProductsForEdit();document.getElementById('editProdSelect').value=i;loadProdForEdit();}
 
 function addToCart(item){let existing = cart.find(p=>p.name==item.name);if(existing) existing.qty++;else cart.push({...item, qty:1});updateCart();}
 function updateCart(){let html = ''; let total = 0;cart.forEach((item,i)=>{total += item.price * item.qty;html += `<div class="cart-item"><img src="${item.img}"><div style="flex:1"><div>${item.name}</div><div style="color:var(--green)">${item.price.toLocaleString()} ل.س x ${item.qty}</div></div><button onclick="cart.splice(${i},1);updateCart()" style="background:red;color:#fff;border:none;border-radius:5px;padding:3px 8px">x</button></div>`;});document.getElementById('cartItems').innerHTML = html || '<p style="text-align:center">السلة فارغة</p>';document.getElementById('cartTotal').innerText = `المجموع: ${total.toLocaleString()} ل.س`;document.getElementById('cartCount').innerText = cart.reduce((a,b)=>a+b.qty,0);}
@@ -342,53 +368,59 @@ function payWithShamCash(){if(cart.length == 0){ alert("السلة فارغة");
 function toggleMenu(){document.getElementById('sideMenu').classList.toggle('show');document.getElementById('overlay').classList.toggle('show');}
 function toggleTheme(){document.body.classList.toggle('light');localStorage.setItem('theme', document.body.classList.contains('light')?'light':'dark');}
 
-// تعديل كامل للقسم
-function editCategoryFull(id){
-  let cat = siteData.categories.find(c=>c.id==id);
-  let name = prompt('اسم القسم الجديد', cat.name);
-  let icon = prompt('ايقونة FontAwesome الجديدة', cat.icon);
-  let newImg = prompt('الصق رابط صورة الايقونة الجديدة او اتركه فاضي', cat.img);
-  if(name){cat.name=name;cat.icon=icon;if(newImg) cat.img=newImg;saveData();location.reload();}
-}
-
-// تعديل كامل للمنتج
-function editProductFull(cat,i){
-  let p = siteData.products[cat][i];
-  let name = prompt('الاسم الجديد', p.name);
-  let specs = prompt('الوصف الجديد', p.specs);
-  let price = prompt('السعر الجديد', p.price);
-  let newImg = prompt('الصق رابط الصورة الجديدة او اتركه فاضي', p.img);
-  if(name){p.name=name;p.specs=specs;p.price=parseInt(price);if(newImg) p.img=newImg;saveData();location.reload();}
-}
-
+// دوال الادمن
 function addCategory(){let name=document.getElementById('newCatName').value;let icon=document.getElementById('newCatIcon').value;let img=tempCatImg || 'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400';let id=document.getElementById('newCatId').value;if(!name||!id){alert('كمل البيانات');return}siteData.categories.push({id,name,icon,img});siteData.products[id]=[];saveData();alert('تم اضافة القسم');location.reload();}
-function deleteCategoryFromPanel(){let id=document.getElementById('deleteCatSelect').value;if(!id){alert('اختر قسم');return}if(confirm('متاكد من حذف القسم وكل منتجاته؟')){siteData.categories=siteData.categories.filter(c=>c.id!=id);delete siteData.products[id];saveData();location.reload();}}
-function updateDeleteSelect(){let sel=document.getElementById('deleteCatSelect');sel.innerHTML='';siteData.categories.forEach(c=>{sel.innerHTML+=`<option value="${c.id}">${c.name}</option>`;});}
-
 function addProduct(){let cat=document.getElementById('productCat').value;let name=document.getElementById('productName').value;let specs=document.getElementById('productSpecs').value;let price=parseInt(document.getElementById('productPrice').value);let img=tempProdImg || 'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=100';if(!name||!price){alert('كمل البيانات');return}siteData.products[cat].push({name,specs,price,img});saveData();alert('تم اضافة المنتج');location.reload();}
+
+function updateEditSelects(){
+  let sel1=document.getElementById('editCatSelect');sel1.innerHTML='';
+  let sel2=document.getElementById('editProdCat');sel2.innerHTML='';
+  siteData.categories.forEach((c,i)=>{sel1.innerHTML+=`<option value="${c.id}">${c.name}</option>`;sel2.innerHTML+=`<option value="${c.id}">${c.name}</option>`;});
+}
+function loadCatForEdit(){
+  let id=document.getElementById('editCatSelect').value;
+  let cat=siteData.categories.find(c=>c.id==id);
+  document.getElementById('editCatName').value=cat.name;
+  document.getElementById('editCatIcon').value=cat.icon;
+  document.getElementById('editCatPreview').src=cat.img;
+}
+function saveCatEdit(){
+  let id=document.getElementById('editCatSelect').value;
+  let cat=siteData.categories.find(c=>c.id==id);
+  cat.name=document.getElementById('editCatName').value;
+  cat.icon=document.getElementById('editCatIcon').value;
+  if(tempEditCatImg) cat.img=tempEditCatImg;
+  saveData();alert('تم التعديل');location.reload();
+}
+function deleteCategoryFromPanel(){let id=document.getElementById('editCatSelect').value;if(confirm('حذف القسم وكل منتجاته؟')){siteData.categories=siteData.categories.filter(c=>c.id!=id);delete siteData.products[id];saveData();location.reload();}}
+
+function loadProductsForEdit(){
+  let cat=document.getElementById('editProdCat').value;
+  let sel=document.getElementById('editProdSelect');sel.innerHTML='';
+  siteData.products[cat].forEach((p,i)=>{sel.innerHTML+=`<option value="${i}">${p.name}</option>`;});
+}
+function loadProdForEdit(){
+  let cat=document.getElementById('editProdCat').value;
+  let i=document.getElementById('editProdSelect').value;
+  let p=siteData.products[cat][i];
+  document.getElementById('editProdName').value=p.name;
+  document.getElementById('editProdSpecs').value=p.specs;
+  document.getElementById('editProdPrice').value=p.price;
+  document.getElementById('editProdPreview').src=p.img;
+}
+function saveProdEdit(){
+  let cat=document.getElementById('editProdCat').value;
+  let i=document.getElementById('editProdSelect').value;
+  let p=siteData.products[cat][i];
+  p.name=document.getElementById('editProdName').value;
+  p.specs=document.getElementById('editProdSpecs').value;
+  p.price=parseInt(document.getElementById('editProdPrice').value);
+  if(tempEditProdImg) p.img=tempEditProdImg;
+  saveData();alert('تم التعديل');location.reload();
+}
+function deleteProdFromPanel(){let cat=document.getElementById('editProdCat').value;let i=document.getElementById('editProdSelect').value;if(confirm('حذف المنتج؟')){siteData.products[cat].splice(i,1);saveData();location.reload();}}
 
 function saveMarquee(){siteData.marquee=document.getElementById('marqueeText').value;saveData();alert('تم الحفظ');}
 function saveData(){localStorage.setItem('oskarSiteData',JSON.stringify(siteData));}
 function resetData(){if(confirm('ارجاع كل شي للافتراضي؟')){localStorage.removeItem('oskarSiteData');location.reload();}}
-function exportData(){let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(siteData));let a = document.createElement('a');a.href=dataStr;a.download="backup-oskar.json";a.click();}
-function importData(event){
-  const file = event.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = function(e){
-    try{
-      siteData = JSON.parse(e.target.result);
-      saveData();
-      alert('تم الاستيراد بنجاح');
-      location.reload();
-    }catch{alert('الملف خطأ')}
-  }
-  reader.readAsText(file);
-}
-
-window.onload = function(){
-  renderHome();renderPages();
-  if(localStorage.getItem('theme')=='light') document.body.classList.add('light');
-}
-</script>
-</body></html>
+function exportData(){let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(siteData));let a = document.createElement('a');a.href=dataStr;a.download="backup-oskar.json";a.click
