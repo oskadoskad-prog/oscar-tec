@@ -13,14 +13,14 @@ body{background:var(--bodyBg, var(--bg)) center/cover fixed;color:var(--text);pa
 
 /* الهيدر */
 .top-header{background:var(--blue);padding:10px;color:#fff;position:sticky;top:0;z-index:999}
-.brand-name{text-align:center;font-weight:900;font-size:1.4rem;padding:5px;color:var(--orange)}
-.brand-name i{margin-left:5px}
-.search-area{display:flex;gap:0;padding:0 10px;position:relative}
+.brand-row{display:flex;justify-content:space-between;align-items:center}
+.brand-name{font-weight:900;font-size:1.4rem;color:var(--orange)}
+.whatsapp-top{background:#25D366;color:#fff;border:none;padding:8px 12px;border-radius:8px;font-weight:700;cursor:pointer;font-size:0.9rem}
+.search-area{display:flex;gap:0;padding:10px 0 0 0;position:relative}
 .search-area.search-icon{background:var(--orange);padding:0 15px;display:flex;align-items:center;border-radius:0 8px 8px 0;font-size:1.3rem}
 .search-area input{flex:1;padding:12px;border:none;outline:none;font-size:1rem;border-radius:8px 0 0 8px}
-.search-results{position:absolute;top:50px;left:10px;right:10px;background:#fff;border-radius:8px;max-height:400px;overflow-y:auto;display:none;z-index:1000;box-shadow:0 4px 10px #0003}
+.search-results{position:absolute;top:55px;left:10px;right:10px;background:#fff;border-radius:8px;max-height:400px;overflow-y:auto;display:none;z-index:1000;box-shadow:0 4px 10px #0003}
 .search-item{display:flex;gap:10px;padding:10px;cursor:pointer;border-bottom:1px solid #ddd;color:#000}
-.search-item:hover{background:#f5f5f5}
 
 /* البنرات 3 */
 .banners{display:flex;gap:8px;padding:10px;overflow-x:auto;background:#fff}
@@ -40,7 +40,7 @@ body{background:var(--bodyBg, var(--bg)) center/cover fixed;color:var(--text);pa
 .product-old{color:#565959;text-decoration:line-through;font-size:0.85rem;text-align:right}
 .add-cart-btn{background:var(--yellow);border:none;width:100%;padding:8px;border-radius:20px;margin-top:8px;font-weight:700;cursor:pointer}
 
-/* ادارة الكروت */
+/* ادارة الكروت - تظهر بالموقع مباشرة */
 .card-admin{position:absolute;top:5px;left:5px;display:flex;gap:4px;z-index:10}
 .card-admin button{background:var(--yellow);color:#000;border:none;border-radius:6px;width:28px;height:28px;cursor:pointer;font-size:0.8rem}
 .card-admin.del{background:var(--red);color:#fff}
@@ -68,7 +68,10 @@ body{background:var(--bodyBg, var(--bg)) center/cover fixed;color:var(--text);pa
 
 <!-- هيدر -->
 <div class="top-header">
-  <div class="brand-name"><i class="fa-solid fa-microchip"></i> مركز اوسكار التقني</div>
+  <div class="brand-row">
+    <div class="brand-name"><i class="fa-solid fa-microchip"></i> مركز اوسكار التقني</div>
+    <button class="whatsapp-top" onclick="window.open('https://wa.me/+971544066811','_blank')"><i class="fa-brands fa-whatsapp"></i> تواصل</button>
+  </div>
   <div class="search-area">
     <div class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
     <input type="text" id="searchInput" placeholder="البحث في مركز اوسكار" onkeyup="searchProduct()">
@@ -91,7 +94,7 @@ body{background:var(--bodyBg, var(--bg)) center/cover fixed;color:var(--text);pa
 <div class="bottom-nav">
   <div class="nav-item" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i>تصفح</div>
   <div class="nav-item" onclick="checkoutShamCash()"><i class="fa-solid fa-cart-shopping"></i>العربة <span id="cartCount" class="cart-count">0</span></div>
-  <div class="nav-item" onclick="alert('حسابك')"><i class="fa-solid fa-user"></i>حسابك</div>
+  <div class="nav-item" onclick="alert('صفحة حسابك')"><i class="fa-solid fa-user"></i>حسابك</div>
   <div class="nav-item" onclick="goHome()"><i class="fa-solid fa-house"></i>الرئيسية</div>
 </div>
 
@@ -128,6 +131,7 @@ body{background:var(--bodyBg, var(--bg)) center/cover fixed;color:var(--text);pa
       <h3>3. تغيير خلفية الموقع</h3>
       <input type="file" id="bgFile" accept="image/*" onchange="changeBackground(this)">
       <img id="bgPreview" class="preview-img" style="display:none">
+      <button onclick="removeBg()" style="background:var(--red)">حذف الخلفية</button>
     </div>
 
     <div class="admin-section">
@@ -183,8 +187,16 @@ function changeBackground(input){
     document.getElementById('bgPreview').style.display = 'block';
     document.body.style.setProperty('--bodyBg', siteData.bodyBg);
     saveData();
+    alert('تم تغيير الخلفية')
   }
   reader.readAsDataURL(file);
+}
+
+function removeBg(){
+  siteData.bodyBg = "";
+  document.body.style.setProperty('--bodyBg', '');
+  document.getElementById('bgPreview').style.display = 'none';
+  saveData();alert('تم حذف الخلفية')
 }
 
 function buildAllProducts(){
@@ -202,9 +214,9 @@ function renderProducts(){
     siteData.products[catId].forEach((p,i)=>{
       html += `<div class="product-card">
         <div class="card-admin" style="display:${adminActive?'flex':'none'}">
-          <button onclick="editProduct('${catId}',${i})"><i class="fa-solid fa-pen"></i></button>
-          <button onclick="changeProdImage('${catId}',${i})"><i class="fa-solid fa-image"></i></button>
-          <button class="del" onclick="deleteProduct('${catId}',${i})"><i class="fa-solid fa-trash"></i></button>
+          <button onclick="editProduct('${catId}',${i})" title="تعديل"><i class="fa-solid fa-pen"></i></button>
+          <button onclick="changeProdImage('${catId}',${i})" title="تغيير صورة"><i class="fa-solid fa-image"></i></button>
+          <button class="del" onclick="deleteProduct('${catId}',${i})" title="حذف"><i class="fa-solid fa-trash"></i></button>
         </div>
         <img src="${p.img}">
         <div class="product-name">${p.name}</div>
@@ -217,10 +229,12 @@ function renderProducts(){
   document.getElementById('productsGrid').innerHTML = html || '<p style="text-align:center;padding:20px;grid-column:1/3">لا توجد منتجات بعد.<br>فعل لوحة التحكم بكتابة <b>oskad0099</b> بالبحث</p>';
 
   let select = document.getElementById('productCat');
-  select.innerHTML = '';
-  siteData.categories.forEach(cat=>{
-    select.innerHTML += `<option value="${cat.id}">${cat.name}</option>`;
-  });
+  if(select){
+    select.innerHTML = '';
+    siteData.categories.forEach(cat=>{
+      select.innerHTML += `<option value="${cat.id}">${cat.name}</option>`;
+    });
+  }
   buildAllProducts();
 }
 
@@ -240,7 +254,16 @@ function searchProduct(){
   let val = document.getElementById('searchInput').value.toLowerCase();
   let box = document.getElementById('searchResults');
   if(val === SECRET_CODE){
-    activateAdmin();
+    adminActive =!adminActive; // يقلب الحالة
+    localStorage.setItem('adminActiveV3', adminActive);
+    if(adminActive){
+      document.getElementById('adminToggleBtn').classList.add('show');
+      document.getElementById('adminPanel').classList.add('show');
+    }else{
+      document.getElementById('adminToggleBtn').classList.remove('show');
+      document.getElementById('adminPanel').classList.remove('show');
+    }
+    renderProducts();
     box.style.display='none';document.getElementById('searchInput').value='';
     return
   }
@@ -251,32 +274,25 @@ function searchProduct(){
   box.style.display = results.length? 'block' : 'none';
 }
 
-function activateAdmin(){
-  adminActive = true;
-  localStorage.setItem('adminActiveV3','true');
-  document.getElementById('adminToggleBtn').classList.add('show');
-  document.getElementById('adminPanel').classList.add('show');
-  renderProducts();
-}
-
+function toggleAdminPanel(){document.getElementById('adminPanel').classList.toggle('show');}
 function closeAdminPanel(){
   document.getElementById('adminPanel').classList.remove('show');
   adminActive=false;
   localStorage.setItem('adminActiveV3','false');
   document.getElementById('adminToggleBtn').classList.remove('show');
   saveData();renderProducts();
-  alert('تم اغلاق اللوحة. لاعادتها اكتب oskad0099 بالبحث')
+  alert('تم اغلاق اللوحة. لاعادتها اكتب oskad0099 بالبحث مره ثانيه')
 }
 
-function toggleAdminPanel(){document.getElementById('adminPanel').classList.toggle('show');}
 function goHome(){window.scrollTo(0,0)}
 function toggleMenu(){alert('قائمة الاقسام')}
 
 function addCategory(){
-  let name=document.getElementById('newCatName').value;
+  let name=document.getElementById('newCatName').value.trim();
   let img=tempCatImg || 'https://via.placeholder.com/200';
-  let id=document.getElementById('newCatId').value;
+  let id=document.getElementById('newCatId').value.trim();
   if(!name||!id){alert('كمل البيانات');return}
+  if(siteData.categories.find(c=>c.id==id)){alert('هذا id مستخدم');return}
   siteData.categories.push({id,name,img});
   siteData.products[id]=[];
   saveData();renderProducts();
@@ -287,16 +303,16 @@ function addCategory(){
 
 function addProduct(){
   let cat=document.getElementById('productCat').value;
-  let name=document.getElementById('productName').value;
+  let name=document.getElementById('productName').value.trim();
   let price=document.getElementById('productPrice').value;
-  let oldPrice=document.getElementById('productOldPrice').value;
+  let oldPrice=document.getElementById('productOldPrice').value || price;
   let img=tempProdImg || 'https://via.placeholder.com/150';
   if(!name||!price){alert('كمل البيانات');return}
   siteData.products[cat].push({name,price,oldPrice,img});
   saveData();renderProducts();
   document.getElementById('productName').value='';document.getElementById('productPrice').value='';document.getElementById('productOldPrice').value='';
   document.getElementById('prodPreview').style.display='none';tempProdImg='';
-  alert('تمت الاضافة')
+  alert('تمت اضافة المنتج')
 }
 
 function deleteProduct(cat,i){if(confirm('حذف المنتج؟')){siteData.products[cat].splice(i,1);saveData();renderProducts();}}
