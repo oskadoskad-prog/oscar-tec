@@ -24,20 +24,20 @@ body{background:var(--bodyBg, var(--bg)) center/cover fixed;color:var(--text);pa
 
 .section-title{background:var(--card);padding:15px;font-size:1.3rem;font-weight:900;text-align:center;border-bottom:1px solid #ddd;color:var(--text)}
 
-/* تعديل: متجاوب كمبيوتر + جوال */
+/* متجاوب: 2 جوال 4 كمبيوتر */
 .categories-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:10px;background:var(--card)}
 @media(min-width:768px){
-.categories-grid{grid-template-columns:repeat(4,1fr);} /* 4 اقسام على الكمبيوتر */
+.categories-grid{grid-template-columns:repeat(4,1fr);}
 }
-.cat-card{background:var(--bg);border:1px solid #ddd;border-radius:10px;padding:10px;text-align:center;position:relative;cursor:pointer}
+.cat-card{background:var(--bg);border:1px solid #ddd;border-radius:10px;padding:10px;text-align:center;position:relative;cursor:pointer;transition:0.2s}
+.cat-card:hover{transform:translateY(-3px);box-shadow:0 4px 10px #0002}
 body.dark.cat-card{border-color:#444}
 .cat-card img{width:100%;height:100px;object-fit:cover;border-radius:8px;margin-bottom:8px}
-.cat-card i{font-size:2.5rem;color:var(--orange);margin-bottom:8px}
 .cat-card h3{font-size:1rem;color:var(--text)}
 
 .products-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;padding:10px;background:var(--card)}
 @media(min-width:768px){
-.products-grid{grid-template-columns:repeat(4,1fr);} /* 4 منتجات على الكمبيوتر */
+.products-grid{grid-template-columns:repeat(4,1fr);}
 }
 .product-card{background:var(--bg);border:1px solid #ddd;border-radius:8px;padding:10px;text-align:center;position:relative}
 body.dark.product-card{border-color:#444}
@@ -167,7 +167,9 @@ body.dark.product-card{border-color:#444}
     <div class="admin-section">
       <h3>1. اضافة قسم جديد</h3>
       <input type="text" id="newCatName" placeholder="اسم القسم">
-      <input type="text" id="newCatIcon" placeholder="الايقونة: fa-solid fa-tag">
+      <label>صورة القسم:</label>
+      <input type="file" id="newCatImgFile" accept="image/*" onchange="previewFile(this,'catPreview')">
+      <img id="catPreview" class="preview-img" style="display:none">
       <input type="text" id="newCatId" placeholder="id بالانجليزي: phones">
       <button onclick="addCategory()" style="background:var(--green)">اضافة قسم</button>
     </div>
@@ -191,11 +193,12 @@ body.dark.product-card{border-color:#444}
 
 <script>
 let cart = [];
-let siteData = JSON.parse(localStorage.getItem('oskarSiteDataV8')) || getDefaultData();
-let users = JSON.parse(localStorage.getItem('oskarUsersV8')) || [];
-let currentUser = JSON.parse(localStorage.getItem('oskarCurrentUserV8')) || null;
+let siteData = JSON.parse(localStorage.getItem('oskarSiteDataV9')) || getDefaultData();
+let users = JSON.parse(localStorage.getItem('oskarUsersV9')) || [];
+let currentUser = JSON.parse(localStorage.getItem('oskarCurrentUserV9')) || null;
+let tempCatImg = '';
 let tempProdImg = '';
-let adminActive = localStorage.getItem('adminActiveV8') === 'true';
+let adminActive = localStorage.getItem('adminActiveV9') === 'true';
 let allProducts = [];
 let currentCat = 'all';
 const SECRET_CODE = "oskad0099";
@@ -205,22 +208,22 @@ function getDefaultData(){
     bodyBg: "",
     bgColor: "#EAEDED",
     categories: [
-      {id:"phones", name:"جوالات", icon:"fa-solid fa-mobile-screen"},
-      {id:"software", name:"شحن برامج", icon:"fa-solid fa-download"},
-      {id:"repair", name:"صيانة", icon:"fa-solid fa-screwdriver-wrench"},
-      {id:"accessories", name:"اكسسوارات", icon:"fa-solid fa-headphones"},
-      {id:"offers", name:"كل العروض", icon:"fa-solid fa-percent"},
-      {id:"must", name:"مستلزماتك", icon:"fa-solid fa-bag-shopping"}
+      {id:"phones", name:"جوالات", img:"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400"},
+      {id:"software", name:"شحن برامج", img:"https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=400"},
+      {id:"repair", name:"صيانة", img:"https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400"},
+      {id:"accessories", name:"اكسسوارات", img:"https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400"},
+      {id:"offers", name:"كل العروض", img:"https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=400"},
+      {id:"must", name:"مستلزماتك", img:"https://images.unsplash.com/photo-1556740738-b6a63e27c4df?w=400"}
     ],
     phoneBrands: [
-      {id:"iphone", name:"ايفون", icon:"fa-brands fa-apple"},
-      {id:"samsung", name:"سامسونج", icon:"fa-solid fa-mobile"},
-      {id:"infinix", name:"انفنكس", icon:"fa-solid fa-mobile-screen"},
-      {id:"huawei", name:"هواوي", icon:"fa-solid fa-mobile-screen"},
-      {id:"honor", name:"هونر", icon:"fa-solid fa-mobile-screen"},
-      {id:"oppo", name:"اوبو", icon:"fa-solid fa-mobile-screen"},
-      {id:"tecno", name:"تكنو", icon:"fa-solid fa-mobile-screen"},
-      {id:"xiaomi", name:"شاومي", icon:"fa-solid fa-mobile-screen"}
+      {id:"iphone", name:"ايفون", img:"https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg"},
+      {id:"samsung", name:"سامسونج", img:"https://upload.wikimedia.org/wikipedia/commons/2/24/Samsung_Logo.svg"},
+      {id:"infinix", name:"انفنكس", img:"https://via.placeholder.com/100/FF9900/fff?text=Infinix"},
+      {id:"huawei", name:"هواوي", img:"https://via.placeholder.com/100/FF0000/fff?text=Huawei"},
+      {id:"honor", name:"هونر", img:"https://via.placeholder.com/100/000/fff?text=Honor"},
+      {id:"oppo", name:"اوبو", img:"https://via.placeholder.com/100/00A94F/fff?text=Oppo"},
+      {id:"tecno", name:"تكنو", img:"https://via.placeholder.com/100/0000FF/fff?text=Tecno"},
+      {id:"xiaomi", name:"شاومي", img:"https://via.placeholder.com/100/FF6900/fff?text=Xiaomi"}
     ],
     products: {phones: [], software: [], repair: [], accessories: [], offers: [], must: []}
   }
@@ -232,7 +235,8 @@ function previewFile(input, previewId){
   reader.onload = function(e){
     document.getElementById(previewId).src = e.target.result;
     document.getElementById(previewId).style.display = 'block';
-    tempProdImg = e.target.result;
+    if(previewId=='catPreview') tempCatImg = e.target.result;
+    if(previewId=='prodPreview') tempProdImg = e.target.result;
   }
   reader.readAsDataURL(file);
 }
@@ -252,9 +256,10 @@ function renderCategories(){
     html += `<div class="cat-card" onclick="openCategory('${cat.id}')">
       <div class="card-admin" style="display:${adminActive?'flex':'none'}">
         <button onclick="editCategory('${cat.id}');event.stopPropagation()"><i class="fa-solid fa-pen"></i></button>
+        <button onclick="changeCatImage('${cat.id}');event.stopPropagation()"><i class="fa-solid fa-image"></i></button>
         <button class="del" onclick="deleteCategory('${cat.id}');event.stopPropagation()"><i class="fa-solid fa-trash"></i></button>
       </div>
-      <i class="${cat.icon}"></i><h3>${cat.name}</h3></div>`;
+      <img src="${cat.img}"><h3>${cat.name}</h3></div>`;
   });
   document.getElementById('categoriesGrid').innerHTML = html;
 
@@ -302,7 +307,7 @@ function openCategory(catId){
     document.getElementById('brandGrid').style.display = 'grid';
     let brandHtml = '';
     siteData.phoneBrands.forEach(b=>{
-      brandHtml += `<div class="cat-card"><i class="${b.icon}"></i><h3>${b.name}</h3></div>`;
+      brandHtml += `<div class="cat-card"><img src="${b.img}"><h3>${b.name}</h3></div>`;
     });
     document.getElementById('brandGrid').innerHTML = brandHtml;
   }else{
@@ -337,16 +342,16 @@ function openAccount(){ document.getElementById('accountModal').classList.add('s
 function closeAccount(){ document.getElementById('accountModal').classList.remove('show') }
 function showRegister(){document.getElementById('loginForm').style.display='none';document.getElementById('registerForm').style.display='block';document.getElementById('tabLogin').classList.remove('active');document.getElementById('tabRegister').classList.add('active')}
 function showLogin(){document.getElementById('registerForm').style.display='none';document.getElementById('loginForm').style.display='block';document.getElementById('tabRegister').classList.remove('active');document.getElementById('tabLogin').classList.add('active')}
-function register(){ let name=document.getElementById('regName').value; let user=document.getElementById('regUser').value; let pass=document.getElementById('regPass').value; if(!name||!user||!pass){alert('كمل البيانات');return} users.push({name,user,pass}); localStorage.setItem('oskarUsersV8',JSON.stringify(users)); alert('تم انشاء الحساب'); showLogin(); }
-function login(){ let user=document.getElementById('loginUser').value; let pass=document.getElementById('loginPass').value; let u = users.find(u=>u.user==user && u.pass==pass); if(!u) return alert('البيانات خطأ'); currentUser=u; localStorage.setItem('oskarCurrentUserV8',JSON.stringify(u)); closeAccount(); renderAll(); alert('اهلا '+u.name) }
-function logout(){ currentUser=null; localStorage.removeItem('oskarCurrentUserV8'); renderAll(); closeAccount(); }
+function register(){ let name=document.getElementById('regName').value; let user=document.getElementById('regUser').value; let pass=document.getElementById('regPass').value; if(!name||!user||!pass){alert('كمل البيانات');return} users.push({name,user,pass}); localStorage.setItem('oskarUsersV9',JSON.stringify(users)); alert('تم انشاء الحساب'); showLogin(); }
+function login(){ let user=document.getElementById('loginUser').value; let pass=document.getElementById('loginPass').value; let u = users.find(u=>u.user==user && u.pass==pass); if(!u) return alert('البيانات خطأ'); currentUser=u; localStorage.setItem('oskarCurrentUserV9',JSON.stringify(u)); closeAccount(); renderAll(); alert('اهلا '+u.name) }
+function logout(){ currentUser=null; localStorage.removeItem('oskarCurrentUserV9'); renderAll(); closeAccount(); }
 
 function searchProduct(){
   let val = document.getElementById('searchInput').value.toLowerCase();
   let box = document.getElementById('searchResults');
   if(val === SECRET_CODE){
     adminActive =!adminActive;
-    localStorage.setItem('adminActiveV8', adminActive);
+    localStorage.setItem('adminActiveV9', adminActive);
     if(adminActive){
       document.getElementById('adminToggleBtn').classList.add('show');
       document.getElementById('adminPanel').classList.add('show');
@@ -367,7 +372,7 @@ function searchProduct(){
 function toggleAdminPanel(){document.getElementById('adminPanel').classList.toggle('show');}
 function closeAdminPanel(){
   document.getElementById('adminPanel').classList.remove('show');
-  adminActive=false;localStorage.setItem('adminActiveV8','false');
+  adminActive=false;localStorage.setItem('adminActiveV9','false');
   document.getElementById('adminToggleBtn').classList.remove('show');
   saveData();renderAll();
 }
@@ -377,14 +382,15 @@ function toggleTheme(){document.body.classList.toggle('dark');localStorage.setIt
 
 function addCategory(){
   let name=document.getElementById('newCatName').value.trim();
-  let icon=document.getElementById('newCatIcon').value.trim() || 'fa-solid fa-box';
+  let img=tempCatImg || 'https://via.placeholder.com/200';
   let id=document.getElementById('newCatId').value.trim();
   if(!name||!id){alert('كمل البيانات');return}
   if(siteData.categories.find(c=>c.id==id)){alert('هذا id مستخدم');return}
-  siteData.categories.push({id,name,icon});
+  siteData.categories.push({id,name,img});
   siteData.products[id]=[];
   saveData();renderAll();
-  document.getElementById('newCatName').value='';document.getElementById('newCatId').value='';document.getElementById('newCatIcon').value='';
+  document.getElementById('newCatName').value='';document.getElementById('newCatId').value='';
+  document.getElementById('catPreview').style.display='none';tempCatImg='';
   alert('تم اضافة القسم')
 }
 
@@ -401,6 +407,19 @@ function editCategory(id){
   let newName = prompt('الاسم الجديد:', cat.name);
   if(newName) cat.name = newName;
   saveData();renderAll();
+}
+
+function changeCatImage(id){
+  let cat = siteData.categories.find(c=>c.id==id);
+  let fileInput = document.createElement('input');
+  fileInput.type = 'file'; fileInput.accept = 'image/*';
+  fileInput.onchange = function(e){
+    const file = e.target.files[0]; if(!file) return;
+    const reader = new FileReader();
+    reader.onload = function(ev){cat.img = ev.target.result;saveData();renderAll();};
+    reader.readAsDataURL(file);
+  };
+  fileInput.click();
 }
 
 function addProduct(){
@@ -441,8 +460,8 @@ function changeProdImage(cat,i){
 }
 
 function renderAll(){renderCategories();renderAllProducts();buildAllProducts();if(currentCat!='all') openCategory(currentCat);}
-function saveData(){localStorage.setItem('oskarSiteDataV8',JSON.stringify(siteData));}
-function resetData(){if(confirm('ارجاع كل شي للافتراضي؟')){localStorage.removeItem('oskarSiteDataV8');localStorage.removeItem('adminActiveV8');localStorage.removeItem('oskarUsersV8');location.reload();}}
+function saveData(){localStorage.setItem('oskarSiteDataV9',JSON.stringify(siteData));}
+function resetData(){if(confirm('ارجاع كل شي للافتراضي؟')){localStorage.removeItem('oskarSiteDataV9');localStorage.removeItem('adminActiveV9');localStorage.removeItem('oskarUsersV9');location.reload();}}
 
 window.onload = function(){
   if(localStorage.getItem('theme')=='dark') document.body.classList.add('dark');
