@@ -17,8 +17,8 @@ body{background:var(--bodyBg, var(--bg)) center/cover fixed;color:var(--text);pa
 .brand-name{font-weight:900;font-size:1.4rem;color:var(--orange)}
 .whatsapp-top{background:#25D366;color:#fff;border:none;padding:8px 12px;border-radius:8px;font-weight:700;cursor:pointer;font-size:0.9rem}
 .search-area{display:flex;gap:0;padding:10px 0 0 0;position:relative}
-.search-icon{background:var(--orange);padding:0 10px;display:flex;align-items:center;border-radius:0 8px 8px 0;font-size:1.1rem;cursor:pointer}
-.search-area input{flex:1;padding:10px;border:none;outline:none;font-size:0.95rem;border-radius:8px 0 0 8px}
+.search-icon{background:var(--orange);padding:0 6px;display:flex;align-items:center;border-radius:0 8px 8px 0;font-size:0.9rem;cursor:pointer;width:32px;justify-content:center}
+.search-area input{flex:1;padding:9px;border:none;outline:none;font-size:0.95rem;border-radius:8px 0 0 8px}
 .search-results{position:absolute;top:50px;left:10px;right:10px;background:var(--card);border-radius:8px;max-height:400px;overflow-y:auto;display:none;z-index:1000;box-shadow:0 4px 10px #0003}
 .search-item{display:flex;gap:10px;padding:10px;cursor:pointer;border-bottom:1px solid #ddd;color:var(--text)}
 
@@ -56,6 +56,19 @@ body.dark.product-card{border-color:#444}
 #sideMenu button{width:100%;padding:12px;margin:8px 0;border:none;border-radius:8px;background:var(--blue);color:#fff;font-weight:700;cursor:pointer;text-align:right}
 .overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000aa;z-index:10000}
 .overlay.show{display:block}
+
+/* نافذة الحساب */
+#accountModal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000a;z-index:100002;align-items:center;justify-content:center}
+#accountModal.show{display:flex}
+.account-box{background:var(--card);width:90%;max-width:400px;padding:20px;border-radius:15px;color:var(--text)}
+.account-box h2{text-align:center;color:var(--orange);margin-bottom:15px}
+.account-tabs{display:flex;gap:5px;margin-bottom:15px}
+.account-tabs button{flex:1;padding:10px;border:none;border-radius:8px;background:#ddd;color:#333;font-weight:700;cursor:pointer}
+.account-tabs button.active{background:var(--orange);color:#000}
+.account-box input{width:100%;padding:12px;margin:8px 0;border-radius:8px;border:1px solid #ddd;background:var(--bg);color:var(--text)}
+.account-box button.submit{width:100%;padding:12px;margin:8px 0;border:none;border-radius:8px;font-weight:700;cursor:pointer;background:var(--green);color:#fff}
+.user-info{text-align:center;padding:15px;background:var(--bg);border-radius:10px;margin-bottom:15px}
+.user-info h3{color:var(--orange);margin-bottom:5px}
 
 #adminPanel{position:fixed;top:0;left:-450px;width:450px;height:100%;background:#232F3E;z-index:99999;overflow-y:auto;padding:20px;border-right:3px solid var(--orange);transition:left 0.4s ease;color:#fff}
 #adminPanel.show{left:0}
@@ -106,9 +119,42 @@ body.dark.product-card{border-color:#444}
 
 <div class="bottom-nav">
   <div class="nav-item" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i>تصفح</div>
-  <div class="nav-item" onclick="checkoutShamCash()"><i class="fa-solid fa-cart-shopping"></i>العربة <span id="cartCount" class="cart-count">0</span></div>
-  <div class="nav-item" onclick="alert('صفحة حسابك')"><i class="fa-solid fa-user"></i>حسابك</div>
+  <div class="nav-item" onclick="checkLoginBeforeCart()"><i class="fa-solid fa-cart-shopping"></i>العربة <span id="cartCount" class="cart-count">0</span></div>
+  <div class="nav-item" onclick="openAccount()"><i class="fa-solid fa-user"></i><span id="accountText">حسابك</span></div>
   <div class="nav-item" onclick="goHome()"><i class="fa-solid fa-house"></i>الرئيسية</div>
+</div>
+
+<!-- نافذة الحساب -->
+<div id="accountModal">
+  <div class="account-box">
+    <div id="loggedInView" style="display:none">
+      <div class="user-info">
+        <h3 id="userNameDisplay"></h3>
+        <p id="userPhoneDisplay"></p>
+      </div>
+      <button onclick="logout()" style="background:var(--red);color:#fff;width:100%;padding:12px;border:none;border-radius:8px;font-weight:700">تسجيل خروج</button>
+      <button onclick="closeAccount()" style="background:#888;color:#fff;width:100%;padding:12px;border:none;border-radius:8px;font-weight:700;margin-top:10px">اغلاق</button>
+    </div>
+
+    <div id="guestView">
+      <div class="account-tabs">
+        <button id="tabLogin" class="active" onclick="showLogin()">تسجيل دخول</button>
+        <button id="tabRegister" onclick="showRegister()">انشاء حساب جديد</button>
+      </div>
+      <div id="loginForm">
+        <input type="text" id="loginUser" placeholder="الايميل او رقم الجوال">
+        <input type="password" id="loginPass" placeholder="كلمة السر">
+        <button class="submit" onclick="login()">دخول</button>
+      </div>
+      <div id="registerForm" style="display:none">
+        <input type="text" id="regName" placeholder="الاسم الكامل">
+        <input type="text" id="regUser" placeholder="الايميل او رقم الجوال">
+        <input type="password" id="regPass" placeholder="كلمة السر">
+        <button class="submit" style="background:var(--orange);color:#000" onclick="register()">انشاء حساب</button>
+      </div>
+      <button onclick="closeAccount()" style="background:var(--red);color:#fff;width:100%;padding:10px;border:none;border-radius:8px;margin-top:10px">اغلاق</button>
+    </div>
+  </div>
 </div>
 
 <button id="adminToggleBtn" class="admin-toggle" onclick="toggleAdminPanel()"><i class="fa-solid fa-chevron-right"></i></button>
@@ -164,10 +210,12 @@ body.dark.product-card{border-color:#444}
 
 <script>
 let cart = [];
-let siteData = JSON.parse(localStorage.getItem('oskarSiteDataV5')) || getDefaultData();
+let siteData = JSON.parse(localStorage.getItem('oskarSiteDataV132')) || getDefaultData();
+let users = JSON.parse(localStorage.getItem('oskarUsersV132')) || [];
+let currentUser = JSON.parse(localStorage.getItem('oskarCurrentUserV132')) || null;
 let tempCatImg = '';
 let tempProdImg = '';
-let adminActive = localStorage.getItem('adminActiveV5') === 'true';
+let adminActive = localStorage.getItem('adminActiveV132') === 'true';
 let allProducts = [];
 let currentCat = 'all';
 const SECRET_CODE = "oskad0099";
@@ -305,16 +353,74 @@ function goHome(){
   window.scrollTo(0,0);
 }
 
-function addToCart(item){let existing = cart.find(p=>p.name==item.name);if(existing) existing.qty++;else cart.push({...item, qty:1});updateCart();}
+function checkLoginBeforeCart(){
+  if(!currentUser){alert('يجب تسجيل الدخول لعرض السلة');openAccount();return}
+  checkoutShamCash();
+}
+
+function addToCart(item){
+  if(!currentUser){alert('يجب تسجيل الدخول لاضافة منتج للسلة');openAccount();return}
+  let existing = cart.find(p=>p.name==item.name);if(existing) existing.qty++;else cart.push({...item, qty:1});updateCart();
+  alert('تمت الاضافة للسلة');
+}
 function updateCart(){document.getElementById('cartCount').innerText = cart.reduce((a,b)=>a+b.qty,0);}
 
 function checkoutShamCash(){
+  if(!currentUser){alert('يجب تسجيل الدخول للشراء');openAccount();return}
   if(cart.length == 0){ alert("السلة فارغة"); return; }
   let total = cart.reduce((a,b)=>a + parseInt(b.price) * b.qty, 0);
-  let message = `مرحبا مركز اوسكار التقني\nاريد الدفع عبر شام كاش\n`;
+  let message = `مرحبا مركز اوسكار التقني\nالعميل: ${currentUser.name}\nرقم التواصل: ${currentUser.user}\nاريد الدفع عبر شام كاش\n`;
   cart.forEach((item,i)=>{message += `${i+1}. ${item.name} x ${item.qty}\n`});
   message += `\nالمجموع: ${total.toLocaleString()} ل.س`;
   window.open(`https://wa.me/+971544066811?text=${encodeURIComponent(message)}`, '_blank');
+}
+
+// نظام الحسابات
+function openAccount(){
+  document.getElementById('accountModal').classList.add('show');
+  if(currentUser){
+    document.getElementById('guestView').style.display='none';
+    document.getElementById('loggedInView').style.display='block';
+    document.getElementById('userNameDisplay').innerText = currentUser.name;
+    document.getElementById('userPhoneDisplay').innerText = currentUser.user;
+  }else{
+    document.getElementById('guestView').style.display='block';
+    document.getElementById('loggedInView').style.display='none';
+  }
+}
+function closeAccount(){document.getElementById('accountModal').classList.remove('show')}
+function showRegister(){document.getElementById('loginForm').style.display='none';document.getElementById('registerForm').style.display='block';document.getElementById('tabLogin').classList.remove('active');document.getElementById('tabRegister').classList.add('active')}
+function showLogin(){document.getElementById('registerForm').style.display='none';document.getElementById('loginForm').style.display='block';document.getElementById('tabRegister').classList.remove('active');document.getElementById('tabLogin').classList.add('active')}
+
+function register(){
+  let name=document.getElementById('regName').value.trim();
+  let user=document.getElementById('regUser').value.trim();
+  let pass=document.getElementById('regPass').value;
+  if(!name||!user||!pass){alert('كمل البيانات');return}
+  if(users.find(u=>u.user==user)){alert('هذا الحساب موجود بالفعل');return}
+  users.push({name,user,pass});
+  localStorage.setItem('oskarUsersV132',JSON.stringify(users));
+  alert('تم انشاء الحساب بنجاح');
+  showLogin();
+}
+
+function login(){
+  let user=document.getElementById('loginUser').value.trim();
+  let pass=document.getElementById('loginPass').value;
+  let u = users.find(u=>u.user==user && u.pass==pass);
+  if(!u){alert('البيانات خاطئة');return}
+  currentUser=u;
+  localStorage.setItem('oskarCurrentUserV132',JSON.stringify(u));
+  document.getElementById('accountText').innerText=u.name;
+  closeAccount();alert('اهلا '+u.name);
+}
+
+function logout(){
+  if(confirm('هل تريد تسجيل الخروج؟')){
+    currentUser=null;localStorage.removeItem('oskarCurrentUserV132');
+    document.getElementById('accountText').innerText='حسابك';cart=[];updateCart();
+    closeAccount();
+  }
 }
 
 function searchProduct(){
@@ -322,7 +428,7 @@ function searchProduct(){
   let box = document.getElementById('searchResults');
   if(val === SECRET_CODE){
     adminActive =!adminActive;
-    localStorage.setItem('adminActiveV5', adminActive);
+    localStorage.setItem('adminActiveV132', adminActive);
     if(adminActive){
       document.getElementById('adminToggleBtn').classList.add('show');
       document.getElementById('adminPanel').classList.add('show');
@@ -343,7 +449,7 @@ function searchProduct(){
 function toggleAdminPanel(){document.getElementById('adminPanel').classList.toggle('show');}
 function closeAdminPanel(){
   document.getElementById('adminPanel').classList.remove('show');
-  adminActive=false;localStorage.setItem('adminActiveV5','false');
+  adminActive=false;localStorage.setItem('adminActiveV132','false');
   document.getElementById('adminToggleBtn').classList.remove('show');
   saveData();renderAll();
 }
@@ -431,11 +537,11 @@ function changeProdImage(cat,i){
 }
 
 function renderAll(){renderCategories();renderAllProducts();buildAllProducts();if(currentCat!='all') openCategory(currentCat);}
-function saveData(){localStorage.setItem('oskarSiteDataV5',JSON.stringify(siteData));}
-function resetData(){if(confirm('ارجاع كل شي للافتراضي؟')){localStorage.removeItem('oskarSiteDataV5');localStorage.removeItem('adminActiveV5');location.reload();}}
+function saveData(){localStorage.setItem('oskarSiteDataV132',JSON.stringify(siteData));}
+function resetData(){if(confirm('ارجاع كل شي للافتراضي؟')){localStorage.removeItem('oskarSiteDataV132');localStorage.removeItem('oskarUsersV132');localStorage.removeItem('oskarCurrentUserV132');localStorage.removeItem('adminActiveV132');location.reload();}}
 
-function exportData(){let blob = new Blob([JSON.stringify(siteData)], {type: "application/json"});let a = document.createElement('a');a.href = URL.createObjectURL(blob);a.download = "oskar_backup.json";a.click();}
-function importData(event){let reader = new FileReader();reader.onload = function(e){siteData = JSON.parse(e.target.result);saveData();location.reload();};reader.readAsText(event.target.files[0]);}
+function exportData(){let blob = new Blob([JSON.stringify({site:siteData,users:users})], {type: "application/json"});let a = document.createElement('a');a.href = URL.createObjectURL(blob);a.download = "oskar_backup.json";a.click();}
+function importData(event){let reader = new FileReader();reader.onload = function(e){let data=JSON.parse(e.target.result);siteData=data.site;users=data.users||[];saveData();localStorage.setItem('oskarUsersV132',JSON.stringify(users));location.reload();};reader.readAsText(event.target.files[0]);}
 
 document.addEventListener('click', ()=>{document.getElementById('searchResults').style.display='none'});
 
@@ -445,6 +551,7 @@ window.onload = function(){
   if(siteData.bodyBg) document.body.style.setProperty('--bodyBg', siteData.bodyBg);
   document.getElementById('bgColor').value = siteData.bgColor;
   if(localStorage.getItem('theme')=='dark') document.body.classList.add('dark');
+  if(currentUser) document.getElementById('accountText').innerText=currentUser.name;
   renderAll();
   if(adminActive){document.getElementById('adminToggleBtn').classList.add('show');document.getElementById('adminPanel').classList.add('show')}
 }
