@@ -169,11 +169,10 @@ body.dark.product-card{border-color:#444}
   </div>
 </div>
 
-<!-- نافذة الدفع والعنوان الجديدة -->
+<!-- نافذة الدفع والعنوان -->
 <div id="checkoutModal">
   <div class="checkout-box">
     <h2><i class="fa-solid fa-truck"></i> اتمام الطلب</h2>
-
     <div class="cart-summary" id="checkoutCartSummary"></div>
     <h3 style="text-align:center;color:var(--red)" id="checkoutTotal"></h3>
 
@@ -228,7 +227,7 @@ body.dark.product-card{border-color:#444}
     </div>
 
     <div class="admin-section">
-      <h3>3. تغيير الخلفية البيضاء للموقع</h3>
+      <h3>3. تغيير الخلفية</h3>
       <label>لون الخلفية:</label>
       <input type="color" id="bgColor" class="color-picker" value="#EAEDED" onchange="changeBgColor(this.value)">
       <label>او صورة خلفية:</label>
@@ -251,12 +250,12 @@ body.dark.product-card{border-color:#444}
 
 <script>
 let cart = [];
-let siteData = JSON.parse(localStorage.getItem('oskarSiteDataV134')) || getDefaultData();
-let users = JSON.parse(localStorage.getItem('oskarUsersV134')) || [];
-let currentUser = JSON.parse(localStorage.getItem('oskarCurrentUserV134')) || null;
+let siteData = JSON.parse(localStorage.getItem('oskarSiteDataV135')) || getDefaultData();
+let users = JSON.parse(localStorage.getItem('oskarUsersV135')) || [];
+let currentUser = JSON.parse(localStorage.getItem('oskarCurrentUserV135')) || null;
 let tempCatImg = '';
 let tempProdImg = '';
-let adminActive = localStorage.getItem('adminActiveV134') === 'true';
+let adminActive = localStorage.getItem('adminActiveV135') === 'true';
 let allProducts = [];
 let currentCat = 'all';
 const SECRET_CODE = "oskad0099";
@@ -406,13 +405,10 @@ function addToCart(item){
 }
 function updateCart(){document.getElementById('cartCount').innerText = cart.reduce((a,b)=>a+b.qty,0);}
 
-// نظام الدفع والعنوان الجديد
 function openCheckout(){
   if(cart.length == 0){ alert("السلة فارغة"); return; }
   document.getElementById('checkoutModal').classList.add('show');
-
-  let html = '';
-  let total = 0;
+  let html = ''; let total = 0;
   cart.forEach((item,i)=>{
     html += `<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #ddd">
       <span>${item.name} x ${item.qty}</span>
@@ -422,7 +418,6 @@ function openCheckout(){
   });
   document.getElementById('checkoutCartSummary').innerHTML = html;
   document.getElementById('checkoutTotal').innerText = 'المجموع: ' + total.toLocaleString() + ' ل.س';
-
   if(currentUser){
     document.getElementById('customerName').value = currentUser.name;
     document.getElementById('customerPhone').value = currentUser.user;
@@ -437,22 +432,13 @@ function sendOrderWhatsApp(){
   let city = document.getElementById('customerCity').value.trim();
   let area = document.getElementById('customerArea').value.trim();
   let address = document.getElementById('customerAddress').value.trim();
-
-  if(!name ||!phone ||!city ||!area ||!address){
-    alert('الرجاء اكمال جميع بيانات العنوان');return
-  }
-
+  if(!name ||!phone ||!city ||!area ||!address){alert('الرجاء اكمال جميع بيانات العنوان');return}
   let total = cart.reduce((a,b)=>a + parseInt(b.price) * b.qty, 0);
-  let message = `طلب جديد من مركز اوسكار التقني\n`;
-  message += `بيانات العميل:\nالاسم: ${name}\nالجوال: ${phone}\nالمدينة: ${city}\nالمنطقة: ${area}\nالعنوان: ${address}\n\n`;
-  message += `المنتجات:\n`;
+  let message = `طلب جديد من مركز اوسكار التقني\nبيانات العميل:\nالاسم: ${name}\nالجوال: ${phone}\nالمدينة: ${city}\nالمنطقة: ${area}\nالعنوان: ${address}\n\nالمنتجات:\n`;
   cart.forEach((item,i)=>{message += `${i+1}. ${item.name} x ${item.qty} = ${(parseInt(item.price)*item.qty).toLocaleString()} ل.س\n`});
-  message += `\nالمجموع الكلي: ${total.toLocaleString()} ل.س\n`;
-  message += `طريقة الدفع: شام كاش - تم الدفع عبر الباركود`;
-
+  message += `\nالمجموع الكلي: ${total.toLocaleString()} ل.س\nطريقة الدفع: شام كاش - تم الدفع عبر الباركود`;
   window.open(`https://wa.me/+971544066811?text=${encodeURIComponent(message)}`, '_blank');
-  cart = []; updateCart(); closeCheckout();
-  alert('تم ارسال الطلب بنجاح');
+  cart = []; updateCart(); closeCheckout(); alert('تم ارسال الطلب بنجاح');
 }
 
 // نظام الحسابات
@@ -479,7 +465,7 @@ function register(){
   if(!name||!user||!pass){alert('كمل البيانات');return}
   if(users.find(u=>u.user==user)){alert('هذا الحساب موجود بالفعل');return}
   users.push({name,user,pass});
-  localStorage.setItem('oskarUsersV134',JSON.stringify(users));
+  localStorage.setItem('oskarUsersV135',JSON.stringify(users));
   alert('تم انشاء الحساب بنجاح');
   showLogin();
 }
@@ -490,14 +476,14 @@ function login(){
   let u = users.find(u=>u.user==user && u.pass==pass);
   if(!u){alert('البيانات خاطئة');return}
   currentUser=u;
-  localStorage.setItem('oskarCurrentUserV134',JSON.stringify(u));
+  localStorage.setItem('oskarCurrentUserV135',JSON.stringify(u));
   document.getElementById('accountText').innerText=u.name;
   closeAccount();alert('اهلا '+u.name);
 }
 
 function logout(){
   if(confirm('هل تريد تسجيل الخروج؟')){
-    currentUser=null;localStorage.removeItem('oskarCurrentUserV134');
+    currentUser=null;localStorage.removeItem('oskarCurrentUserV135');
     document.getElementById('accountText').innerText='حسابك';cart=[];updateCart();
     closeAccount();
   }
@@ -508,7 +494,7 @@ function searchProduct(){
   let box = document.getElementById('searchResults');
   if(val === SECRET_CODE){
     adminActive =!adminActive;
-    localStorage.setItem('adminActiveV134', adminActive);
+    localStorage.setItem('adminActiveV135', adminActive);
     if(adminActive){
       document.getElementById('adminToggleBtn').classList.add('show');
       document.getElementById('adminPanel').classList.add('show');
@@ -529,7 +515,7 @@ function searchProduct(){
 function toggleAdminPanel(){document.getElementById('adminPanel').classList.toggle('show');}
 function closeAdminPanel(){
   document.getElementById('adminPanel').classList.remove('show');
-  adminActive=false;localStorage.setItem('adminActiveV134','false');
+  adminActive=false;localStorage.setItem('adminActiveV135','false');
   document.getElementById('adminToggleBtn').classList.remove('show');
   saveData();renderAll();
 }
