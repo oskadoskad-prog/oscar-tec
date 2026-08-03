@@ -12,7 +12,7 @@ body.dark{--bg:#131921;--card:#232F3E;--text:#fff}
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Cairo',sans-serif}
 body{background:var(--bodyBg, var(--bg)) center/cover fixed;color:var(--text);padding-bottom:70px}
 
-.top-header{background:var(--headerBg, var(--blue));padding:10px;color:#fff;position:sticky;top:0;z-index:999;background-size:cover}
+.top-header{background:var(--headerBg, var(--blue));background-size:cover;padding:10px;color:#fff;position:sticky;top:0;z-index:999}
 .brand-row{display:flex;justify-content:space-between;align-items:center}
 .brand-name{font-weight:900;font-size:1.4rem;color:var(--orange)}
 .whatsapp-top{background:#25D366;color:#fff;border:none;padding:8px 12px;border-radius:8px;font-weight:700;cursor:pointer;font-size:0.9rem}
@@ -47,7 +47,7 @@ body.dark.product-card{border-color:#444}
 .add-cart-btn{background:var(--yellow);border:none;width:100%;padding:8px;border-radius:20px;margin-top:8px;font-weight:700;cursor:pointer;color:#000}
 .add-product-in-cat{background:var(--green);color:#fff;border:none;padding:12px;width:95%;margin:10px auto;display:block;border-radius:10px;font-weight:900;cursor:pointer}
 
-.card-admin{position:absolute;top:5px;left:5px;display:flex;gap:4px;z-index:10}
+.card-admin{position:absolute;top:5px;left:5px;display:flex;gap:4px;z-index:10;flex-wrap:wrap;width:90px}
 .card-admin button{background:var(--yellow);color:#000;border:none;border-radius:6px;width:28px;height:28px;cursor:pointer;font-size:0.8rem}
 .card-admin.del{background:var(--red);color:#fff}
 .back-btn{background:var(--blue);color:#fff;border:none;padding:10px 15px;border-radius:8px;margin:10px;cursor:pointer}
@@ -271,14 +271,12 @@ function changeBackground(input){
   }
   reader.readAsDataURL(file);
 }
-
 function removeBg(){
   siteData.bodyBg = "";
   document.body.style.setProperty('--bodyBg', '');
   document.getElementById('bgPreview').style.display = 'none';
   saveData();alert('تم حذف صورة الخلفية')
 }
-
 function changeHeader(input){
   const file = input.files[0];if(!file) return;
   const reader = new FileReader();
@@ -291,12 +289,30 @@ function changeHeader(input){
   }
   reader.readAsDataURL(file);
 }
-
 function removeHeader(){
   siteData.headerBg = "";
   document.getElementById('topHeader').style.setProperty('--headerBg', '');
   document.getElementById('headerPreview').style.display = 'none';
   saveData();alert('تم حذف صورة الهيدر')
+}
+
+function exportData(){
+  const dataStr = JSON.stringify(siteData);
+  const blob = new Blob([dataStr], {type: "application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = "oskar_backup.json"; a.click();
+  URL.revokeObjectURL(url);
+  alert('تم تصدير البيانات')
+}
+function importData(event){
+  const file = event.target.files[0];
+  const reader = new FileReader();
+  reader.onload = function(e){
+    siteData = JSON.parse(e.target.result);
+    saveData();renderAll();alert('تم استيراد البيانات')
+  }
+  reader.readAsText(file);
 }
 
 function buildAllProducts(){
@@ -365,11 +381,11 @@ function openCategory(catId){
     document.getElementById('brandGrid').style.display = 'grid';
     let brandHtml = '';
     siteData.phoneBrands.forEach(b=>{
-      brandHtml += `<div class="cat-card" onclick="addProductToBrand('${b.id}')">
+      brandHtml += `<div class="cat-card" onclick="quickAddToCat('phones')">
         <div class="card-admin" style="display:${adminActive?'flex':'none'}">
           <button onclick="editBrand('${b.id}');event.stopPropagation()"><i class="fa-solid fa-pen"></i></button>
           <button onclick="changeBrandImage('${b.id}');event.stopPropagation()"><i class="fa-solid fa-image"></i></button>
-          <button onclick="addProductToBrand('${b.id}');event.stopPropagation()"><i class="fa-solid fa-plus"></i></button>
+          <button onclick="quickAddToCat('phones');event.stopPropagation()"><i class="fa-solid fa-plus"></i></button>
         </div>
         <img src="${b.img}"><h3>${b.name}</h3></div>`;
     });
@@ -385,20 +401,12 @@ function openCategory(catId){
   document.getElementById('catProductsGrid').innerHTML = html || '<p style="text-align:center;padding:20px">لا توجد منتجات في هذا القسم</p>';
 }
 
-function addProductToBrand(brandId){
-  document.getElementById('productCat').value = 'phones';
-  document.getElementById('productName').placeholder = `اسم المنتج - ${brandId}`;
-  document.getElementById('adminPanel').classList.add('show');
-  document.getElementById('adminPanel').scrollTop = 0;
-}
-
 function editBrand(brandId){
   let brand = siteData.phoneBrands.find(b=>b.id==brandId);
   let newName = prompt('الاسم الجديد للبراند:', brand.name);
   if(newName) brand.name = newName;
   saveData();renderAll();
 }
-
 function changeBrandImage(brandId){
   let brand = siteData.phoneBrands.find(b=>b.id==brandId);
   let fileInput = document.createElement('input');
@@ -417,6 +425,11 @@ function quickAddToCurrentCat(){
   document.getElementById('adminPanel').classList.add('show');
   document.getElementById('adminPanel').scrollTop = 0;
 }
+function quickAddToCat(catId){
+  document.getElementById('productCat').value = catId;
+  document.getElementById('adminPanel').classList.add('show');
+  document.getElementById('adminPanel').scrollTop = 0;
+}
 
 function goHome(){
   currentCat = 'all';
@@ -429,17 +442,7 @@ function addToCart(item){let existing = cart.find(p=>p.name==item.name);if(exist
 function updateCart(){document.getElementById('cartCount').innerText = cart.reduce((a,b)=>a+b.qty,0);}
 
 // دوال الحساب
-function openAccount(){
-  document.getElementById('accountModal').classList.add('show');
-  if(currentUser){
-    document.getElementById('guestView').style.display='none';
-    document.getElementById('loggedInView').style.display='block';
-    document.getElementById('userNameDisplay').innerText='اهلا '+currentUser.name;
-  }else{
-    document.getElementById('guestView').style.display='block';
-    document.getElementById('loggedInView').style.display='none';
-  }
-}
+function openAccount(){ document.getElementById('accountModal').classList.add('show'); if(currentUser){document.getElementById('guestView').style.display='none';document.getElementById('loggedInView').style.display='block';document.getElementById('userNameDisplay').innerText=currentUser.name;}else{document.getElementById('guestView').style.display='block';document.getElementById('loggedInView').style.display='none';} }
 function closeAccount(){ document.getElementById('accountModal').classList.remove('show') }
 function showRegister(){document.getElementById('loginForm').style.display='none';document.getElementById('registerForm').style.display='block';document.getElementById('tabLogin').classList.remove('active');document.getElementById('tabRegister').classList.add('active')}
 function showLogin(){document.getElementById('registerForm').style.display='none';document.getElementById('loginForm').style.display='block';document.getElementById('tabRegister').classList.remove('active');document.getElementById('tabLogin').classList.add('active')}
@@ -533,12 +536,4 @@ function addProduct(){
   siteData.products[cat].push({name,price,oldPrice,img});
   saveData();renderAll();
   document.getElementById('productName').value='';document.getElementById('productPrice').value='';document.getElementById('productOldPrice').value='';
-  document.getElementById('prodPreview').style.display='none';tempProdImg='';
-  alert('تمت اضافة المنتج للقسم')
-}
-
-function deleteProduct(cat,i){if(confirm('حذف المنتج؟')){siteData.products[cat].splice(i,1);saveData();renderAll();}}
-function editProduct(cat,i){
-  let p=siteData.products[cat][i];
-  let newName=prompt('الاسم الجديد:',p.name);if(!newName) return;
-  let newPrice=prompt('السعر الجديد:',p.price);if(!newPrice) return;
+  document.getElementById('prodPreview
