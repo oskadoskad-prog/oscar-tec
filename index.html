@@ -24,7 +24,7 @@ body{background:var(--bodyBg, var(--bg)) center/cover fixed;color:var(--text);pa
 
 .section-title{background:var(--card);padding:15px;font-size:1.3rem;font-weight:900;text-align:center;border-bottom:1px solid #ddd;color:var(--text)}
 
-.categories-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:10px;background:var(--card)}
+.categories-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:10px;background:var(--card)}
 .cat-card{background:var(--bg);border:1px solid #ddd;border-radius:10px;padding:10px;text-align:center;position:relative;cursor:pointer}
 body.dark.cat-card{border-color:#444}
 .cat-card img{width:100%;height:100px;object-fit:cover;border-radius:8px;margin-bottom:8px}
@@ -68,16 +68,13 @@ body.dark.product-card{border-color:#444}
 .preview-img{width:80px;height:80px;border-radius:8px;object-fit:cover;margin:5px;border:2px solid var(--orange)}
 .color-picker{width:100%;height:40px;border:none;border-radius:8px;cursor:pointer}
 
-/* نافذة اتمام الطلب الجديدة */
-#checkoutModal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000a;z-index:100003;align-items:center;justify-content:center}
-#checkoutModal.show{display:flex}
-.checkout-box{background:var(--card);width:90%;max-width:500px;padding:20px;border-radius:15px;color:var(--text);max-height:90vh;overflow-y:auto}
-.checkout-box h2{text-align:center;color:var(--orange);margin-bottom:15px}
-.address-section{border:1px solid #ddd;padding:15px;border-radius:10px;margin:15px 0;background:var(--bg)}
-.address-section h3{color:var(--blue);margin-bottom:10px;font-size:1rem}
-.location-btn{background:var(--blue);color:#fff;border:none;padding:10px;border-radius:8px;width:100%;margin:8px 0;cursor:pointer;font-weight:700}
-.location-btn i{margin-left:5px}
-.cart-summary{max-height:200px;overflow-y:auto;margin:10px 0;border:1px solid #ddd;border-radius:8px;padding:10px}
+/* نافذة الحساب */
+#accountModal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000a;z-index:100003;align-items:center;justify-content:center}
+#accountModal.show{display:flex}
+.account-box{background:var(--card);width:90%;max-width:400px;padding:20px;border-radius:15px;color:var(--text)}
+.account-tabs{display:flex;gap:5px;margin-bottom:15px}
+.account-tabs button{flex:1;padding:10px;border:none;border-radius:8px;background:#ddd;cursor:pointer;font-weight:700}
+.account-tabs button.active{background:var(--orange);color:#000}
 </style>
 </head>
 <body>
@@ -105,6 +102,7 @@ body.dark.product-card{border-color:#444}
 <div id="categoryPage" style="display:none">
   <button class="back-btn" onclick="goHome()"><i class="fa-solid fa-arrow-right"></i> رجوع للاقسام</button>
   <h2 class="section-title" id="catPageTitle"></h2>
+  <div id="brandGrid" class="categories-grid" style="display:none"></div>
   <button class="add-product-in-cat" style="display:none" id="addProductBtn" onclick="quickAddToCurrentCat()"><i class="fa-solid fa-plus"></i> اضافة منتج لهذا القسم</button>
   <div id="catProductsGrid" class="products-grid"></div>
 </div>
@@ -117,31 +115,37 @@ body.dark.product-card{border-color:#444}
 
 <div class="bottom-nav">
   <div class="nav-item" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i>تصفح</div>
-  <div class="nav-item" onclick="openCheckout()"><i class="fa-solid fa-cart-shopping"></i>العربة <span id="cartCount" class="cart-count">0</span></div>
-  <div class="nav-item" onclick="alert('صفحة حسابك')"><i class="fa-solid fa-user"></i>حسابك</div>
+  <div class="nav-item" onclick="alert('العربة')"><i class="fa-solid fa-cart-shopping"></i>العربة <span id="cartCount" class="cart-count">0</span></div>
+  <div class="nav-item" onclick="openAccount()"><i class="fa-solid fa-user"></i>حسابك</div>
   <div class="nav-item" onclick="goHome()"><i class="fa-solid fa-house"></i>الرئيسية</div>
 </div>
 
-<!-- نافذة اتمام الطلب الجديدة -->
-<div id="checkoutModal">
-  <div class="checkout-box">
-    <h2><i class="fa-solid fa-truck"></i> اتمام الطلب</h2>
-    <div class="cart-summary" id="checkoutCartSummary"></div>
-    <h3 style="text-align:center;color:var(--red)" id="checkoutTotal"></h3>
-
-    <div class="address-section">
-      <h3><i class="fa-solid fa-location-dot"></i> بيانات التوصيل</h3>
-      <input type="text" id="customerName" placeholder="الاسم الكامل *">
-      <input type="text" id="customerPhone" placeholder="رقم الجوال *">
-      <input type="text" id="customerLocation" placeholder="المدينة - المنطقة *">
-
-      <button type="button" class="location-btn" onclick="getLocation()"><i class="fa-solid fa-location-crosshairs"></i> تحديد موقعي الحالي</button>
-      <input type="text" id="customerLocationLink" placeholder="رابط الموقع من الخرائط" readonly>
-      <textarea id="customerLocationDetails" rows="2" placeholder="تفاصيل اضافية للموقع: بجانب مسجد - محل معروف"></textarea>
+<!-- نافذة الحساب -->
+<div id="accountModal">
+  <div class="account-box">
+    <div id="loggedInView" style="display:none">
+      <h3 id="userNameDisplay"></h3>
+      <button onclick="logout()" style="background:var(--red);color:#fff;width:100%;padding:12px;border:none;border-radius:8px">تسجيل خروج</button>
+      <button onclick="closeAccount()" style="background:#888;color:#fff;width:100%;padding:12px;border:none;border-radius:8px;margin-top:10px">اغلاق</button>
     </div>
-
-    <button onclick="sendOrderWhatsApp()" style="background:var(--green);color:#fff;width:100%;padding:12px;border:none;border-radius:8px;font-weight:700"><i class="fa-brands fa-whatsapp"></i> ارسال الطلب عبر واتساب</button>
-    <button onclick="closeCheckout()" style="background:var(--red);color:#fff;width:100%;padding:12px;border:none;border-radius:8px;font-weight:700;margin-top:10px">الغاء</button>
+    <div id="guestView">
+      <div class="account-tabs">
+        <button id="tabLogin" class="active" onclick="showLogin()">تسجيل دخول</button>
+        <button id="tabRegister" onclick="showRegister()">انشاء حساب</button>
+      </div>
+      <div id="loginForm">
+        <input type="text" id="loginUser" placeholder="الايميل او رقم الجوال">
+        <input type="password" id="loginPass" placeholder="كلمة السر">
+        <button onclick="login()" style="background:var(--green);color:#fff;width:100%;padding:12px;border:none;border-radius:8px">دخول</button>
+      </div>
+      <div id="registerForm" style="display:none">
+        <input type="text" id="regName" placeholder="الاسم الكامل">
+        <input type="text" id="regUser" placeholder="الايميل او رقم الجوال">
+        <input type="password" id="regPass" placeholder="كلمة السر">
+        <button onclick="register()" style="background:var(--orange);color:#000;width:100%;padding:12px;border:none;border-radius:8px">انشاء حساب</button>
+      </div>
+      <button onclick="closeAccount()" style="background:var(--red);color:#fff;width:100%;padding:10px;border:none;border-radius:8px;margin-top:10px">اغلاق</button>
+    </div>
   </div>
 </div>
 
@@ -175,20 +179,13 @@ body.dark.product-card{border-color:#444}
     </div>
 
     <div class="admin-section">
-      <h3>3. تغيير الخلفية البيضاء للموقع</h3>
+      <h3>3. تغيير الخلفية</h3>
       <label>لون الخلفية:</label>
       <input type="color" id="bgColor" class="color-picker" value="#EAEDED" onchange="changeBgColor(this.value)">
       <label>او صورة خلفية:</label>
       <input type="file" id="bgFile" accept="image/*" onchange="changeBackground(this)">
       <img id="bgPreview" class="preview-img" style="display:none">
       <button onclick="removeBg()" style="background:var(--red)">حذف الصورة</button>
-    </div>
-
-    <div class="admin-section">
-      <h3>4. النسخ الاحتياطي</h3>
-      <button onclick="exportData()" style="background:var(--blue)">تصدير البيانات</button>
-      <input type="file" id="importFile" accept=".json" onchange="importData(event)" style="display:none">
-      <button onclick="document.getElementById('importFile').click()" style="background:var(--yellow);color:#000">استيراد البيانات</button>
     </div>
 
     <button onclick="saveData()" style="background:var(--green)">حفظ كل التغييرات</button>
@@ -198,10 +195,12 @@ body.dark.product-card{border-color:#444}
 
 <script>
 let cart = [];
-let siteData = JSON.parse(localStorage.getItem('oskarSiteDataV5')) || getDefaultData();
+let siteData = JSON.parse(localStorage.getItem('oskarSiteDataV7')) || getDefaultData();
+let users = JSON.parse(localStorage.getItem('oskarUsersV7')) || [];
+let currentUser = JSON.parse(localStorage.getItem('oskarCurrentUserV7')) || null;
 let tempCatImg = '';
 let tempProdImg = '';
-let adminActive = localStorage.getItem('adminActiveV5') === 'true';
+let adminActive = localStorage.getItem('adminActiveV7') === 'true';
 let allProducts = [];
 let currentCat = 'all';
 const SECRET_CODE = "oskad0099";
@@ -212,9 +211,23 @@ function getDefaultData(){
     bgColor: "#EAEDED",
     categories: [
       {id:"phones", name:"جوالات", img:"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400"},
-      {id:"accessories", name:"اكسسوارات", img:"https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400"}
+      {id:"laptops", name:"لابتوبات", img:"https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400"},
+      {id:"accessories", name:"اكسسوارات", img:"https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400"},
+      {id:"smartwatch", name:"ساعات ذكية", img:"https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400"},
+      {id:"tablets", name:"تابلت", img:"https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=400"},
+      {id:"audio", name:"سماعات", img:"https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400"}
     ],
-    products: {phones: [], accessories: []}
+    phoneBrands: [
+      {id:"iphone", name:"ايفون", img:"https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg"},
+      {id:"samsung", name:"سامسونج", img:"https://upload.wikimedia.org/wikipedia/commons/2/24/Samsung_Logo.svg"},
+      {id:"infinix", name:"انفنكس", img:"https://via.placeholder.com/100/FF9900/fff?text=Infinix"},
+      {id:"huawei", name:"هواوي", img:"https://via.placeholder.com/100/FF0000/fff?text=Huawei"},
+      {id:"honor", name:"هونر", img:"https://via.placeholder.com/100/000/fff?text=Honor"},
+      {id:"oppo", name:"اوبو", img:"https://via.placeholder.com/100/00A94F/fff?text=Oppo"},
+      {id:"tecno", name:"تكنو", img:"https://via.placeholder.com/100/0000FF/fff?text=Tecno"},
+      {id:"xiaomi", name:"شاومي", img:"https://via.placeholder.com/100/FF6900/fff?text=Xiaomi"}
+    ],
+    products: {phones: [], laptops: [], accessories: [], smartwatch: [], tablets: [], audio: []}
   }
 }
 
@@ -319,6 +332,18 @@ function openCategory(catId){
   let cat = siteData.categories.find(c=>c.id==catId);
   document.getElementById('catPageTitle').innerText = cat.name;
 
+  // اذا كان قسم الجوالات نعرض البراندات
+  if(catId == 'phones'){
+    document.getElementById('brandGrid').style.display = 'grid';
+    let brandHtml = '';
+    siteData.phoneBrands.forEach(b=>{
+      brandHtml += `<div class="cat-card"><img src="${b.img}"><h3>${b.name}</h3></div>`;
+    });
+    document.getElementById('brandGrid').innerHTML = brandHtml;
+  }else{
+    document.getElementById('brandGrid').style.display = 'none';
+  }
+
   let html = '';
   siteData.products[catId].forEach((p,i)=>{
     html += productCardHTML(p, catId, i);
@@ -342,70 +367,21 @@ function goHome(){
 function addToCart(item){let existing = cart.find(p=>p.name==item.name);if(existing) existing.qty++;else cart.push({...item, qty:1});updateCart();}
 function updateCart(){document.getElementById('cartCount').innerText = cart.reduce((a,b)=>a+b.qty,0);}
 
-// دوال الموقع الجديدة
-function getLocation(){
-  if(navigator.geolocation){
-    navigator.geolocation.getCurrentPosition(function(position){
-      let lat = position.coords.latitude;
-      let lng = position.coords.longitude;
-      let link = `https://www.google.com/maps?q=${lat},${lng}`;
-      document.getElementById('customerLocationLink').value = link;
-      alert('تم تحديد الموقع بنجاح');
-    }, function(){
-      alert('لم نتمكن من تحديد الموقع. الرجاء السماح للمتصفح بالوصول للموقع');
-    });
-  }else{
-    alert('المتصفح لا يدعم تحديد الموقع');
-  }
-}
-
-function openCheckout(){
-  if(cart.length == 0){ alert("السلة فارغة"); return; }
-  document.getElementById('checkoutModal').classList.add('show');
-  let html = ''; let total = 0;
-  cart.forEach((item,i)=>{
-    html += `<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #ddd">
-      <span>${item.name} x ${item.qty}</span>
-      <span>${(parseInt(item.price)*item.qty).toLocaleString()} ل.س</span>
-    </div>`;
-    total += parseInt(item.price)*item.qty;
-  });
-  document.getElementById('checkoutCartSummary').innerHTML = html;
-  document.getElementById('checkoutTotal').innerText = 'المجموع: ' + total.toLocaleString() + ' ل.س';
-}
-
-function closeCheckout(){document.getElementById('checkoutModal').classList.remove('show')}
-
-function sendOrderWhatsApp(){
-  let name = document.getElementById('customerName').value.trim();
-  let phone = document.getElementById('customerPhone').value.trim();
-  let location = document.getElementById('customerLocation').value.trim();
-  let locationLink = document.getElementById('customerLocationLink').value.trim();
-  let locationDetails = document.getElementById('customerLocationDetails').value.trim();
-
-  if(!name ||!phone ||!location){
-    alert('الرجاء اكمال الاسم والجوال والعنوان');return
-  }
-
-  let total = cart.reduce((a,b)=>a + parseInt(b.price) * b.qty, 0);
-  let message = `طلب جديد من مركز اوسكار التقني\n`;
-  message += `الاسم: ${name}\nالجوال: ${phone}\nالعنوان: ${location}\n`;
-  if(locationLink) message += `الموقع: ${locationLink}\n`;
-  if(locationDetails) message += `تفاصيل الموقع: ${locationDetails}\n`;
-  message += `\nالمنتجات:\n`;
-  cart.forEach((item,i)=>{message += `${i+1}. ${item.name} x ${item.qty} = ${(parseInt(item.price)*item.qty).toLocaleString()} ل.س\n`});
-  message += `\nالمجموع الكلي: ${total.toLocaleString()} ل.س`;
-
-  window.open(`https://wa.me/+971544066811?text=${encodeURIComponent(message)}`, '_blank');
-  cart = []; updateCart(); closeCheckout(); alert('تم ارسال الطلب بنجاح');
-}
+// دوال الحساب
+function openAccount(){ document.getElementById('accountModal').classList.add('show'); if(currentUser){document.getElementById('guestView').style.display='none';document.getElementById('loggedInView').style.display='block';document.getElementById('userNameDisplay').innerText=currentUser.name;} }
+function closeAccount(){ document.getElementById('accountModal').classList.remove('show') }
+function showRegister(){document.getElementById('loginForm').style.display='none';document.getElementById('registerForm').style.display='block';document.getElementById('tabLogin').classList.remove('active');document.getElementById('tabRegister').classList.add('active')}
+function showLogin(){document.getElementById('registerForm').style.display='none';document.getElementById('loginForm').style.display='block';document.getElementById('tabRegister').classList.remove('active');document.getElementById('tabLogin').classList.add('active')}
+function register(){ let name=document.getElementById('regName').value; let user=document.getElementById('regUser').value; let pass=document.getElementById('regPass').value; if(!name||!user||!pass){alert('كمل البيانات');return} users.push({name,user,pass}); localStorage.setItem('oskarUsersV7',JSON.stringify(users)); alert('تم انشاء الحساب'); showLogin(); }
+function login(){ let user=document.getElementById('loginUser').value; let pass=document.getElementById('loginPass').value; let u = users.find(u=>u.user==user && u.pass==pass); if(!u) return alert('البيانات خطأ'); currentUser=u; localStorage.setItem('oskarCurrentUserV7',JSON.stringify(u)); closeAccount(); renderAll(); alert('اهلا '+u.name) }
+function logout(){ currentUser=null; localStorage.removeItem('oskarCurrentUserV7'); renderAll(); closeAccount(); }
 
 function searchProduct(){
   let val = document.getElementById('searchInput').value.toLowerCase();
   let box = document.getElementById('searchResults');
   if(val === SECRET_CODE){
     adminActive =!adminActive;
-    localStorage.setItem('adminActiveV5', adminActive);
+    localStorage.setItem('adminActiveV7', adminActive);
     if(adminActive){
       document.getElementById('adminToggleBtn').classList.add('show');
       document.getElementById('adminPanel').classList.add('show');
@@ -426,7 +402,7 @@ function searchProduct(){
 function toggleAdminPanel(){document.getElementById('adminPanel').classList.toggle('show');}
 function closeAdminPanel(){
   document.getElementById('adminPanel').classList.remove('show');
-  adminActive=false;localStorage.setItem('adminActiveV5','false');
+  adminActive=false;localStorage.setItem('adminActiveV7','false');
   document.getElementById('adminToggleBtn').classList.remove('show');
   saveData();renderAll();
 }
@@ -514,13 +490,8 @@ function changeProdImage(cat,i){
 }
 
 function renderAll(){renderCategories();renderAllProducts();buildAllProducts();if(currentCat!='all') openCategory(currentCat);}
-function saveData(){localStorage.setItem('oskarSiteDataV5',JSON.stringify(siteData));}
-function resetData(){if(confirm('ارجاع كل شي للافتراضي؟')){localStorage.removeItem('oskarSiteDataV5');localStorage.removeItem('adminActiveV5');location.reload();}}
-
-function exportData(){let blob = new Blob([JSON.stringify(siteData)], {type: "application/json"});let a = document.createElement('a');a.href = URL.createObjectURL(blob);a.download = "oskar_backup.json";a.click();}
-function importData(event){let reader = new FileReader();reader.onload = function(e){siteData = JSON.parse(e.target.result);saveData();location.reload();};reader.readAsText(event.target.files[0]);}
-
-document.addEventListener('click', ()=>{document.getElementById('searchResults').style.display='none'});
+function saveData(){localStorage.setItem('oskarSiteDataV7',JSON.stringify(siteData));}
+function resetData(){if(confirm('ارجاع كل شي للافتراضي؟')){localStorage.removeItem('oskarSiteDataV7');localStorage.removeItem('adminActiveV7');localStorage.removeItem('oskarUsersV7');location.reload();}}
 
 window.onload = function(){
   document.body.style.backgroundColor = siteData.bgColor;
