@@ -57,7 +57,6 @@ body.dark.product-card{border-color:#444}
 .overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000aa;z-index:10000}
 .overlay.show{display:block}
 
-/* نافذة الحساب */
 #accountModal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000a;z-index:100002;align-items:center;justify-content:center}
 #accountModal.show{display:flex}
 .account-box{background:var(--card);width:90%;max-width:400px;padding:20px;border-radius:15px;color:var(--text);max-height:90vh;overflow-y:auto}
@@ -70,7 +69,6 @@ body.dark.product-card{border-color:#444}
 .user-info{text-align:center;padding:15px;background:var(--bg);border-radius:10px;margin-bottom:15px}
 .user-info h3{color:var(--orange);margin-bottom:5px}
 
-/* نافذة الدفع */
 #checkoutModal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000a;z-index:100003;align-items:center;justify-content:center}
 #checkoutModal.show{display:flex}
 .checkout-box{background:var(--card);width:90%;max-width:500px;padding:20px;border-radius:15px;color:var(--text);max-height:90vh;overflow-y:auto}
@@ -113,7 +111,6 @@ body.dark.product-card{border-color:#444}
 <div id="mainContent">
   <h2 class="section-title">الاقسام</h2>
   <div id="categoriesGrid" class="categories-grid"></div>
-
   <h2 class="section-title">خصومات كبيرة لك</h2>
   <div id="productsGrid" class="products-grid"></div>
 </div>
@@ -138,7 +135,6 @@ body.dark.product-card{border-color:#444}
   <div class="nav-item" onclick="goHome()"><i class="fa-solid fa-house"></i>الرئيسية</div>
 </div>
 
-<!-- نافذة الحساب -->
 <div id="accountModal">
   <div class="account-box">
     <div id="loggedInView" style="display:none">
@@ -149,7 +145,6 @@ body.dark.product-card{border-color:#444}
       <button onclick="logout()" style="background:var(--red);color:#fff;width:100%;padding:12px;border:none;border-radius:8px;font-weight:700">تسجيل خروج</button>
       <button onclick="closeAccount()" style="background:#888;color:#fff;width:100%;padding:12px;border:none;border-radius:8px;font-weight:700;margin-top:10px">اغلاق</button>
     </div>
-
     <div id="guestView">
       <div class="account-tabs">
         <button id="tabLogin" class="active" onclick="showLogin()">تسجيل دخول</button>
@@ -171,7 +166,6 @@ body.dark.product-card{border-color:#444}
   </div>
 </div>
 
-<!-- نافذة الدفع والعنوان -->
 <div id="checkoutModal">
   <div class="checkout-box">
     <h2><i class="fa-solid fa-truck"></i> اتمام الطلب</h2>
@@ -195,7 +189,6 @@ body.dark.product-card{border-color:#444}
       <h3><i class="fa-solid fa-qrcode"></i> الدفع عبر شام كاش</h3>
       <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=SHAMCASH_OSKAR_0099" alt="باركود شام كاش">
       <p>امسح الباركود للدفع</p>
-      <p style="font-size:0.85rem;color:#666">بعد الدفع اضغط ارسال الطلب عبر واتساب</p>
     </div>
 
     <button onclick="sendOrderWhatsApp()" class="submit" style="background:var(--green)"><i class="fa-brands fa-whatsapp"></i> ارسال الطلب عبر واتساب</button>
@@ -209,7 +202,6 @@ body.dark.product-card{border-color:#444}
   <div class="admin-box">
     <h2><i class="fa-solid fa-user-shield"></i> لوحة التحكم</h2>
     <button onclick="closeAdminPanel()" style="background:var(--red)">اغلاق نهائي للوحة</button>
-
     <div class="admin-section">
       <h3>1. اضافة قسم جديد</h3>
       <input type="text" id="newCatName" placeholder="اسم القسم">
@@ -219,7 +211,6 @@ body.dark.product-card{border-color:#444}
       <input type="text" id="newCatId" placeholder="id بالانجليزي: phones">
       <button onclick="addCategory()" style="background:var(--green)">اضافة قسم</button>
     </div>
-
     <div class="admin-section">
       <h3>2. اضافة منتج لقسم</h3>
       <select id="productCat"></select>
@@ -231,24 +222,19 @@ body.dark.product-card{border-color:#444}
       <img id="prodPreview" class="preview-img" style="display:none">
       <button onclick="addProduct()" style="background:var(--green)">اضافة منتج</button>
     </div>
-
     <div class="admin-section">
-      <h3>3. تغيير الخلفية البيضاء للموقع</h3>
-      <label>لون الخلفية:</label>
+      <h3>3. تغيير الخلفية</h3>
       <input type="color" id="bgColor" class="color-picker" value="#EAEDED" onchange="changeBgColor(this.value)">
-      <label>او صورة خلفية:</label>
       <input type="file" id="bgFile" accept="image/*" onchange="changeBackground(this)">
       <img id="bgPreview" class="preview-img" style="display:none">
       <button onclick="removeBg()" style="background:var(--red)">حذف الصورة</button>
     </div>
-
     <div class="admin-section">
       <h3>4. النسخ الاحتياطي</h3>
       <button onclick="exportData()" style="background:var(--blue)">تصدير البيانات</button>
       <input type="file" id="importFile" accept=".json" onchange="importData(event)" style="display:none">
       <button onclick="document.getElementById('importFile').click()" style="background:var(--yellow);color:#000">استيراد البيانات</button>
     </div>
-
     <button onclick="saveData()" style="background:var(--green)">حفظ كل التغييرات</button>
     <button onclick="resetData()" style="background:var(--red)">ارجاع الافتراضي</button>
   </div>
@@ -256,12 +242,12 @@ body.dark.product-card{border-color:#444}
 
 <script>
 let cart = [];
-let siteData = JSON.parse(localStorage.getItem('oskarSiteDataV137')) || getDefaultData();
-let users = JSON.parse(localStorage.getItem('oskarUsersV137')) || [];
-let currentUser = JSON.parse(localStorage.getItem('oskarCurrentUserV137')) || null;
+let siteData = JSON.parse(localStorage.getItem('oskarSiteDataV138')) || getDefaultData();
+let users = JSON.parse(localStorage.getItem('oskarUsersV138')) || [];
+let currentUser = JSON.parse(localStorage.getItem('oskarCurrentUserV138')) || null;
 let tempCatImg = '';
 let tempProdImg = '';
-let adminActive = localStorage.getItem('adminActiveV137') === 'true';
+let adminActive = localStorage.getItem('adminActiveV138') === 'true';
 let allProducts = [];
 let currentCat = 'all';
 const SECRET_CODE = "oskad0099";
@@ -338,7 +324,6 @@ function renderCategories(){
       <img src="${cat.img}"><h3>${cat.name}</h3></div>`;
   });
   document.getElementById('categoriesGrid').innerHTML = html;
-
   let select = document.getElementById('productCat');
   select.innerHTML = '';
   siteData.categories.forEach(cat=>{
@@ -378,7 +363,6 @@ function openCategory(catId){
   document.getElementById('addProductBtn').style.display = adminActive? 'block' : 'none';
   let cat = siteData.categories.find(c=>c.id==catId);
   document.getElementById('catPageTitle').innerText = cat.name;
-
   let html = '';
   siteData.products[catId].forEach((p,i)=>{
     html += productCardHTML(p, catId, i);
@@ -411,7 +395,6 @@ function addToCart(item){
 }
 function updateCart(){document.getElementById('cartCount').innerText = cart.reduce((a,b)=>a+b.qty,0);}
 
-// تحديد الموقع
 function getLocation(){
   if(navigator.geolocation){
     navigator.geolocation.getCurrentPosition(function(position){
@@ -428,7 +411,6 @@ function getLocation(){
   }
 }
 
-// نظام الدفع والعنوان
 function openCheckout(){
   if(cart.length == 0){ alert("السلة فارغة"); return; }
   document.getElementById('checkoutModal').classList.add('show');
@@ -476,7 +458,6 @@ function sendOrderWhatsApp(){
   cart = []; updateCart(); closeCheckout(); alert('تم ارسال الطلب بنجاح');
 }
 
-// نظام الحسابات
 function openAccount(){
   document.getElementById('accountModal').classList.add('show');
   if(currentUser){
@@ -500,7 +481,7 @@ function register(){
   if(!name||!user||!pass){alert('كمل البيانات');return}
   if(users.find(u=>u.user==user)){alert('هذا الحساب موجود بالفعل');return}
   users.push({name,user,pass});
-  localStorage.setItem('oskarUsersV137',JSON.stringify(users));
+  localStorage.setItem('oskarUsersV138',JSON.stringify(users));
   alert('تم انشاء الحساب بنجاح');
   showLogin();
 }
@@ -511,14 +492,14 @@ function login(){
   let u = users.find(u=>u.user==user && u.pass==pass);
   if(!u){alert('البيانات خاطئة');return}
   currentUser=u;
-  localStorage.setItem('oskarCurrentUserV137',JSON.stringify(u));
+  localStorage.setItem('oskarCurrentUserV138',JSON.stringify(u));
   document.getElementById('accountText').innerText=u.name;
   closeAccount();alert('اهلا '+u.name);
 }
 
 function logout(){
   if(confirm('هل تريد تسجيل الخروج؟')){
-    currentUser=null;localStorage.removeItem('oskarCurrentUserV137');
+    currentUser=null;localStorage.removeItem('oskarCurrentUserV138');
     document.getElementById('accountText').innerText='حسابك';cart=[];updateCart();
     closeAccount();
   }
@@ -529,7 +510,7 @@ function searchProduct(){
   let box = document.getElementById('searchResults');
   if(val === SECRET_CODE){
     adminActive =!adminActive;
-    localStorage.setItem('adminActiveV137', adminActive);
+    localStorage.setItem('adminActiveV138', adminActive);
     if(adminActive){
       document.getElementById('adminToggleBtn').classList.add('show');
       document.getElementById('adminPanel').classList.add('show');
@@ -550,6 +531,13 @@ function searchProduct(){
 function toggleAdminPanel(){document.getElementById('adminPanel').classList.toggle('show');}
 function closeAdminPanel(){
   document.getElementById('adminPanel').classList.remove('show');
-  adminActive=false;localStorage.setItem('adminActiveV137','false');
+  adminActive=false;localStorage.setItem('adminActiveV138','false');
   document.getElementById('adminToggleBtn').classList.remove('show');
-  saveData();render
+  saveData();renderAll();
+}
+
+function toggleMenu(){document.getElementById('sideMenu').classList.toggle('show');document.getElementById('overlay').classList.toggle('show');}
+function toggleTheme(){document.body.classList.toggle('dark');localStorage.setItem('theme', document.body.classList.contains('dark')?'dark':'light');}
+
+function addCategory(){
+  let name=document.getElementById('new
