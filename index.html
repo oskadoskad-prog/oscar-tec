@@ -24,14 +24,12 @@ body{background:var(--bodyBg, var(--bg)) center/cover fixed;color:var(--text);pa
 
 .section-title{background:var(--card);padding:15px;font-size:1.3rem;font-weight:900;text-align:center;border-bottom:1px solid #ddd;color:var(--text)}
 
-/* تعديل مهم: متجاوب للكمبيوتر والجوال */
+/* تعديل: متجاوب كمبيوتر + جوال */
 .categories-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:10px;background:var(--card)}
 @media(min-width:768px){
- .categories-grid{grid-template-columns:repeat(4,1fr);} /* 4 اقسام على الكمبيوتر */
+.categories-grid{grid-template-columns:repeat(4,1fr);} /* 4 اقسام على الكمبيوتر */
 }
-
-.cat-card{background:var(--bg);border:1px solid #ddd;border-radius:10px;padding:10px;text-align:center;position:relative;cursor:pointer;transition:0.2s}
-.cat-card:hover{transform:translateY(-3px);box-shadow:0 4px 10px #0002}
+.cat-card{background:var(--bg);border:1px solid #ddd;border-radius:10px;padding:10px;text-align:center;position:relative;cursor:pointer}
 body.dark.cat-card{border-color:#444}
 .cat-card img{width:100%;height:100px;object-fit:cover;border-radius:8px;margin-bottom:8px}
 .cat-card i{font-size:2.5rem;color:var(--orange);margin-bottom:8px}
@@ -39,7 +37,7 @@ body.dark.cat-card{border-color:#444}
 
 .products-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;padding:10px;background:var(--card)}
 @media(min-width:768px){
- .products-grid{grid-template-columns:repeat(4,1fr);} /* 4 منتجات على الكمبيوتر */
+.products-grid{grid-template-columns:repeat(4,1fr);} /* 4 منتجات على الكمبيوتر */
 }
 .product-card{background:var(--bg);border:1px solid #ddd;border-radius:8px;padding:10px;text-align:center;position:relative}
 body.dark.product-card{border-color:#444}
@@ -158,7 +156,6 @@ body.dark.product-card{border-color:#444}
     </div>
   </div>
 </div>
-
 
 <button id="adminToggleBtn" class="admin-toggle" onclick="toggleAdminPanel()"><i class="fa-solid fa-chevron-right"></i></button>
 
@@ -301,7 +298,6 @@ function openCategory(catId){
   let cat = siteData.categories.find(c=>c.id==catId);
   document.getElementById('catPageTitle').innerText = cat.name;
 
-  // اذا كان قسم الجوالات نعرض البراندات
   if(catId == 'phones'){
     document.getElementById('brandGrid').style.display = 'grid';
     let brandHtml = '';
@@ -344,7 +340,6 @@ function showLogin(){document.getElementById('registerForm').style.display='none
 function register(){ let name=document.getElementById('regName').value; let user=document.getElementById('regUser').value; let pass=document.getElementById('regPass').value; if(!name||!user||!pass){alert('كمل البيانات');return} users.push({name,user,pass}); localStorage.setItem('oskarUsersV8',JSON.stringify(users)); alert('تم انشاء الحساب'); showLogin(); }
 function login(){ let user=document.getElementById('loginUser').value; let pass=document.getElementById('loginPass').value; let u = users.find(u=>u.user==user && u.pass==pass); if(!u) return alert('البيانات خطأ'); currentUser=u; localStorage.setItem('oskarCurrentUserV8',JSON.stringify(u)); closeAccount(); renderAll(); alert('اهلا '+u.name) }
 function logout(){ currentUser=null; localStorage.removeItem('oskarCurrentUserV8'); renderAll(); closeAccount(); }
-
 
 function searchProduct(){
   let val = document.getElementById('searchInput').value.toLowerCase();
