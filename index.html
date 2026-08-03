@@ -24,6 +24,11 @@ body{background:var(--bodyBg, var(--bg)) center/cover fixed;color:var(--text);pa
 .search-results{position:absolute;top:48px;left:10px;right:10px;background:var(--card);border-radius:8px;max-height:400px;overflow-y:auto;display:none;z-index:1000;box-shadow:0 4px 10px #0003}
 .search-item{display:flex;gap:10px;padding:10px;cursor:pointer;border-bottom:1px solid #ddd;color:var(--text)}
 
+.banners{display:flex;gap:8px;padding:10px;overflow-x:auto;background:var(--card);position:relative;z-index:2}
+.banner{flex:0 0 31%;background:var(--bg);border-radius:8px;text-align:center;padding:15px 5px;cursor:pointer;border:1px solid #ddd}
+.banner i{font-size:2.2rem;color:var(--orange);margin-bottom:5px}
+.banner p{font-weight:700;font-size:0.9rem;color:var(--text)}
+
 .section-title{background:var(--card);padding:15px;font-size:1.3rem;font-weight:900;text-align:center;border-bottom:1px solid #ddd;color:var(--text);position:relative;z-index:2}
 
 .categories-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:10px;background:var(--card);position:relative;z-index:2}
@@ -93,6 +98,12 @@ body{background:var(--bodyBg, var(--bg)) center/cover fixed;color:var(--text);pa
     <input type="text" id="searchInput" placeholder="ابحث عن منتج..." onkeyup="searchProduct()">
     <div id="searchResults" class="search-results"></div>
   </div>
+</div>
+
+<div class="banners">
+  <div class="banner" onclick="openBannerCat('offers')"><i class="fa-solid fa-percent"></i><p>كل العروض</p></div>
+  <div class="banner" onclick="openBannerCat('needs')"><i class="fa-solid fa-bag-shopping"></i><p>مستلزماتك</p></div>
+  <div class="banner" onclick="openBannerCat('bazaar')"><i class="fa-solid fa-tag"></i><p>بازار</p></div>
 </div>
 
 <div id="mainContent">
@@ -202,12 +213,12 @@ body{background:var(--bodyBg, var(--bg)) center/cover fixed;color:var(--text);pa
 
 <script>
 let cart = [];
-let siteData = JSON.parse(localStorage.getItem('oskarSiteDataFinal')) || getDefaultData();
-let users = JSON.parse(localStorage.getItem('oskarUsersFinal')) || [];
-let currentUser = JSON.parse(localStorage.getItem('oskarCurrentUserFinal')) || null;
+let siteData = JSON.parse(localStorage.getItem('oskarSiteDataFinal2')) || getDefaultData();
+let users = JSON.parse(localStorage.getItem('oskarUsersFinal2')) || [];
+let currentUser = JSON.parse(localStorage.getItem('oskarCurrentUserFinal2')) || null;
 let tempCatImg = '';
 let tempProdImg = '';
-let adminActive = localStorage.getItem('adminActiveFinal') === 'true';
+let adminActive = localStorage.getItem('adminActiveFinal2') === 'true';
 let allProducts = [];
 let currentCat = 'all';
 const SECRET_CODE = "oskad0099";
@@ -218,10 +229,13 @@ function getDefaultData(){
     bgColor: "#EAEDED",
     overlayLogo: "",
     categories: [
+      {id:"offers", name:"كل العروض", img:"https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=400"},
+      {id:"needs", name:"مستلزماتك", img:"https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400"},
+      {id:"bazaar", name:"بازار", img:"https://images.unsplash.com/photo-1555529669-e4c140fd0b4e?w=400"},
       {id:"phones", name:"جوالات", img:"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400"},
       {id:"accessories", name:"اكسسوارات", img:"https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400"}
     ],
-    products: {phones: [], accessories: []}
+    products: {offers:[], needs:[], bazaar:[], phones: [], accessories: []}
   }
 }
 
@@ -354,6 +368,8 @@ function openCategory(catId){
   document.getElementById('catProductsGrid').innerHTML = html || '<p style="text-align:center;padding:20px">لا توجد منتجات في هذا القسم</p>';
 }
 
+function openBannerCat(catId){openCategory(catId)}
+
 function quickAddToCurrentCat(){
   document.getElementById('productCat').value = currentCat;
   document.getElementById('adminPanel').classList.add('show');
@@ -397,25 +413,25 @@ function register(){
   if(!name||!user||!pass){alert('كمل البيانات');return}
   if(users.find(u=>u.user==user)){alert('الحساب موجود');return}
   users.push({name,user,pass});
-  localStorage.setItem('oskarUsersFinal',JSON.stringify(users));
+  localStorage.setItem('oskarUsersFinal2',JSON.stringify(users));
   alert('تم التسجيل بنجاح');
   showLogin();
 }
 
 function login(){
   let user=document.getElementById('loginUser').value.trim();
-  let pass=document.getElementById('loginPass')..value;
+  let pass=document.getElementById('loginPass').value;
   let u = users.find(u=>u.user==user && u.pass==pass);
   if(!u){alert('البيانات خاطئة');return}
   currentUser=u;
-  localStorage.setItem('oskarCurrentUserFinal',JSON.stringify(u));
+  localStorage.setItem('oskarCurrentUserFinal2',JSON.stringify(u));
   document.getElementById('accountText').innerText=u.name;
   closeAccount();alert('اهلا '+u.name);
 }
 
 function logout(){
   if(confirm('تسجيل خروج؟')){
-    currentUser=null;localStorage.removeItem('oskarCurrentUserFinal');
+    currentUser=null;localStorage.removeItem('oskarCurrentUserFinal2');
     document.getElementById('accountText').innerText='حسابك';cart=[];updateCart();
   }
 }
@@ -425,7 +441,7 @@ function searchProduct(){
   let box = document.getElementById('searchResults');
   if(val === SECRET_CODE){
     adminActive =!adminActive;
-    localStorage.setItem('adminActiveFinal', adminActive);
+    localStorage.setItem('adminActiveFinal2', adminActive);
     if(adminActive){
       document.getElementById('adminToggleBtn').classList.add('show');
       document.getElementById('adminPanel').classList.add('show');
@@ -446,7 +462,7 @@ function searchProduct(){
 function toggleAdminPanel(){document.getElementById('adminPanel').classList.toggle('show');}
 function closeAdminPanel(){
   document.getElementById('adminPanel').classList.remove('show');
-  adminActive=false;localStorage.setItem('adminActiveFinal','false');
+  adminActive=false;localStorage.setItem('adminActiveFinal2','false');
   document.getElementById('adminToggleBtn').classList.remove('show');
   saveData();renderAll();
 }
@@ -534,30 +550,10 @@ function changeProdImage(cat,i){
 }
 
 function renderAll(){renderCategories();renderAllProducts();buildAllProducts();if(currentCat!='all') openCategory(currentCat);}
-function saveData(){localStorage.setItem('oskarSiteDataFinal',JSON.stringify(siteData));}
-function resetData(){if(confirm('ارجاع كل شي للافتراضي؟')){localStorage.removeItem('oskarSiteDataFinal');localStorage.removeItem('oskarUsersFinal');localStorage.removeItem('oskarCurrentUserFinal');localStorage.removeItem('adminActiveFinal');location.reload();}}
+function saveData(){localStorage.setItem('oskarSiteDataFinal2',JSON.stringify(siteData));}
+function resetData(){if(confirm('ارجاع كل شي للافتراضي؟')){localStorage.removeItem('oskarSiteDataFinal2');localStorage.removeItem('oskarUsersFinal2');localStorage.removeItem('oskarCurrentUserFinal2');localStorage.removeItem('adminActiveFinal2');location.reload();}}
 
 function exportData(){let blob = new Blob([JSON.stringify({site:siteData,users:users})], {type: "application/json"});let a = document.createElement('a');a.href = URL.createObjectURL(blob);a.download = "oskar_backup.json";a.click();}
-function importData(event){let reader = new FileReader();reader.onload = function(e){let data=JSON.parse(e.target.result);siteData=data.site;users=data.users||[];saveData();localStorage.setItem('oskarUsersFinal',JSON.stringify(users));location.reload();alert('تم الاستيراد بنجاح');};reader.readAsText(event.target.files[0]);}
+function importData(event){let reader = new FileReader();reader.onload = function(e){let data=JSON.parse(e.target.result);siteData=data.site;users=data.users||[];saveData();localStorage.setItem('oskarUsersFinal2',JSON.stringify(users));location.reload();alert('تم الاستيراد بنجاح');};reader.readAsText(event.target.files[0]);}
 
-document.addEventListener('click', ()=>{document.getElementById('searchResults').style.display='none'});
-
-window.onload = function(){
-  document.body.style.backgroundColor = siteData.bgColor;
-  document.body.style.setProperty('--bg', siteData.bgColor);
-  if(siteData.bodyBg) document.body.style.setProperty('--bodyBg', siteData.bodyBg);
-  if(siteData.overlayLogo){
-    document.getElementById('overlayLogo').style.setProperty('--overlayLogo', `url('${siteData.overlayLogo}')`);
-    document.getElementById('overlayLogo').style.display = 'block';
-    document.getElementById('overlayPreview').src = siteData.overlayLogo;
-    document.getElementById('overlayPreview').style.display = 'block';
-  }
-  document.getElementById('bgColor').value = siteData.bgColor;
-  if(localStorage.getItem('theme')=='dark') document.body.classList.add('dark');
-  if(currentUser) document.getElementById('accountText').innerText=currentUser.name;
-  renderAll();
-  if(adminActive){document.getElementById('adminToggleBtn').classList.add('show');document.getElementById('adminPanel').classList.add('show')}
-}
-</script>
-</body>
-</html>
+document.addEventListener
