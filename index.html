@@ -24,7 +24,6 @@ body{background:var(--bodyBg, var(--bg)) center/cover fixed;color:var(--text);pa
 
 .section-title{background:var(--card);padding:15px;font-size:1.3rem;font-weight:900;text-align:center;border-bottom:1px solid #ddd;color:var(--text)}
 
-/* متجاوب: 2 جوال 4 كمبيوتر */
 .categories-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:10px;background:var(--card)}
 @media(min-width:768px){
 .categories-grid{grid-template-columns:repeat(4,1fr);}
@@ -110,8 +109,8 @@ body.dark.product-card{border-color:#444}
 <div id="categoryPage" style="display:none">
   <button class="back-btn" onclick="goHome()"><i class="fa-solid fa-arrow-right"></i> رجوع للاقسام</button>
   <h2 class="section-title" id="catPageTitle"></h2>
-  <div id="brandGrid" class="categories-grid" style="display:none"></div>
   <button class="add-product-in-cat" style="display:none" id="addProductBtn" onclick="quickAddToCurrentCat()"><i class="fa-solid fa-plus"></i> اضافة منتج لهذا القسم</button>
+  <div id="brandGrid" class="categories-grid" style="display:none"></div>
   <div id="catProductsGrid" class="products-grid"></div>
 </div>
 
@@ -299,7 +298,7 @@ function openCategory(catId){
   currentCat = catId;
   document.getElementById('mainContent').style.display = 'none';
   document.getElementById('categoryPage').style.display = 'block';
-  document.getElementById('addProductBtn').style.display = adminActive? 'block' : 'none';
+  document.getElementById('addProductBtn').style.display = adminActive? 'block' : 'none'; // زر الاضافة يظهر لكل الاقسام
   let cat = siteData.categories.find(c=>c.id==catId);
   document.getElementById('catPageTitle').innerText = cat.name;
 
@@ -338,13 +337,23 @@ function addToCart(item){let existing = cart.find(p=>p.name==item.name);if(exist
 function updateCart(){document.getElementById('cartCount').innerText = cart.reduce((a,b)=>a+b.qty,0);}
 
 // دوال الحساب
-function openAccount(){ document.getElementById('accountModal').classList.add('show'); if(currentUser){document.getElementById('guestView').style.display='none';document.getElementById('loggedInView').style.display='block';document.getElementById('userNameDisplay').innerText=currentUser.name;} }
+function openAccount(){
+  document.getElementById('accountModal').classList.add('show');
+  if(currentUser){
+    document.getElementById('guestView').style.display='none';
+    document.getElementById('loggedInView').style.display='block';
+    document.getElementById('userNameDisplay').innerText='اهلا '+currentUser.name;
+  }else{
+    document.getElementById('guestView').style.display='block';
+    document.getElementById('loggedInView').style.display='none';
+  }
+}
 function closeAccount(){ document.getElementById('accountModal').classList.remove('show') }
 function showRegister(){document.getElementById('loginForm').style.display='none';document.getElementById('registerForm').style.display='block';document.getElementById('tabLogin').classList.remove('active');document.getElementById('tabRegister').classList.add('active')}
 function showLogin(){document.getElementById('registerForm').style.display='none';document.getElementById('loginForm').style.display='block';document.getElementById('tabRegister').classList.remove('active');document.getElementById('tabLogin').classList.add('active')}
 function register(){ let name=document.getElementById('regName').value; let user=document.getElementById('regUser').value; let pass=document.getElementById('regPass').value; if(!name||!user||!pass){alert('كمل البيانات');return} users.push({name,user,pass}); localStorage.setItem('oskarUsersV9',JSON.stringify(users)); alert('تم انشاء الحساب'); showLogin(); }
-function login(){ let user=document.getElementById('loginUser').value; let pass=document.getElementById('loginPass').value; let u = users.find(u=>u.user==user && u.pass==pass); if(!u) return alert('البيانات خطأ'); currentUser=u; localStorage.setItem('oskarCurrentUserV9',JSON.stringify(u)); closeAccount(); renderAll(); alert('اهلا '+u.name) }
-function logout(){ currentUser=null; localStorage.removeItem('oskarCurrentUserV9'); renderAll(); closeAccount(); }
+function login(){ let user=document.getElementById('loginUser').value; let pass=document.getElementById('loginPass').value; let u = users.find(u=>u.user==user && u.pass==pass); if(!u) return alert('البيانات خطأ'); currentUser=u; localStorage.setItem('oskarCurrentUserV9',JSON.stringify(u)); openAccount(); renderAll(); alert('اهلا '+u.name) }
+function logout(){ currentUser=null; localStorage.removeItem('oskarCurrentUserV9'); openAccount(); renderAll(); alert('تم تسجيل الخروج') } // رجع لنافذة تسجيل الدخول
 
 function searchProduct(){
   let val = document.getElementById('searchInput').value.toLowerCase();
