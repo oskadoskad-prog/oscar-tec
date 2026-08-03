@@ -17,13 +17,13 @@ body{background:var(--bodyBg, var(--bg)) center/cover fixed;color:var(--text);pa
 .brand-name{font-weight:900;font-size:1.4rem;color:var(--orange)}
 .whatsapp-top{background:#25D366;color:#fff;border:none;padding:8px 12px;border-radius:8px;font-weight:700;cursor:pointer;font-size:0.9rem}
 .search-area{display:flex;gap:0;padding:10px 0 0 0;position:relative}
-.search-icon{background:var(--orange);padding:0 10px;display:flex;align-items:center;border-radius:0 8px 8px 0;font-size:1.1rem;cursor:pointer}
+.search-icon{background:var(--orange);padding:0 8px;display:flex;align-items:center;border-radius:0 8px 8px 0;font-size:1rem;cursor:pointer;width:40px;justify-content:center}
 .search-area input{flex:1;padding:10px;border:none;outline:none;font-size:0.95rem;border-radius:8px 0 0 8px}
 .search-results{position:absolute;top:50px;left:10px;right:10px;background:var(--card);border-radius:8px;max-height:400px;overflow-y:auto;display:none;z-index:1000;box-shadow:0 4px 10px #0003}
 .search-item{display:flex;gap:10px;padding:10px;cursor:pointer;border-bottom:1px solid #ddd;color:var(--text)}
 
 .banners{display:flex;gap:8px;padding:10px;overflow-x:auto;background:var(--card)}
-.banner{flex:0 0 31%;background:var(--bg);border-radius:8px;text-align:center;padding:15px 5px;cursor:pointer;border:1px solid #ddd}
+.banner{flex:0 0 48%;background:var(--bg);border-radius:8px;text-align:center;padding:15px 5px;cursor:pointer;border:1px solid #ddd}
 .banner i{font-size:2.2rem;color:var(--orange);margin-bottom:5px}
 .banner p{font-weight:700;font-size:0.9rem;color:var(--text)}
 
@@ -70,7 +70,7 @@ body{background:var(--bodyBg, var(--bg)) center/cover fixed;color:var(--text);pa
 .admin-box button{padding:10px;border:none;border-radius:8px;font-weight:700;cursor:pointer;width:100%;margin:5px 0}
 .preview-img{width:80px;height:80px;border-radius:8px;object-fit:cover;margin:5px;border:2px solid var(--orange)}
 .color-picker{width:100%;height:40px;border:none;border-radius:8px;cursor:pointer}
-.sync-box{background:var(--orange);color:#000;padding:10px;border-radius:8px;text-align:center;font-weight:900;margin:10px 0}
+.sync-box{background:var(--orange);color:#000;padding:10px;border-radius:8px;text-align:center;font-weight:900;margin:10px 0;font-size:0.9rem}
 </style>
 </head>
 <body>
@@ -88,9 +88,8 @@ body{background:var(--bodyBg, var(--bg)) center/cover fixed;color:var(--text);pa
 </div>
 
 <div class="banners">
-  <div class="banner"><i class="fa-solid fa-percent"></i><p>كل العروض</p></div>
-  <div class="banner"><i class="fa-solid fa-bag-shopping"></i><p>مستلزماتك</p></div>
-  <div class="banner"><i class="fa-solid fa-tag"></i><p>بازار</p></div>
+  <div class="banner" onclick="openBannerCat('offers')"><i class="fa-solid fa-percent"></i><p>كل العروض</p></div>
+  <div class="banner" onclick="openBannerCat('needs')"><i class="fa-solid fa-bag-shopping"></i><p>مستلزماتك</p></div>
 </div>
 
 <div id="mainContent">
@@ -102,7 +101,7 @@ body{background:var(--bodyBg, var(--bg)) center/cover fixed;color:var(--text);pa
 </div>
 
 <div id="categoryPage" style="display:none">
-  <button class="back-btn" onclick="goHome()"><i class="fa-solid fa-arrow-right"></i> رجوع للاقسام</button>
+  <button class="back-btn" onclick="goHome()"><i class="fa-solid fa-arrow-right"></i> رجوع</button>
   <h2 class="section-title" id="catPageTitle"></h2>
   <button class="add-product-in-cat" style="display:none" id="addProductBtn" onclick="quickAddToCurrentCat()"><i class="fa-solid fa-plus"></i> اضافة منتج لهذا القسم</button>
   <div id="catProductsGrid" class="products-grid"></div>
@@ -129,10 +128,10 @@ body{background:var(--bodyBg, var(--bg)) center/cover fixed;color:var(--text);pa
     <button onclick="closeAdminPanel()" style="background:var(--red)">اغلاق نهائي للوحة</button>
 
     <div class="sync-box">
-      <i class="fa-solid fa-rotate"></i> للمزامنة بين الجوال والكمبيوتر
-      <button onclick="exportData()" style="background:#fff;color:#000;margin-top:8px">1. تصدير من الكمبيوتر</button>
+      <i class="fa-solid fa-rotate"></i> لنقل البيانات من الكمبيوتر للجوال<br>
+      <button onclick="exportData()" style="background:#fff;color:#000;margin-top:8px">تصدير البيانات</button>
       <input type="file" id="importFile" accept=".json" onchange="importData(event)" style="display:none">
-      <button onclick="document.getElementById('importFile').click()" style="background:#fff;color:#000">2. استيراد على الجوال</button>
+      <button onclick="document.getElementById('importFile').click()" style="background:#fff;color:#000">استيراد البيانات</button>
     </div>
 
     <div class="admin-section">
@@ -158,7 +157,7 @@ body{background:var(--bodyBg, var(--bg)) center/cover fixed;color:var(--text);pa
     </div>
 
     <div class="admin-section">
-      <h3>3. تغيير الخلفية البيضاء للموقع</h3>
+      <h3>3. تغيير الخلفية</h3>
       <label>لون الخلفية:</label>
       <input type="color" id="bgColor" class="color-picker" value="#EAEDED" onchange="changeBgColor(this.value)">
       <label>او صورة خلفية:</label>
@@ -174,10 +173,10 @@ body{background:var(--bodyBg, var(--bg)) center/cover fixed;color:var(--text);pa
 
 <script>
 let cart = [];
-let siteData = JSON.parse(localStorage.getItem('oskarSiteDataV6')) || getDefaultData();
+let siteData = JSON.parse(localStorage.getItem('oskarSiteDataV7')) || getDefaultData();
 let tempCatImg = '';
 let tempProdImg = '';
-let adminActive = localStorage.getItem('adminActiveV6') === 'true';
+let adminActive = localStorage.getItem('adminActiveV7') === 'true';
 let allProducts = [];
 let currentCat = 'all';
 const SECRET_CODE = "oskad0099";
@@ -187,10 +186,12 @@ function getDefaultData(){
     bodyBg: "",
     bgColor: "#EAEDED",
     categories: [
+      {id:"offers", name:"كل العروض", img:"https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=400"},
+      {id:"needs", name:"مستلزماتك", img:"https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400"},
       {id:"phones", name:"جوالات", img:"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400"},
       {id:"accessories", name:"اكسسوارات", img:"https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400"}
     ],
-    products: {phones: [], accessories: []}
+    products: {offers:[], needs:[], phones: [], accessories: []}
   }
 }
 
@@ -302,6 +303,8 @@ function openCategory(catId){
   document.getElementById('catProductsGrid').innerHTML = html || '<p style="text-align:center;padding:20px">لا توجد منتجات في هذا القسم</p>';
 }
 
+function openBannerCat(catId){openCategory(catId)}
+
 function quickAddToCurrentCat(){
   document.getElementById('productCat').value = currentCat;
   document.getElementById('adminPanel').classList.add('show');
@@ -332,7 +335,7 @@ function searchProduct(){
   let box = document.getElementById('searchResults');
   if(val === SECRET_CODE){
     adminActive =!adminActive;
-    localStorage.setItem('adminActiveV6', adminActive);
+    localStorage.setItem('adminActiveV7', adminActive);
     if(adminActive){
       document.getElementById('adminToggleBtn').classList.add('show');
       document.getElementById('adminPanel').classList.add('show');
@@ -353,7 +356,7 @@ function searchProduct(){
 function toggleAdminPanel(){document.getElementById('adminPanel').classList.toggle('show');}
 function closeAdminPanel(){
   document.getElementById('adminPanel').classList.remove('show');
-  adminActive=false;localStorage.setItem('adminActiveV6','false');
+  adminActive=false;localStorage.setItem('adminActiveV7','false');
   document.getElementById('adminToggleBtn').classList.remove('show');
   saveData();renderAll();
 }
@@ -372,7 +375,7 @@ function addCategory(){
   saveData();renderAll();
   document.getElementById('newCatName').value='';document.getElementById('newCatId').value='';
   document.getElementById('catPreview').style.display='none';tempCatImg='';
-  alert('تم اضافة القسم. تذكر تعمل تصدير عشان يظهر بالجوال')
+  alert('تم اضافة القسم. اعمل تصدير وبعدها استيراد على الجوال')
 }
 
 function deleteCategory(id){
@@ -414,7 +417,7 @@ function addProduct(){
   saveData();renderAll();
   document.getElementById('productName').value='';document.getElementById('productPrice').value='';document.getElementById('productOldPrice').value='';
   document.getElementById('prodPreview').style.display='none';tempProdImg='';
-  alert('تمت اضافة المنتج للقسم. تذكر تعمل تصدير')
+  alert('تمت اضافة المنتج. اعمل تصدير وبعدها استيراد على الجوال')
 }
 
 function deleteProduct(cat,i){if(confirm('حذف المنتج؟')){siteData.products[cat].splice(i,1);saveData();renderAll();}}
@@ -441,10 +444,10 @@ function changeProdImage(cat,i){
 }
 
 function renderAll(){renderCategories();renderAllProducts();buildAllProducts();if(currentCat!='all') openCategory(currentCat);}
-function saveData(){localStorage.setItem('oskarSiteDataV6',JSON.stringify(siteData));}
-function resetData(){if(confirm('ارجاع كل شي للافتراضي؟')){localStorage.removeItem('oskarSiteDataV6');localStorage.removeItem('adminActiveV6');location.reload();}}
+function saveData(){localStorage.setItem('oskarSiteDataV7',JSON.stringify(siteData));}
+function resetData(){if(confirm('ارجاع كل شي للافتراضي؟')){localStorage.removeItem('oskarSiteDataV7');localStorage.removeItem('adminActiveV7');location.reload();}}
 
-function exportData(){let blob = new Blob([JSON.stringify(siteData)], {type: "application/json"});let a = document.createElement('a');a.href = URL.createObjectURL(blob);a.download = "oskar_backup.json";a.click();alert('تم التصدير. ارسل الملف للجوال واستورده')}
+function exportData(){let blob = new Blob([JSON.stringify(siteData)], {type: "application/json"});let a = document.createElement('a');a.href = URL.createObjectURL(blob);a.download = "oskar_backup.json";a.click();}
 function importData(event){let reader = new FileReader();reader.onload = function(e){siteData = JSON.parse(e.target.result);saveData();location.reload();alert('تم الاستيراد بنجاح');};reader.readAsText(event.target.files[0]);}
 
 document.addEventListener('click', ()=>{document.getElementById('searchResults').style.display='none'});
