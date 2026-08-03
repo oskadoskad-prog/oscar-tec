@@ -60,15 +60,27 @@ body.dark.product-card{border-color:#444}
 /* نافذة الحساب */
 #accountModal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000a;z-index:100002;align-items:center;justify-content:center}
 #accountModal.show{display:flex}
-.account-box{background:var(--card);width:90%;max-width:400px;padding:20px;border-radius:15px;color:var(--text)}
+.account-box{background:var(--card);width:90%;max-width:400px;padding:20px;border-radius:15px;color:var(--text);max-height:90vh;overflow-y:auto}
 .account-box h2{text-align:center;color:var(--orange);margin-bottom:15px}
 .account-tabs{display:flex;gap:5px;margin-bottom:15px}
 .account-tabs button{flex:1;padding:10px;border:none;border-radius:8px;background:#ddd;color:#333;font-weight:700;cursor:pointer}
 .account-tabs button.active{background:var(--orange);color:#000}
-.account-box input{width:100%;padding:12px;margin:8px 0;border-radius:8px;border:1px solid #ddd;background:var(--bg);color:var(--text)}
+.account-box input,.account-box textarea{width:100%;padding:12px;margin:8px 0;border-radius:8px;border:1px solid #ddd;background:var(--bg);color:var(--text)}
 .account-box button.submit{width:100%;padding:12px;margin:8px 0;border:none;border-radius:8px;font-weight:700;cursor:pointer;background:var(--green);color:#fff}
 .user-info{text-align:center;padding:15px;background:var(--bg);border-radius:10px;margin-bottom:15px}
 .user-info h3{color:var(--orange);margin-bottom:5px}
+
+/* نافذة الدفع */
+#checkoutModal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000a;z-index:100003;align-items:center;justify-content:center}
+#checkoutModal.show{display:flex}
+.checkout-box{background:var(--card);width:90%;max-width:500px;padding:20px;border-radius:15px;color:var(--text);max-height:90vh;overflow-y:auto}
+.checkout-box h2{text-align:center;color:var(--orange);margin-bottom:15px}
+.address-section{border:1px solid #ddd;padding:15px;border-radius:10px;margin:15px 0;background:var(--bg)}
+.address-section h3{color:var(--blue);margin-bottom:10px;font-size:1rem}
+.payment-section{text-align:center;padding:15px;border:2px dashed var(--orange);border-radius:10px;margin:15px 0}
+.payment-section img{width:180px;height:180px;margin:10px auto;display:block;border-radius:8px}
+.payment-section p{font-weight:700;color:var(--red)}
+.cart-summary{max-height:200px;overflow-y:auto;margin:10px 0;border:1px solid #ddd;border-radius:8px;padding:10px}
 
 #adminPanel{position:fixed;top:0;left:-450px;width:450px;height:100%;background:#232F3E;z-index:99999;overflow-y:auto;padding:20px;border-right:3px solid var(--orange);transition:left 0.4s ease;color:#fff}
 #adminPanel.show{left:0}
@@ -157,6 +169,35 @@ body.dark.product-card{border-color:#444}
   </div>
 </div>
 
+<!-- نافذة الدفع والعنوان -->
+<div id="checkoutModal">
+  <div class="checkout-box">
+    <h2><i class="fa-solid fa-truck"></i> اتمام الطلب</h2>
+
+    <div class="cart-summary" id="checkoutCartSummary"></div>
+    <h3 style="text-align:center;color:var(--red)" id="checkoutTotal"></h3>
+
+    <div class="address-section">
+      <h3><i class="fa-solid fa-location-dot"></i> عنوان التوصيل</h3>
+      <input type="text" id="customerName" placeholder="الاسم الكامل">
+      <input type="text" id="customerPhone" placeholder="رقم الجوال">
+      <input type="text" id="customerCity" placeholder="المدينة">
+      <input type="text" id="customerArea" placeholder="المنطقة / الحي">
+      <textarea id="customerAddress" rows="3" placeholder="العنوان التفصيلي: الشارع - رقم البيت - علامة مميزة"></textarea>
+    </div>
+
+    <div class="payment-section">
+      <h3><i class="fa-solid fa-qrcode"></i> الدفع عبر شام كاش</h3>
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=SHAMCASH_OSKAR_0099" alt="باركود شام كاش">
+      <p>امسح الباركود للدفع</p>
+      <p style="font-size:0.85rem;color:#666">بعد الدفع اضغط ارسال الطلب عبر واتساب</p>
+    </div>
+
+    <button onclick="sendOrderWhatsApp()" class="submit" style="background:var(--green)"><i class="fa-brands fa-whatsapp"></i> ارسال الطلب عبر واتساب</button>
+    <button onclick="closeCheckout()" style="background:var(--red)">الغاء</button>
+  </div>
+</div>
+
 <button id="adminToggleBtn" class="admin-toggle" onclick="toggleAdminPanel()"><i class="fa-solid fa-chevron-right"></i></button>
 
 <div id="adminPanel">
@@ -210,12 +251,12 @@ body.dark.product-card{border-color:#444}
 
 <script>
 let cart = [];
-let siteData = JSON.parse(localStorage.getItem('oskarSiteDataV132')) || getDefaultData();
-let users = JSON.parse(localStorage.getItem('oskarUsersV132')) || [];
-let currentUser = JSON.parse(localStorage.getItem('oskarCurrentUserV132')) || null;
+let siteData = JSON.parse(localStorage.getItem('oskarSiteDataV133')) || getDefaultData();
+let users = JSON.parse(localStorage.getItem('oskarUsersV133')) || [];
+let currentUser = JSON.parse(localStorage.getItem('oskarCurrentUserV133')) || null;
 let tempCatImg = '';
 let tempProdImg = '';
-let adminActive = localStorage.getItem('adminActiveV132') === 'true';
+let adminActive = localStorage.getItem('adminActiveV133') === 'true';
 let allProducts = [];
 let currentCat = 'all';
 const SECRET_CODE = "oskad0099";
@@ -355,7 +396,7 @@ function goHome(){
 
 function checkLoginBeforeCart(){
   if(!currentUser){alert('يجب تسجيل الدخول لعرض السلة');openAccount();return}
-  checkoutShamCash();
+  openCheckout();
 }
 
 function addToCart(item){
@@ -365,14 +406,55 @@ function addToCart(item){
 }
 function updateCart(){document.getElementById('cartCount').innerText = cart.reduce((a,b)=>a+b.qty,0);}
 
-function checkoutShamCash(){
-  if(!currentUser){alert('يجب تسجيل الدخول للشراء');openAccount();return}
+// نظام الدفع الجديد
+function openCheckout(){
   if(cart.length == 0){ alert("السلة فارغة"); return; }
+  document.getElementById('checkoutModal').classList.add('show');
+
+  // ملخص السلة
+  let html = '';
+  let total = 0;
+  cart.forEach((item,i)=>{
+    html += `<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #ddd">
+      <span>${item.name} x ${item.qty}</span>
+      <span>${(parseInt(item.price)*item.qty).toLocaleString()} ل.س</span>
+    </div>`;
+    total += parseInt(item.price)*item.qty;
+  });
+  document.getElementById('checkoutCartSummary').innerHTML = html;
+  document.getElementById('checkoutTotal').innerText = 'المجموع: ' + total.toLocaleString() + ' ل.س';
+
+  // تعبئة بيانات المستخدم تلقائي
+  if(currentUser){
+    document.getElementById('customerName').value = currentUser.name;
+    document.getElementById('customerPhone').value = currentUser.user;
+  }
+}
+
+function closeCheckout(){document.getElementById('checkoutModal').classList.remove('show')}
+
+function sendOrderWhatsApp(){
+  let name = document.getElementById('customerName').value.trim();
+  let phone = document.getElementById('customerPhone').value.trim();
+  let city = document.getElementById('customerCity').value.trim();
+  let area = document.getElementById('customerArea').value.trim();
+  let address = document.getElementById('customerAddress').value.trim();
+
+  if(!name ||!phone ||!city ||!area ||!address){
+    alert('الرجاء اكمال جميع بيانات العنوان');return
+  }
+
   let total = cart.reduce((a,b)=>a + parseInt(b.price) * b.qty, 0);
-  let message = `مرحبا مركز اوسكار التقني\nالعميل: ${currentUser.name}\nرقم التواصل: ${currentUser.user}\nاريد الدفع عبر شام كاش\n`;
-  cart.forEach((item,i)=>{message += `${i+1}. ${item.name} x ${item.qty}\n`});
-  message += `\nالمجموع: ${total.toLocaleString()} ل.س`;
+  let message = `طلب جديد من مركز اوسكار التقني\n\n`;
+  message += `بيانات العميل:\nالاسم: ${name}\nالجوال: ${phone}\nالمدينة: ${city}\nالمنطقة: ${area}\nالعنوان: ${address}\n\n`;
+  message += `المنتجات:\n`;
+  cart.forEach((item,i)=>{message += `${i+1}. ${item.name} x ${item.qty} = ${(parseInt(item.price)*item.qty).toLocaleString()} ل.س\n`});
+  message += `\nالمجموع الكلي: ${total.toLocaleString()} ل.س\n`;
+  message += `طريقة الدفع: شام كاش - تم الدفع عبر الباركود`;
+
   window.open(`https://wa.me/+971544066811?text=${encodeURIComponent(message)}`, '_blank');
+  cart = []; updateCart(); closeCheckout();
+  alert('تم ارسال الطلب بنجاح');
 }
 
 // نظام الحسابات
@@ -399,7 +481,7 @@ function register(){
   if(!name||!user||!pass){alert('كمل البيانات');return}
   if(users.find(u=>u.user==user)){alert('هذا الحساب موجود بالفعل');return}
   users.push({name,user,pass});
-  localStorage.setItem('oskarUsersV132',JSON.stringify(users));
+  localStorage.setItem('oskarUsersV133',JSON.stringify(users));
   alert('تم انشاء الحساب بنجاح');
   showLogin();
 }
@@ -410,14 +492,14 @@ function login(){
   let u = users.find(u=>u.user==user && u.pass==pass);
   if(!u){alert('البيانات خاطئة');return}
   currentUser=u;
-  localStorage.setItem('oskarCurrentUserV132',JSON.stringify(u));
+  localStorage.setItem('oskarCurrentUserV133',JSON.stringify(u));
   document.getElementById('accountText').innerText=u.name;
   closeAccount();alert('اهلا '+u.name);
 }
 
 function logout(){
   if(confirm('هل تريد تسجيل الخروج؟')){
-    currentUser=null;localStorage.removeItem('oskarCurrentUserV132');
+    currentUser=null;localStorage.removeItem('oskarCurrentUserV133');
     document.getElementById('accountText').innerText='حسابك';cart=[];updateCart();
     closeAccount();
   }
@@ -428,7 +510,7 @@ function searchProduct(){
   let box = document.getElementById('searchResults');
   if(val === SECRET_CODE){
     adminActive =!adminActive;
-    localStorage.setItem('adminActiveV132', adminActive);
+    localStorage.setItem('adminActiveV133', adminActive);
     if(adminActive){
       document.getElementById('adminToggleBtn').classList.add('show');
       document.getElementById('adminPanel').classList.add('show');
@@ -449,7 +531,7 @@ function searchProduct(){
 function toggleAdminPanel(){document.getElementById('adminPanel').classList.toggle('show');}
 function closeAdminPanel(){
   document.getElementById('adminPanel').classList.remove('show');
-  adminActive=false;localStorage.setItem('adminActiveV132','false');
+  adminActive=false;localStorage.setItem('adminActiveV133','false');
   document.getElementById('adminToggleBtn').classList.remove('show');
   saveData();renderAll();
 }
@@ -483,78 +565,4 @@ function editCategory(id){
   let cat = siteData.categories.find(c=>c.id==id);
   let newName = prompt('الاسم الجديد:', cat.name);
   if(newName) cat.name = newName;
-  saveData();renderAll();
-}
-
-function changeCatImage(id){
-  let cat = siteData.categories.find(c=>c.id==id);
-  let fileInput = document.createElement('input');
-  fileInput.type = 'file'; fileInput.accept = 'image/*';
-  fileInput.onchange = function(e){
-    const file = e.target.files[0]; if(!file) return;
-    const reader = new FileReader();
-    reader.onload = function(ev){cat.img = ev.target.result;saveData();renderAll();};
-    reader.readAsDataURL(file);
-  };
-  fileInput.click();
-}
-
-function addProduct(){
-  let cat=document.getElementById('productCat').value;
-  let name=document.getElementById('productName').value.trim();
-  let price=document.getElementById('productPrice').value;
-  let oldPrice=document.getElementById('productOldPrice').value || price;
-  let img=tempProdImg || 'https://via.placeholder.com/150';
-  if(!name||!price){alert('كمل البيانات');return}
-  siteData.products[cat].push({name,price,oldPrice,img});
-  saveData();renderAll();
-  document.getElementById('productName').value='';document.getElementById('productPrice').value='';document.getElementById('productOldPrice').value='';
-  document.getElementById('prodPreview').style.display='none';tempProdImg='';
-  alert('تمت اضافة المنتج للقسم')
-}
-
-function deleteProduct(cat,i){if(confirm('حذف المنتج؟')){siteData.products[cat].splice(i,1);saveData();renderAll();}}
-function editProduct(cat,i){
-  let p=siteData.products[cat][i];
-  let newName=prompt('الاسم الجديد:',p.name);if(!newName) return;
-  let newPrice=prompt('السعر الجديد:',p.price);if(!newPrice) return;
-  let newOldPrice=prompt('السعر القديم:',p.oldPrice);if(!newOldPrice) return;
-  p.name=newName;p.price=newPrice;p.oldPrice=newOldPrice;
-  saveData();renderAll();
-}
-
-function changeProdImage(cat,i){
-  let p = siteData.products[cat][i];
-  let fileInput = document.createElement('input');
-  fileInput.type = 'file'; fileInput.accept = 'image/*';
-  fileInput.onchange = function(e){
-    const file = e.target.files[0]; if(!file) return;
-    const reader = new FileReader();
-    reader.onload = function(ev){p.img = ev.target.result;saveData();renderAll();};
-    reader.readAsDataURL(file);
-  };
-  fileInput.click();
-}
-
-function renderAll(){renderCategories();renderAllProducts();buildAllProducts();if(currentCat!='all') openCategory(currentCat);}
-function saveData(){localStorage.setItem('oskarSiteDataV132',JSON.stringify(siteData));}
-function resetData(){if(confirm('ارجاع كل شي للافتراضي؟')){localStorage.removeItem('oskarSiteDataV132');localStorage.removeItem('oskarUsersV132');localStorage.removeItem('oskarCurrentUserV132');localStorage.removeItem('adminActiveV132');location.reload();}}
-
-function exportData(){let blob = new Blob([JSON.stringify({site:siteData,users:users})], {type: "application/json"});let a = document.createElement('a');a.href = URL.createObjectURL(blob);a.download = "oskar_backup.json";a.click();}
-function importData(event){let reader = new FileReader();reader.onload = function(e){let data=JSON.parse(e.target.result);siteData=data.site;users=data.users||[];saveData();localStorage.setItem('oskarUsersV132',JSON.stringify(users));location.reload();};reader.readAsText(event.target.files[0]);}
-
-document.addEventListener('click', ()=>{document.getElementById('searchResults').style.display='none'});
-
-window.onload = function(){
-  document.body.style.backgroundColor = siteData.bgColor;
-  document.body.style.setProperty('--bg', siteData.bgColor);
-  if(siteData.bodyBg) document.body.style.setProperty('--bodyBg', siteData.bodyBg);
-  document.getElementById('bgColor').value = siteData.bgColor;
-  if(localStorage.getItem('theme')=='dark') document.body.classList.add('dark');
-  if(currentUser) document.getElementById('accountText').innerText=currentUser.name;
-  renderAll();
-  if(adminActive){document.getElementById('adminToggleBtn').classList.add('show');document.getElementById('adminPanel').classList.add('show')}
-}
-</script>
-</body>
-</html>
+  saveData
