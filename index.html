@@ -1,543 +1,160 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>مركز اوسكار التقني</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<style>
-:root{--bg:#EAEDED;--card:#fff;--blue:#232F3E;--orange:#FF9900;--green:#067D62; --red:#B12704; --yellow:#FFD814; --text:#0F1111}
-body.dark{--bg:#131921;--card:#232F3E;--text:#fff}
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Cairo',sans-serif}
-body{background:var(--bodyBg, var(--bg)) center/cover fixed;color:var(--text);padding-bottom:70px}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ID TECH - لصيانة الهواتف والإكسسوارات</title>
+    <style>
+        /* الألوان الأساسية للموقع */
+        :root {
+            --gold: #D4AF37;
+            --silver: #C0C0C0;
+            --dark: #1A1A1A;
+            --light: #F9F9F9;
+            --white: #FFFFFF;
+        }
 
-.top-header{background:var(--blue);padding:10px;color:#fff;position:sticky;top:0;z-index:999}
-.brand-row{display:flex;justify-content:space-between;align-items:center}
-.brand-name{font-weight:900;font-size:1.4rem;color:var(--orange)}
-.whatsapp-top{background:#25D366;color:#fff;border:none;padding:8px 12px;border-radius:8px;font-weight:700;cursor:pointer;font-size:0.9rem}
-.search-area{display:flex;gap:0;padding:10px 0 0 0;position:relative}
-.search-icon{background:var(--orange);padding:0 6px;display:flex;align-items:center;border-radius:0 8px 8px 0;font-size:0.9rem;cursor:pointer;width:32px;justify-content:center}
-.search-area input{flex:1;padding:9px;border:none;outline:none;font-size:0.95rem;border-radius:8px 0 0 8px}
-.search-results{position:absolute;top:50px;left:10px;right:10px;background:var(--card);border-radius:8px;max-height:400px;overflow-y:auto;display:none;z-index:1000;box-shadow:0 4px 10px #0003}
-.search-item{display:flex;gap:10px;padding:10px;cursor:pointer;border-bottom:1px solid #ddd;color:var(--text)}
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--light); color: var(--dark); line-height: 1.6; }
 
-.section-title{background:var(--card);padding:15px;font-size:1.3rem;font-weight:900;text-align:center;border-bottom:1px solid #ddd;color:var(--text)}
+        /* شريط التنقل */
+        header { background: var(--dark); color: var(--white); padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+        .logo { font-size: 28px; font-weight: 900; letter-spacing: 2px; }
+        .logo span.gold { color: var(--gold); }
+        .logo span.silver { color: var(--silver); }
+        nav a { color: var(--white); text-decoration: none; margin: 0 15px; font-weight: 600; transition: color 0.3s ease; }
+        nav a:hover { color: var(--gold); }
 
-.categories-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:10px;background:var(--card)}
-.cat-card{background:var(--bg);border:1px solid #ddd;border-radius:10px;padding:10px;text-align:center;position:relative;cursor:pointer}
-body.dark.cat-card{border-color:#444}
-.cat-card img{width:100%;height:100px;object-fit:cover;border-radius:8px;margin-bottom:8px}
-.cat-card h3{font-size:1rem;color:var(--text)}
+        /* القسم الرئيسي */
+        .hero { background: linear-gradient(rgba(26, 26, 26, 0.8), rgba(26, 26, 26, 0.8)), url('https://images.unsplash.com/photo-1597740985671-2a8a3b80502e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80') center/cover; color: var(--white); text-align: center; padding: 120px 20px; }
+        .hero h1 { font-size: 3.5rem; margin-bottom: 20px; color: var(--gold); text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+        .hero p { font-size: 1.2rem; margin-bottom: 30px; color: var(--silver); }
+        .btn { background: var(--gold); color: var(--dark); padding: 12px 30px; border: none; cursor: pointer; font-weight: bold; font-size: 1.1rem; text-decoration: none; border-radius: 5px; transition: background 0.3s; }
+        .btn:hover { background: var(--silver); }
 
-.products-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;padding:10px;background:var(--card)}
-.product-card{background:var(--bg);border:1px solid #ddd;border-radius:8px;padding:10px;text-align:center;position:relative}
-body.dark.product-card{border-color:#444}
-.product-card img{width:100%;height:140px;object-fit:contain;margin-bottom:8px}
-.product-name{font-size:0.9rem;height:40px;overflow:hidden;text-align:right;color:var(--text)}
-.product-price{color:var(--red);font-weight:900;font-size:1.1rem;text-align:right}
-.product-old{color:#888;text-decoration:line-through;font-size:0.85rem;text-align:right}
-.add-cart-btn{background:var(--yellow);border:none;width:100%;padding:8px;border-radius:20px;margin-top:8px;font-weight:700;cursor:pointer;color:#000}
-.add-product-in-cat{background:var(--green);color:#fff;border:none;padding:12px;width:95%;margin:10px auto;display:block;border-radius:10px;font-weight:900;cursor:pointer}
+        /* الأقسام العامة */
+        section { padding: 60px 5%; }
+        .section-title { text-align: center; font-size: 2.5rem; margin-bottom: 40px; color: var(--dark); border-bottom: 3px solid var(--gold); display: inline-block; padding-bottom: 10px; }
+        .text-center { text-align: center; }
 
-.card-admin{position:absolute;top:5px;left:5px;display:flex;gap:4px;z-index:10}
-.card-admin button{background:var(--yellow);color:#000;border:none;border-radius:6px;width:28px;height:28px;cursor:pointer;font-size:0.8rem}
-.card-admin.del{background:var(--red);color:#fff}
-.back-btn{background:var(--blue);color:#fff;border:none;padding:10px 15px;border-radius:8px;margin:10px;cursor:pointer}
+        /* شبكة المنتجات والخدمات */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+        .card { background: var(--white); padding: 25px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); text-align: center; border-top: 4px solid var(--silver); transition: transform 0.3s; }
+        .card:hover { transform: translateY(-10px); border-top: 4px solid var(--gold); }
+        .card h3 { color: var(--dark); margin-bottom: 15px; }
+        .price { color: var(--gold); font-size: 1.4rem; font-weight: bold; margin: 15px 0; }
+        .card button { width: 100%; margin-top: 10px; }
 
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid #ddd;display:flex;justify-content:space-around;padding:8px 0;z-index:998}
-.nav-item{text-align:center;font-size:0.8rem;color:var(--text);cursor:pointer;position:relative}
-.nav-item i{font-size:1.5rem;display:block;margin-bottom:3px}
-.cart-count{position:absolute;top:-5px;right:15px;background:var(--red);color:#fff;border-radius:50%;width:18px;height:18px;font-size:0.7rem;display:flex;align-items:center;justify-content:center;font-weight:900}
+        /* نماذج الإدخال (الصيانة) */
+        .form-container { background: var(--white); padding: 40px; border-radius: 10px; max-width: 600px; margin: 0 auto; box-shadow: 0 5px 15px rgba(0,0,0,0.1); border: 1px solid var(--silver); }
+        form { display: flex; flex-direction: column; gap: 20px; }
+        input, textarea, select { padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem; outline: none; }
+        input:focus, textarea:focus, select:focus { border-color: var(--gold); }
 
-#sideMenu{display:none;position:fixed;top:0;right:0;width:300px;height:100%;background:var(--card);z-index:10001;padding:20px;border-left:2px solid var(--orange)}
-#sideMenu.show{display:block}
-#sideMenu h3{color:var(--orange);margin:15px 0}
-#sideMenu button{width:100%;padding:12px;margin:8px 0;border:none;border-radius:8px;background:var(--blue);color:#fff;font-weight:700;cursor:pointer;text-align:right}
-.overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000aa;z-index:10000}
-.overlay.show{display:block}
-
-#accountModal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000a;z-index:100002;align-items:center;justify-content:center}
-#accountModal.show{display:flex}
-.account-box{background:var(--card);width:90%;max-width:400px;padding:20px;border-radius:15px;color:var(--text);max-height:90vh;overflow-y:auto}
-.account-box h2{text-align:center;color:var(--orange);margin-bottom:15px}
-.account-tabs{display:flex;gap:5px;margin-bottom:15px}
-.account-tabs button{flex:1;padding:10px;border:none;border-radius:8px;background:#ddd;color:#333;font-weight:700;cursor:pointer}
-.account-tabs button.active{background:var(--orange);color:#000}
-.account-box input,.account-box textarea{width:100%;padding:12px;margin:8px 0;border-radius:8px;border:1px solid #ddd;background:var(--bg);color:var(--text)}
-.account-box button.submit{width:100%;padding:12px;margin:8px 0;border:none;border-radius:8px;font-weight:700;cursor:pointer;background:var(--green);color:#fff}
-.user-info{text-align:center;padding:15px;background:var(--bg);border-radius:10px;margin-bottom:15px}
-.user-info h3{color:var(--orange);margin-bottom:5px}
-
-#checkoutModal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000a;z-index:100003;align-items:center;justify-content:center}
-#checkoutModal.show{display:flex}
-.checkout-box{background:var(--card);width:90%;max-width:500px;padding:20px;border-radius:15px;color:var(--text);max-height:90vh;overflow-y:auto}
-.checkout-box h2{text-align:center;color:var(--orange);margin-bottom:15px}
-.address-section{border:1px solid #ddd;padding:15px;border-radius:10px;margin:15px 0;background:var(--bg)}
-.address-section h3{color:var(--blue);margin-bottom:10px;font-size:1rem}
-.location-btn{background:var(--blue);color:#fff;border:none;padding:10px;border-radius:8px;width:100%;margin:8px 0;cursor:pointer;font-weight:700}
-.location-btn i{margin-left:5px}
-.payment-section{text-align:center;padding:15px;border:2px dashed var(--orange);border-radius:10px;margin:15px 0}
-.payment-section img{width:180px;height:180px;margin:10px auto;display:block;border-radius:8px;background:#fff;padding:10px}
-.payment-section p{font-weight:700;color:var(--red)}
-.cart-summary{max-height:200px;overflow-y:auto;margin:10px 0;border:1px solid #ddd;border-radius:8px;padding:10px}
-
-#adminPanel{position:fixed;top:0;left:-450px;width:450px;height:100%;background:#232F3E;z-index:99999;overflow-y:auto;padding:20px;border-right:3px solid var(--orange);transition:left 0.4s ease;color:#fff}
-#adminPanel.show{left:0}
-.admin-toggle{position:fixed;top:50%;left:0;background:var(--orange);color:#000;border:none;padding:15px 8px;border-radius:0 10px 10px 0;font-size:1.5rem;cursor:pointer;z-index:100000;display:none}
-.admin-toggle.show{display:block}
-.admin-box h2{color:var(--orange);text-align:center;margin-bottom:15px}
-.admin-section{border:1px solid #555;padding:15px;border-radius:10px;margin:15px 0}
-.admin-box input,.admin-box textarea,.admin-box select{width:100%;padding:10px;margin:8px 0;border-radius:8px;border:1px solid var(--orange);background:#131921;color:#fff}
-.admin-box button{padding:10px;border:none;border-radius:8px;font-weight:700;cursor:pointer;width:100%;margin:5px 0}
-.preview-img{width:80px;height:80px;border-radius:8px;object-fit:cover;margin:5px;border:2px solid var(--orange)}
-.color-picker{width:100%;height:40px;border:none;border-radius:8px;cursor:pointer}
-</style>
+        /* التذييل */
+        footer { background: var(--dark); color: var(--silver); text-align: center; padding: 30px; margin-top: 40px; }
+        footer .logo { font-size: 20px; margin-bottom: 10px; display: block; }
+    </style>
 </head>
 <body>
 
-<div class="top-header">
-  <div class="brand-row">
-    <div class="brand-name"><i class="fa-solid fa-microchip"></i> مركز اوسكار التقني</div>
-    <button class="whatsapp-top" onclick="window.open('https://wa.me/+971544066811','_blank')"><i class="fa-brands fa-whatsapp"></i> تواصل</button>
-  </div>
-  <div class="search-area">
-    <div class="search-icon" onclick="searchProduct()"><i class="fa-solid fa-magnifying-glass"></i></div>
-    <input type="text" id="searchInput" placeholder="البحث في مركز اوسكار" onkeyup="searchProduct()">
-    <div id="searchResults" class="search-results"></div>
-  </div>
-</div>
+    <!-- شريط التنقل -->
+    <header>
+        <div class="logo"><span class="gold">ID</span> <span class="silver">TECH</span></div>
+        <nav>
+            <a href="#home">الرئيسية</a>
+            <a href="#services">خدمات الصيانة</a>
+            <a href="#shop">متجر الإكسسوارات</a>
+            <a href="#contact">تواصل معنا</a>
+        </nav>
+    </header>
 
-<div id="mainContent">
-  <h2 class="section-title">الاقسام</h2>
-  <div id="categoriesGrid" class="categories-grid"></div>
-  <h2 class="section-title">خصومات كبيرة لك</h2>
-  <div id="productsGrid" class="products-grid"></div>
-</div>
+    <!-- القسم الرئيسي -->
+    <section id="home" class="hero">
+        <h1>خبراء التقنية بين يديك</h1>
+        <p>نقدم أفضل خدمات صيانة الهواتف الذكية وأحدث الإكسسوارات الأصلية بأسعار تنافسية.</p>
+        <a href="#services" class="btn">احجز موعد صيانة الآن</a>
+    </section>
 
-<div id="categoryPage" style="display:none">
-  <button class="back-btn" onclick="goHome()"><i class="fa-solid fa-arrow-right"></i> رجوع للاقسام</button>
-  <h2 class="section-title" id="catPageTitle"></h2>
-  <button class="add-product-in-cat" style="display:none" id="addProductBtn" onclick="quickAddToCurrentCat()"><i class="fa-solid fa-plus"></i> اضافة منتج لهذا القسم</button>
-  <div id="catProductsGrid" class="products-grid"></div>
-</div>
+    <!-- متجر الإكسسوارات -->
+    <section id="shop">
+        <div class="text-center">
+            <h2 class="section-title">أحدث الإكسسوارات</h2>
+        </div>
+        <div class="grid" id="products-grid">
+            <!-- المنتجات تُضاف هنا عبر JavaScript -->
+        </div>
+    </section>
 
-<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
-<div id="sideMenu">
-  <h3><i class="fa-solid fa-gear"></i> الاعدادات</h3>
-  <button onclick="toggleTheme()"><i class="fa-solid fa-circle-half-stroke"></i> الوضع الليلي / النهاري</button>
-</div>
+    <!-- قسم حجز الصيانة -->
+    <section id="services" style="background-color: #EFEFEF;">
+        <div class="text-center">
+            <h2 class="section-title">طلب صيانة هاتف</h2>
+            <p style="margin-bottom: 30px;">املأ النموذج وسنقوم بالتواصل معك لتحديد التكلفة والموعد.</p>
+        </div>
+        <div class="form-container">
+            <form id="maintenance-form">
+                <input type="text" id="name" placeholder="الاسم الكامل" required>
+                <input type="tel" id="phone" placeholder="رقم الهاتف" required>
+                <select id="device-type" required>
+                    <option value="" disabled selected>اختر نوع الهاتف</option>
+                    <option value="iphone">Apple iPhone</option>
+                    <option value="android">Android (Samsung, Xiaomi, etc.)</option>
+                </select>
+                <textarea id="issue" rows="4" placeholder="صف المشكلة التي تواجهها بالتفصيل (مثل: الشاشة مكسورة، البطارية لا تشحن...)" required></textarea>
+                <button type="submit" class="btn">إرسال طلب الصيانة</button>
+            </form>
+        </div>
+    </section>
 
-<div class="bottom-nav">
-  <div class="nav-item" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i>تصفح</div>
-  <div class="nav-item" onclick="checkLoginBeforeCart()"><i class="fa-solid fa-cart-shopping"></i>العربة <span id="cartCount" class="cart-count">0</span></div>
-  <div class="nav-item" onclick="openAccount()"><i class="fa-solid fa-user"></i><span id="accountText">حسابك</span></div>
-  <div class="nav-item" onclick="goHome()"><i class="fa-solid fa-house"></i>الرئيسية</div>
-</div>
+    <!-- التذييل -->
+    <footer id="contact">
+        <div class="logo"><span class="gold">ID</span> <span class="silver">TECH</span></div>
+        <p>جميع الحقوق محفوظة &copy; 2026</p>
+        <p>للتواصل: info@idtech.com | رقم الهاتف: 123456789</p>
+    </footer>
 
-<div id="accountModal">
-  <div class="account-box">
-    <div id="loggedInView" style="display:none">
-      <div class="user-info">
-        <h3 id="userNameDisplay"></h3>
-        <p id="userPhoneDisplay"></p>
-      </div>
-      <button onclick="logout()" style="background:var(--red);color:#fff;width:100%;padding:12px;border:none;border-radius:8px;font-weight:700">تسجيل خروج</button>
-      <button onclick="closeAccount()" style="background:#888;color:#fff;width:100%;padding:12px;border:none;border-radius:8px;font-weight:700;margin-top:10px">اغلاق</button>
-    </div>
-    <div id="guestView">
-      <div class="account-tabs">
-        <button id="tabLogin" class="active" onclick="showLogin()">تسجيل دخول</button>
-        <button id="tabRegister" onclick="showRegister()">انشاء حساب جديد</button>
-      </div>
-      <div id="loginForm">
-        <input type="text" id="loginUser" placeholder="الايميل او رقم الجوال">
-        <input type="password" id="loginPass" placeholder="كلمة السر">
-        <button class="submit" onclick="login()">دخول</button>
-      </div>
-      <div id="registerForm" style="display:none">
-        <input type="text" id="regName" placeholder="الاسم الكامل">
-        <input type="text" id="regUser" placeholder="الايميل او رقم الجوال">
-        <input type="password" id="regPass" placeholder="كلمة السر">
-        <button class="submit" style="background:var(--orange);color:#000" onclick="register()">انشاء حساب</button>
-      </div>
-      <button onclick="closeAccount()" style="background:var(--red);color:#fff;width:100%;padding:10px;border:none;border-radius:8px;margin-top:10px">اغلاق</button>
-    </div>
-  </div>
-</div>
+    <!-- سكربت التفاعل -->
+    <script>
+        // بيانات المنتجات الوهمية (لتجربة المتجر)
+        const products = [
+            { id: 1, name: "شاحن سريع 20W", price: "15.00", category: "شواحن" },
+            { id: 2, name: "سماعات بلوتوث لاسلكية", price: "35.00", category: "سماعات" },
+            { id: 3, name: "غطاء حماية سيليكون", price: "5.00", category: "أغطية" },
+            { id: 4, name: "شاشة حماية زجاجية", price: "8.00", category: "حماية" }
+        ];
 
-<div id="checkoutModal">
-  <div class="checkout-box">
-    <h2><i class="fa-solid fa-truck"></i> اتمام الطلب</h2>
-    <div class="cart-summary" id="checkoutCartSummary"></div>
-    <h3 style="text-align:center;color:var(--red)" id="checkoutTotal"></h3>
+        // عرض المنتجات في الصفحة
+        const productsGrid = document.getElementById('products-grid');
+        
+        products.forEach(product => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <h3>${product.name}</h3>
+                <p style="color: #666;">${product.category}</p>
+                <div class="price">$${product.price}</div>
+                <button class="btn" onclick="addToCart(${product.id})">أضف إلى السلة</button>
+            `;
+            productsGrid.appendChild(card);
+        });
 
-    <div class="address-section">
-      <h3><i class="fa-solid fa-location-dot"></i> عنوان التوصيل</h3>
-      <input type="text" id="customerName" placeholder="الاسم الكامل *">
-      <input type="text" id="customerPhone" placeholder="رقم الجوال *">
-      <input type="text" id="customerCity" placeholder="المدينة *">
-      <input type="text" id="customerArea" placeholder="المنطقة / الحي *">
-      <textarea id="customerAddress" rows="3" placeholder="العنوان التفصيلي: الشارع - رقم البيت - علامة مميزة *"></textarea>
+        // وظيفة إضافة للمحفظة (محاكاة)
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            alert(`تم إضافة "${product.name}" إلى سلة المشتريات بنجاح!`);
+        }
 
-      <button class="location-btn" onclick="getLocation()"><i class="fa-solid fa-location-crosshairs"></i> تحديد موقعي الحالي</button>
-      <input type="text" id="customerLocationLink" placeholder="رابط الموقع من الخرائط" readonly>
-      <textarea id="customerLocationDetails" rows="2" placeholder="تفاصيل اضافية للموقع: بجانب مسجد - محل معروف"></textarea>
-    </div>
-
-    <div class="payment-section">
-      <h3><i class="fa-solid fa-qrcode"></i> الدفع عبر شام كاش</h3>
-      <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=SHAMCASH_OSKAR_0099" alt="باركود شام كاش">
-      <p>امسح الباركود للدفع</p>
-    </div>
-
-    <button onclick="sendOrderWhatsApp()" class="submit" style="background:var(--green)"><i class="fa-brands fa-whatsapp"></i> ارسال الطلب عبر واتساب</button>
-    <button onclick="closeCheckout()" style="background:var(--red)">الغاء</button>
-  </div>
-</div>
-
-<button id="adminToggleBtn" class="admin-toggle" onclick="toggleAdminPanel()"><i class="fa-solid fa-chevron-right"></i></button>
-
-<div id="adminPanel">
-  <div class="admin-box">
-    <h2><i class="fa-solid fa-user-shield"></i> لوحة التحكم</h2>
-    <button onclick="closeAdminPanel()" style="background:var(--red)">اغلاق نهائي للوحة</button>
-    <div class="admin-section">
-      <h3>1. اضافة قسم جديد</h3>
-      <input type="text" id="newCatName" placeholder="اسم القسم">
-      <label>صورة القسم:</label>
-      <input type="file" id="newCatImgFile" accept="image/*" onchange="previewFile(this,'catPreview')">
-      <img id="catPreview" class="preview-img" style="display:none">
-      <input type="text" id="newCatId" placeholder="id بالانجليزي: phones">
-      <button onclick="addCategory()" style="background:var(--green)">اضافة قسم</button>
-    </div>
-    <div class="admin-section">
-      <h3>2. اضافة منتج لقسم</h3>
-      <select id="productCat"></select>
-      <input type="text" id="productName" placeholder="اسم المنتج">
-      <input type="number" id="productPrice" placeholder="السعر الجديد بالليرة">
-      <input type="number" id="productOldPrice" placeholder="السعر القديم بالليرة">
-      <label>صورة المنتج:</label>
-      <input type="file" id="productImgFile" accept="image/*" onchange="previewFile(this,'prodPreview')">
-      <img id="prodPreview" class="preview-img" style="display:none">
-      <button onclick="addProduct()" style="background:var(--green)">اضافة منتج</button>
-    </div>
-    <div class="admin-section">
-      <h3>3. تغيير الخلفية</h3>
-      <input type="color" id="bgColor" class="color-picker" value="#EAEDED" onchange="changeBgColor(this.value)">
-      <input type="file" id="bgFile" accept="image/*" onchange="changeBackground(this)">
-      <img id="bgPreview" class="preview-img" style="display:none">
-      <button onclick="removeBg()" style="background:var(--red)">حذف الصورة</button>
-    </div>
-    <div class="admin-section">
-      <h3>4. النسخ الاحتياطي</h3>
-      <button onclick="exportData()" style="background:var(--blue)">تصدير البيانات</button>
-      <input type="file" id="importFile" accept=".json" onchange="importData(event)" style="display:none">
-      <button onclick="document.getElementById('importFile').click()" style="background:var(--yellow);color:#000">استيراد البيانات</button>
-    </div>
-    <button onclick="saveData()" style="background:var(--green)">حفظ كل التغييرات</button>
-    <button onclick="resetData()" style="background:var(--red)">ارجاع الافتراضي</button>
-  </div>
-</div>
-
-<script>
-let cart = [];
-let siteData = JSON.parse(localStorage.getItem('oskarSiteDataV138')) || getDefaultData();
-let users = JSON.parse(localStorage.getItem('oskarUsersV138')) || [];
-let currentUser = JSON.parse(localStorage.getItem('oskarCurrentUserV138')) || null;
-let tempCatImg = '';
-let tempProdImg = '';
-let adminActive = localStorage.getItem('adminActiveV138') === 'true';
-let allProducts = [];
-let currentCat = 'all';
-const SECRET_CODE = "oskad0099";
-
-function getDefaultData(){
-  return {
-    bodyBg: "",
-    bgColor: "#EAEDED",
-    categories: [
-      {id:"phones", name:"جوالات", img:"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400"},
-      {id:"accessories", name:"اكسسوارات", img:"https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400"}
-    ],
-    products: {phones: [], accessories: []}
-  }
-}
-
-function previewFile(input, previewId){
-  const file = input.files[0]; if(!file) return;
-  const reader = new FileReader();
-  reader.onload = function(e){
-    document.getElementById(previewId).src = e.target.result;
-    document.getElementById(previewId).style.display = 'block';
-    if(previewId=='catPreview') tempCatImg = e.target.result;
-    if(previewId=='prodPreview') tempProdImg = e.target.result;
-  }
-  reader.readAsDataURL(file);
-}
-
-function changeBackground(input){
-  const file = input.files[0];if(!file) return;
-  const reader = new FileReader();
-  reader.onload = function(e){
-    siteData.bodyBg = `url('${e.target.result}')`;
-    document.getElementById('bgPreview').src = e.target.result;
-    document.getElementById('bgPreview').style.display = 'block';
-    document.body.style.setProperty('--bodyBg', siteData.bodyBg);
-    saveData();alert('تم تغيير الخلفية')
-  }
-  reader.readAsDataURL(file);
-}
-
-function changeBgColor(color){
-  siteData.bgColor = color;
-  document.body.style.backgroundColor = color;
-  document.body.style.setProperty('--bg', color);
-  saveData();
-}
-
-function removeBg(){
-  siteData.bodyBg = "";
-  document.body.style.setProperty('--bodyBg', '');
-  document.getElementById('bgPreview').style.display = 'none';
-  saveData();alert('تم حذف صورة الخلفية')
-}
-
-function buildAllProducts(){
-  allProducts = [];
-  for(let catId in siteData.products){
-    siteData.products[catId].forEach(p=>{
-      allProducts.push({...p, catId:catId});
-    });
-  }
-}
-
-function renderCategories(){
-  let html = '';
-  siteData.categories.forEach(cat=>{
-    html += `<div class="cat-card" onclick="openCategory('${cat.id}')">
-      <div class="card-admin" style="display:${adminActive?'flex':'none'}">
-        <button onclick="editCategory('${cat.id}');event.stopPropagation()"><i class="fa-solid fa-pen"></i></button>
-        <button onclick="changeCatImage('${cat.id}');event.stopPropagation()"><i class="fa-solid fa-image"></i></button>
-        <button class="del" onclick="deleteCategory('${cat.id}');event.stopPropagation()"><i class="fa-solid fa-trash"></i></button>
-      </div>
-      <img src="${cat.img}"><h3>${cat.name}</h3></div>`;
-  });
-  document.getElementById('categoriesGrid').innerHTML = html;
-  let select = document.getElementById('productCat');
-  select.innerHTML = '';
-  siteData.categories.forEach(cat=>{
-    select.innerHTML += `<option value="${cat.id}">${cat.name}</option>`;
-  });
-}
-
-function renderAllProducts(){
-  let html = '';
-  for(let catId in siteData.products){
-    siteData.products[catId].slice(0,4).forEach((p,i)=>{
-      html += productCardHTML(p, catId, i);
-    });
-  }
-  document.getElementById('productsGrid').innerHTML = html || '<p style="text-align:center;padding:20px;grid-column:1/3">لا توجد منتجات بعد</p>';
-}
-
-function productCardHTML(p, catId, i){
-  return `<div class="product-card">
-    <div class="card-admin" style="display:${adminActive?'flex':'none'}">
-      <button onclick="editProduct('${catId}',${i})"><i class="fa-solid fa-pen"></i></button>
-      <button onclick="changeProdImage('${catId}',${i})"><i class="fa-solid fa-image"></i></button>
-      <button class="del" onclick="deleteProduct('${catId}',${i})"><i class="fa-solid fa-trash"></i></button>
-    </div>
-    <img src="${p.img}">
-    <div class="product-name">${p.name}</div>
-    <div class="product-price">${parseInt(p.price).toLocaleString()} ل.س</div>
-    <div class="product-old">${parseInt(p.oldPrice).toLocaleString()} ل.س</div>
-    <button class="add-cart-btn" onclick='addToCart(${JSON.stringify(p)})'>اضافة للعربة</button>
-  </div>`;
-}
-
-function openCategory(catId){
-  currentCat = catId;
-  document.getElementById('mainContent').style.display = 'none';
-  document.getElementById('categoryPage').style.display = 'block';
-  document.getElementById('addProductBtn').style.display = adminActive? 'block' : 'none';
-  let cat = siteData.categories.find(c=>c.id==catId);
-  document.getElementById('catPageTitle').innerText = cat.name;
-  let html = '';
-  siteData.products[catId].forEach((p,i)=>{
-    html += productCardHTML(p, catId, i);
-  });
-  document.getElementById('catProductsGrid').innerHTML = html || '<p style="text-align:center;padding:20px">لا توجد منتجات في هذا القسم</p>';
-}
-
-function quickAddToCurrentCat(){
-  document.getElementById('productCat').value = currentCat;
-  document.getElementById('adminPanel').classList.add('show');
-  document.getElementById('adminPanel').scrollTop = 0;
-}
-
-function goHome(){
-  currentCat = 'all';
-  document.getElementById('mainContent').style.display = 'block';
-  document.getElementById('categoryPage').style.display = 'none';
-  window.scrollTo(0,0);
-}
-
-function checkLoginBeforeCart(){
-  if(!currentUser){alert('يجب تسجيل الدخول لعرض السلة');openAccount();return}
-  openCheckout();
-}
-
-function addToCart(item){
-  if(!currentUser){alert('يجب تسجيل الدخول لاضافة منتج للسلة');openAccount();return}
-  let existing = cart.find(p=>p.name==item.name);if(existing) existing.qty++;else cart.push({...item, qty:1});updateCart();
-  alert('تمت الاضافة للسلة');
-}
-function updateCart(){document.getElementById('cartCount').innerText = cart.reduce((a,b)=>a+b.qty,0);}
-
-function getLocation(){
-  if(navigator.geolocation){
-    navigator.geolocation.getCurrentPosition(function(position){
-      let lat = position.coords.latitude;
-      let lng = position.coords.longitude;
-      let link = `https://www.google.com/maps?q=${lat},${lng}`;
-      document.getElementById('customerLocationLink').value = link;
-      alert('تم تحديد الموقع بنجاح');
-    }, function(){
-      alert('لم نتمكن من تحديد الموقع. الرجاء السماح للمتصفح بالوصول للموقع');
-    });
-  }else{
-    alert('المتصفح لا يدعم تحديد الموقع');
-  }
-}
-
-function openCheckout(){
-  if(cart.length == 0){ alert("السلة فارغة"); return; }
-  document.getElementById('checkoutModal').classList.add('show');
-  let html = ''; let total = 0;
-  cart.forEach((item,i)=>{
-    html += `<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #ddd">
-      <span>${item.name} x ${item.qty}</span>
-      <span>${(parseInt(item.price)*item.qty).toLocaleString()} ل.س</span>
-    </div>`;
-    total += parseInt(item.price)*item.qty;
-  });
-  document.getElementById('checkoutCartSummary').innerHTML = html;
-  document.getElementById('checkoutTotal').innerText = 'المجموع: ' + total.toLocaleString() + ' ل.س';
-  if(currentUser){
-    document.getElementById('customerName').value = currentUser.name;
-    document.getElementById('customerPhone').value = currentUser.user;
-  }
-}
-
-function closeCheckout(){document.getElementById('checkoutModal').classList.remove('show')}
-
-function sendOrderWhatsApp(){
-  let name = document.getElementById('customerName').value.trim();
-  let phone = document.getElementById('customerPhone').value.trim();
-  let city = document.getElementById('customerCity').value.trim();
-  let area = document.getElementById('customerArea').value.trim();
-  let address = document.getElementById('customerAddress').value.trim();
-  let locationLink = document.getElementById('customerLocationLink').value.trim();
-  let locationDetails = document.getElementById('customerLocationDetails').value.trim();
-
-  if(!name ||!phone ||!city ||!area ||!address){
-    alert('الرجاء اكمال جميع بيانات العنوان الاساسية');return
-  }
-
-  let total = cart.reduce((a,b)=>a + parseInt(b.price) * b.qty, 0);
-  let message = `طلب جديد من مركز اوسكار التقني\n`;
-  message += `بيانات العميل:\nالاسم: ${name}\nالجوال: ${phone}\nالمدينة: ${city}\nالمنطقة: ${area}\nالعنوان: ${address}\n`;
-  if(locationLink) message += `الموقع: ${locationLink}\n`;
-  if(locationDetails) message += `تفاصيل الموقع: ${locationDetails}\n`;
-  message += `\nالمنتجات:\n`;
-  cart.forEach((item,i)=>{message += `${i+1}. ${item.name} x ${item.qty} = ${(parseInt(item.price)*item.qty).toLocaleString()} ل.س\n`});
-  message += `\nالمجموع الكلي: ${total.toLocaleString()} ل.س\nطريقة الدفع: شام كاش - تم الدفع عبر الباركود`;
-
-  window.open(`https://wa.me/+971544066811?text=${encodeURIComponent(message)}`, '_blank');
-  cart = []; updateCart(); closeCheckout(); alert('تم ارسال الطلب بنجاح');
-}
-
-function openAccount(){
-  document.getElementById('accountModal').classList.add('show');
-  if(currentUser){
-    document.getElementById('guestView').style.display='none';
-    document.getElementById('loggedInView').style.display='block';
-    document.getElementById('userNameDisplay').innerText = currentUser.name;
-    document.getElementById('userPhoneDisplay').innerText = currentUser.user;
-  }else{
-    document.getElementById('guestView').style.display='block';
-    document.getElementById('loggedInView').style.display='none';
-  }
-}
-function closeAccount(){document.getElementById('accountModal').classList.remove('show')}
-function showRegister(){document.getElementById('loginForm').style.display='none';document.getElementById('registerForm').style.display='block';document.getElementById('tabLogin').classList.remove('active');document.getElementById('tabRegister').classList.add('active')}
-function showLogin(){document.getElementById('registerForm').style.display='none';document.getElementById('loginForm').style.display='block';document.getElementById('tabRegister').classList.remove('active');document.getElementById('tabLogin').classList.add('active')}
-
-function register(){
-  let name=document.getElementById('regName').value.trim();
-  let user=document.getElementById('regUser').value.trim();
-  let pass=document.getElementById('regPass').value;
-  if(!name||!user||!pass){alert('كمل البيانات');return}
-  if(users.find(u=>u.user==user)){alert('هذا الحساب موجود بالفعل');return}
-  users.push({name,user,pass});
-  localStorage.setItem('oskarUsersV138',JSON.stringify(users));
-  alert('تم انشاء الحساب بنجاح');
-  showLogin();
-}
-
-function login(){
-  let user=document.getElementById('loginUser').value.trim();
-  let pass=document.getElementById('loginPass').value;
-  let u = users.find(u=>u.user==user && u.pass==pass);
-  if(!u){alert('البيانات خاطئة');return}
-  currentUser=u;
-  localStorage.setItem('oskarCurrentUserV138',JSON.stringify(u));
-  document.getElementById('accountText').innerText=u.name;
-  closeAccount();alert('اهلا '+u.name);
-}
-
-function logout(){
-  if(confirm('هل تريد تسجيل الخروج؟')){
-    currentUser=null;localStorage.removeItem('oskarCurrentUserV138');
-    document.getElementById('accountText').innerText='حسابك';cart=[];updateCart();
-    closeAccount();
-  }
-}
-
-function searchProduct(){
-  let val = document.getElementById('searchInput').value.toLowerCase();
-  let box = document.getElementById('searchResults');
-  if(val === SECRET_CODE){
-    adminActive =!adminActive;
-    localStorage.setItem('adminActiveV138', adminActive);
-    if(adminActive){
-      document.getElementById('adminToggleBtn').classList.add('show');
-      document.getElementById('adminPanel').classList.add('show');
-    }else{
-      document.getElementById('adminToggleBtn').classList.remove('show');
-      document.getElementById('adminPanel').classList.remove('show');
-    }
-    renderAll();box.style.display='none';document.getElementById('searchInput').value='';
-    return
-  }
-  if(val.length < 2){box.style.display='none';return}
-  let results = allProducts.filter(p=>p.name.toLowerCase().includes(val)).slice(0,8);
-  box.innerHTML = '';
-  results.forEach(p=>{box.innerHTML += `<div class="search-item" onclick="openCategory('${p.catId}')"><img src="${p.img}" width="40">${p.name}</div>`});
-  box.style.display = results.length? 'block' : 'none';
-}
-
-function toggleAdminPanel(){document.getElementById('adminPanel').classList.toggle('show');}
-function closeAdminPanel(){
-  document.getElementById('adminPanel').classList.remove('show');
-  adminActive=false;localStorage.setItem('adminActiveV138','false');
-  document.getElementById('adminToggleBtn').classList.remove('show');
-  saveData();renderAll();
-}
-
-function toggleMenu(){document.getElementById('sideMenu').classList.toggle('show');document.getElementById('overlay').classList.toggle('show');}
-function toggleTheme(){document.body.classList.toggle('dark');localStorage.setItem('theme', document.body.classList.contains('dark')?'dark':'light');}
-
-function addCategory(){
-  let name=document.getElementById('new
+        // معالجة نموذج الصيانة
+        document.getElementById('maintenance-form').addEventListener('submit', function(e) {
+            e.preventDefault(); // منع إعادة تحميل الصفحة
+            
+            const name = document.getElementById('name').value;
+            const device = document.getElementById('device-type').value;
+            
+            alert(`شكراً لك يا ${name}. تم استلام طلب صيانة هاتف ${device} الخاص بك. سنتواصل معك قريباً!`);
+            this.reset(); // تفريغ الحقول بعد الإرسال
+        });
+    </script>
+</body>
+</html>
