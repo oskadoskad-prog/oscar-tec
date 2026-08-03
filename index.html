@@ -32,7 +32,6 @@ body.admin.banner.edit-banner{display:block}
 .search-item{display:flex;gap:10px;padding:10px;cursor:pointer;border-bottom:1px solid #ddd;color:var(--text)}
 
 .location-bar{display:flex;gap:8px;padding:8px 10px;align-items:center}
-.join-prime{background:#fff;color:#232F3E;border:none;padding:6px 12px;border-radius:20px;font-weight:700;font-size:0.85rem;cursor:pointer}
 .location-select{background:transparent;color:#fff;border:1px solid #fff;padding:6px 12px;border-radius:20px;font-size:0.85rem;display:flex;align-items:center;gap:5px;cursor:pointer}
 
 .section-title{background:var(--blue2);padding:15px;font-size:1.3rem;font-weight:900;text-align:center;color:#fff;position:relative;z-index:2}
@@ -97,23 +96,7 @@ body.admin.section-title.edit-section{display:block}
 <div class="overlay-logo" id="overlayLogo"></div>
 
 <div class="top-header">
-  <div class="banners">
-    <div class="banner" onclick="openBannerCat('offers')">
-      <button class="edit-banner" onclick="editBanner('offers');event.stopPropagation()"><i class="fa-solid fa-pen"></i></button>
-      <img src="https://cdn-icons-png.flaticon.com/512/2639/2639415.png">
-      <p>كل العروض</p>
-    </div>
-    <div class="banner" onclick="openBannerCat('needs')">
-      <button class="edit-banner" onclick="editBanner('needs');event.stopPropagation()"><i class="fa-solid fa-pen"></i></button>
-      <img src="https://cdn-icons-png.flaticon.com/512/3081/3081559.png">
-      <p>مستلزماتك</p>
-    </div>
-    <div class="banner" onclick="openBannerCat('bazaar')">
-      <button class="edit-banner" onclick="editBanner('bazaar');event.stopPropagation()"><i class="fa-solid fa-pen"></i></button>
-      <img src="https://cdn-icons-png.flaticon.com/512/891/891462.png">
-      <p>بازار</p>
-    </div>
-  </div>
+  <div class="banners" id="bannersRow"></div>
 
   <div class="search-area">
     <div class="search-cam"><i class="fa-solid fa-camera"></i></div>
@@ -125,8 +108,7 @@ body.admin.section-title.edit-section{display:block}
   </div>
 
   <div class="location-bar">
-    <button class="join-prime">الضم إلى برايم</button>
-    <div class="location-select"><i class="fa-solid fa-location-dot"></i> التوصيل إلى سعود - الفجيرة...</div>
+    <div class="location-select" onclick="changeLocation()"><i class="fa-solid fa-location-dot"></i> <span id="locationText">التوصيل إلى الفجيرة - سعود</span></div>
   </div>
 </div>
 
@@ -239,12 +221,12 @@ body.admin.section-title.edit-section{display:block}
 
 <script>
 let cart = [];
-let siteData = JSON.parse(localStorage.getItem('oskarSiteDataV129')) || getDefaultData();
-let users = JSON.parse(localStorage.getItem('oskarUsersV129')) || [];
-let currentUser = JSON.parse(localStorage.getItem('oskarCurrentUserV129')) || null;
+let siteData = JSON.parse(localStorage.getItem('oskarSiteDataV130')) || getDefaultData();
+let users = JSON.parse(localStorage.getItem('oskarUsersV130')) || [];
+let currentUser = JSON.parse(localStorage.getItem('oskarCurrentUserV130')) || null;
 let tempCatImg = '';
 let tempProdImg = '';
-let adminActive = localStorage.getItem('adminActiveV129') === 'true';
+let adminActive = localStorage.getItem('adminActiveV130') === 'true';
 let allProducts = [];
 let currentCat = 'all';
 const SECRET_CODE = "oskad0099";
@@ -254,11 +236,12 @@ function getDefaultData(){
     bodyBg: "",
     bgColor: "#EAEDED",
     overlayLogo: "",
-    banners: {
-      offers:{name:"كل العروض", img:"https://cdn-icons-png.flaticon.com/512/2639/2639415.png"},
-      needs:{name:"مستلزماتك", img:"https://cdn-icons-png.flaticon.com/512/3081/3081559.png"},
-      bazaar:{name:"بازار", img:"https://cdn-icons-png.flaticon.com/512/891/891462.png"}
-    },
+    location: "الفجيرة - سعود",
+    banners: [
+      {id:"offers", name:"كل العروض", img:"https://cdn-icons-png.flaticon.com/512/2639/2639415.png"},
+      {id:"needs", name:"مستلزماتك", img:"https://cdn-icons-png.flaticon.com/512/3081/3081559.png"},
+      {id:"bazaar", name:"بازار", img:"https://cdn-icons-png.flaticon.com/512/891/891462.png"}
+    ],
     categories: [
       {id:"offers", name:"كل العروض", img:"https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=400"},
       {id:"needs", name:"مستلزماتك", img:"https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400"},
@@ -345,23 +328,39 @@ function buildAllProducts(){
   }
 }
 
+function renderBanners(){
+  let html = '';
+  siteData.banners.forEach(b=>{
+    html += `<div class="banner" onclick="openBannerCat('${b.id}')">
+      <button class="edit-banner" onclick="editBanner('${b.id}');event.stopPropagation()"><i class="fa-solid fa-pen"></i></button>
+      <img src="${b.img}">
+      <p>${b.name}</p>
+    </div>`;
+  });
+  document.getElementById('bannersRow').innerHTML = html;
+}
+
 function renderAllProducts(){
   let html = '';
   siteData.products.offers.forEach((p,i)=>{
-    html += `<div class="product-card">
-      <div class="card-admin" style="display:${adminActive?'flex':'none'}">
-        <button onclick="editProduct('offers',${i})"><i class="fa-solid fa-pen"></i></button>
-        <button onclick="changeProdImage('offers',${i})"><i class="fa-solid fa-image"></i></button>
-        <button class="del" onclick="deleteProduct('offers',${i})"><i class="fa-solid fa-trash"></i></button>
-      </div>
-      <img src="${p.img}">
-      <div class="product-name">${p.name}</div>
-      <div class="product-price">${parseFloat(p.price).toLocaleString()}<span> درهم</span></div>
-      <div class="product-old">${parseFloat(p.oldPrice).toLocaleString()}<span> درهم</span></div>
-      <button class="add-cart-btn" onclick='addToCart(${JSON.stringify(p)})'>اضافة للعربة</button>
-    </div>`;
+    html += productCardHTML(p, 'offers', i);
   });
   document.getElementById('productsGrid').innerHTML = html;
+}
+
+function productCardHTML(p, catId, i){
+  return `<div class="product-card">
+    <div class="card-admin" style="display:${adminActive?'flex':'none'}">
+      <button onclick="editProduct('${catId}',${i})"><i class="fa-solid fa-pen"></i></button>
+      <button onclick="changeProdImage('${catId}',${i})"><i class="fa-solid fa-image"></i></button>
+      <button class="del" onclick="deleteProduct('${catId}',${i})"><i class="fa-solid fa-trash"></i></button>
+    </div>
+    <img src="${p.img}">
+    <div class="product-name">${p.name}</div>
+    <div class="product-price">${parseFloat(p.price).toLocaleString()}<span> درهم</span></div>
+    <div class="product-old">${parseFloat(p.oldPrice).toLocaleString()}<span> درهم</span></div>
+    <button class="add-cart-btn" onclick='addToCart(${JSON.stringify(p)})'>اضافة للعربة</button>
+  </div>`;
 }
 
 function openBannerCat(catId){
@@ -374,37 +373,36 @@ function openBannerCat(catId){
 
   let html = '';
   siteData.products[catId].forEach((p,i)=>{
-    html += `<div class="product-card">
-      <div class="card-admin" style="display:${adminActive?'flex':'none'}">
-        <button onclick="editProduct('${catId}',${i})"><i class="fa-solid fa-pen"></i></button>
-        <button onclick="changeProdImage('${catId}',${i})"><i class="fa-solid fa-image"></i></button>
-        <button class="del" onclick="deleteProduct('${catId}',${i})"><i class="fa-solid fa-trash"></i></button>
-      </div>
-      <img src="${p.img}">
-      <div class="product-name">${p.name}</div>
-      <div class="product-price">${parseFloat(p.price).toLocaleString()}<span> درهم</span></div>
-      <div class="product-old">${parseFloat(p.oldPrice).toLocaleString()}<span> درهم</span></div>
-      <button class="add-cart-btn" onclick='addToCart(${JSON.stringify(p)})'>اضافة للعربة</button>
-    </div>`;
+    html += productCardHTML(p, catId, i);
   });
   document.getElementById('catProductsGrid').innerHTML = html || '<p style="text-align:center;padding:20px;color:#000">لا توجد منتجات</p>';
 }
 
 function editBanner(id){
-  let newName = prompt('الاسم الجديد للايقونة:', siteData.banners[id].name);
-  if(newName) siteData.banners[id].name = newName;
+  let banner = siteData.banners.find(b=>b.id==id);
+  let newName = prompt('الاسم الجديد للايقونة:', banner.name);
+  if(newName) banner.name = newName;
   let fileInput = document.createElement('input');
   fileInput.type = 'file'; fileInput.accept = 'image/*';
   fileInput.onchange = function(e){
     const file = e.target.files[0]; if(!file) return;
     const reader = new FileReader();
     reader.onload = function(ev){
-      siteData.banners[id].img = ev.target.result;
-      saveData();location.reload();
+      banner.img = ev.target.result;
+      saveData();renderBanners();
     };
     reader.readAsDataURL(file);
   };
   fileInput.click();
+}
+
+function changeLocation(){
+  let newLoc = prompt('ادخل الموقع الجديد للتوصيل:', siteData.location);
+  if(newLoc){
+    siteData.location = newLoc;
+    document.getElementById('locationText').innerText = 'التوصيل إلى ' + newLoc;
+    saveData();
+  }
 }
 
 function quickAddToCurrentCat(){
@@ -430,7 +428,7 @@ function checkoutShamCash(){
   if(!currentUser){alert('يجب تسجيل الدخول للشراء');openAccount();return}
   if(cart.length == 0){ alert("السلة فارغة"); return; }
   let total = cart.reduce((a,b)=>a + parseFloat(b.price) * b.qty, 0);
-  let message = `مرحبا مركز اوسكار التقني\nالعميل: ${currentUser.name}\nاريد الدفع عبر شام كاش\n`;
+  let message = `مرحبا مركز اوسكار التقني\nالعميل: ${currentUser.name}\nالموقع: ${siteData.location}\nاريد الدفع عبر شام كاش\n`;
   cart.forEach((item,i)=>{message += `${i+1}. ${item.name} x ${item.qty}\n`});
   message += `\nالمجموع: ${total.toLocaleString()} درهم`;
   window.open(`https://wa.me/+971544066811?text=${encodeURIComponent(message)}`, '_blank');
@@ -451,7 +449,7 @@ function register(){
   if(!name||!user||!pass){alert('كمل البيانات');return}
   if(users.find(u=>u.user==user)){alert('الحساب موجود');return}
   users.push({name,user,pass});
-  localStorage.setItem('oskarUsersV129',JSON.stringify(users));
+  localStorage.setItem('oskarUsersV130',JSON.stringify(users));
   alert('تم التسجيل بنجاح');
   showLogin();
 }
@@ -462,13 +460,13 @@ function login(){
   let u = users.find(u=>u.user==user && u.pass==pass);
   if(!u){alert('البيانات خاطئة');return}
   currentUser=u;
-  localStorage.setItem('oskarCurrentUserV129',JSON.stringify(u));
+  localStorage.setItem('oskarCurrentUserV130',JSON.stringify(u));
   closeAccount();alert('اهلا '+u.name);
 }
 
 function logout(){
   if(confirm('تسجيل خروج؟')){
-    currentUser=null;localStorage.removeItem('oskarCurrentUserV129');
+    currentUser=null;localStorage.removeItem('oskarCurrentUserV130');
     cart=[];updateCart();
   }
 }
@@ -488,7 +486,7 @@ function searchProduct(){
 
 function toggleAdmin(){
   adminActive =!adminActive;
-  localStorage.setItem('adminActiveV129', adminActive);
+  localStorage.setItem('adminActiveV130', adminActive);
   document.body.classList.toggle('admin', adminActive);
   if(adminActive){
     document.getElementById('adminToggleBtn').classList.add('show');
@@ -497,7 +495,7 @@ function toggleAdmin(){
     document.getElementById('adminToggleBtn').classList.remove('show');
     document.getElementById('adminPanel').classList.remove('show');
   }
-  renderAllProducts();
+  renderAllProducts();renderCategories();
 }
 
 function toggleAdminPanel(){document.getElementById('adminPanel').classList.toggle('show');}
@@ -506,8 +504,56 @@ function closeAdminPanel(){toggleAdmin();}
 function toggleMenu(){document.getElementById('sideMenu').classList.toggle('show');document.getElementById('overlay').classList.toggle('show');}
 function toggleTheme(){document.body.classList.toggle('dark');localStorage.setItem('theme', document.body.classList.contains('dark')?'dark':'light');}
 
+function renderCategories(){
+  let select = document.getElementById('productCat');
+  select.innerHTML = '';
+  siteData.categories.forEach(cat=>{
+    select.innerHTML += `<option value="${cat.id}">${cat.name}</option>`;
+  });
+}
+
 function addCategory(){
   let name=document.getElementById('newCatName').value.trim();
   let img=tempCatImg || 'https://via.placeholder.com/200';
   let id=document.getElementById('newCatId').value.trim();
-  if(!name||!id
+  if(!name||!id){alert('كمل البيانات');return}
+  if(siteData.categories.find(c=>c.id==id)){alert('هذا id مستخدم');return}
+  siteData.categories.push({id,name,img});
+  siteData.products[id]=[];
+  siteData.banners.push({id,name,img:"https://via.placeholder.com/50"});
+  saveData();renderBanners();renderCategories();
+  document.getElementById('newCatName').value='';document.getElementById('newCatId').value='';
+  document.getElementById('catPreview').style.display='none';tempCatImg='';
+  alert('تم اضافة القسم')
+}
+
+function addProduct(){
+  let cat=document.getElementById('productCat').value;
+  let name=document.getElementById('productName').value.trim();
+  let price=document.getElementById('productPrice').value;
+  let oldPrice=document.getElementById('productOldPrice').value || price;
+  let img=tempProdImg || 'https://via.placeholder.com/150';
+  if(!name||!price){alert('كمل البيانات');return}
+  siteData.products[cat].push({name,price,oldPrice,img});
+  saveData();renderAllProducts();
+  document.getElementById('productName').value='';document.getElementById('productPrice').value='';document.getElementById('productOldPrice').value='';
+  document.getElementById('prodPreview').style.display='none';tempProdImg='';
+  alert('تمت اضافة المنتج')
+}
+
+function deleteProduct(cat,i){if(confirm('حذف المنتج؟')){siteData.products[cat].splice(i,1);saveData();renderAllProducts();if(currentCat==cat) openBannerCat(cat);}}
+function editProduct(cat,i){
+  let p=siteData.products[cat][i];
+  let newName=prompt('الاسم الجديد:',p.name);if(newName) p.name=newName;
+  let newPrice=prompt('السعر الجديد:',p.price);if(newPrice) p.price=newPrice;
+  let newOldPrice=prompt('السعر القديم:',p.oldPrice);if(newOldPrice) p.oldPrice=newOldPrice;
+  saveData();renderAllProducts();if(currentCat==cat) openBannerCat(cat);
+}
+
+function changeProdImage(cat,i){
+  let p = siteData.products[cat][i];
+  let fileInput = document.createElement('input');
+  fileInput.type = 'file'; fileInput.accept = 'image/*';
+  fileInput.onchange = function(e){
+    const file = e.target.files[0]; if(!file) return;
+    const
