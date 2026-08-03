@@ -12,24 +12,26 @@ body.dark{--bg:#131921;--card:#232F3E;--text:#fff}
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Cairo',sans-serif}
 body{background:var(--bodyBg, var(--bg)) center/cover fixed;color:var(--text);padding-bottom:70px}
 
+.overlay-logo{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;opacity:0.08;background:var(--overlayLogo) center/contain no-repeat;display:none}
+
 .top-header{background:var(--blue);padding:10px;color:#fff;position:sticky;top:0;z-index:999}
 .brand-row{display:flex;justify-content:space-between;align-items:center}
 .brand-name{font-weight:900;font-size:1.4rem;color:var(--orange)}
 .whatsapp-top{background:#25D366;color:#fff;border:none;padding:8px 12px;border-radius:8px;font-weight:700;cursor:pointer;font-size:0.9rem}
-.search-area{display:flex;gap:0;padding:10px 0 0 0;position:relative;background:url('https://i.ibb.co/5KZq1bM/robot-phone-bg.png') center/cover no-repeat;border-radius:8px;min-height:45px}
-.search-icon{background:var(--orange);padding:0 6px;display:flex;align-items:center;border-radius:0 8px 8px 0;font-size:0.9rem;cursor:pointer;width:35px;justify-content:center}
-.search-area input{flex:1;padding:10px;border:none;outline:none;font-size:0.9rem;border-radius:8px 0 0 8px;background:#fff}
-.search-results{position:absolute;top:50px;left:10px;right:10px;background:var(--card);border-radius:8px;max-height:400px;overflow-y:auto;display:none;z-index:1000;box-shadow:0 4px 10px #0003}
+.search-area{display:flex;gap:0;padding:10px 0 0 0;position:relative;z-index:2}
+.search-icon{background:var(--orange);padding:0 5px;display:flex;align-items:center;border-radius:0 8px 8px 0;font-size:0.85rem;cursor:pointer;width:32px;justify-content:center}
+.search-area input{flex:1;padding:9px;border:none;outline:none;font-size:0.9rem;border-radius:8px 0 0 8px;background:#fff}
+.search-results{position:absolute;top:48px;left:10px;right:10px;background:var(--card);border-radius:8px;max-height:400px;overflow-y:auto;display:none;z-index:1000;box-shadow:0 4px 10px #0003}
 .search-item{display:flex;gap:10px;padding:10px;cursor:pointer;border-bottom:1px solid #ddd;color:var(--text)}
 
-.section-title{background:var(--card);padding:15px;font-size:1.3rem;font-weight:900;text-align:center;border-bottom:1px solid #ddd;color:var(--text)}
+.section-title{background:var(--card);padding:15px;font-size:1.3rem;font-weight:900;text-align:center;border-bottom:1px solid #ddd;color:var(--text);position:relative;z-index:2}
 
-.categories-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:10px;background:var(--card)}
+.categories-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:10px;background:var(--card);position:relative;z-index:2}
 .cat-card{background:var(--bg);border:1px solid #ddd;border-radius:10px;padding:10px;text-align:center;position:relative;cursor:pointer}
 .cat-card img{width:100%;height:100px;object-fit:cover;border-radius:8px;margin-bottom:8px}
 .cat-card h3{font-size:1rem;color:var(--text)}
 
-.products-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;padding:10px;background:var(--card)}
+.products-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;padding:10px;background:var(--card);position:relative;z-index:2}
 .product-card{background:var(--bg);border:1px solid #ddd;border-radius:8px;padding:10px;text-align:center;position:relative}
 .product-card img{width:100%;height:140px;object-fit:contain;margin-bottom:8px}
 .product-name{font-size:0.9rem;height:40px;overflow:hidden;text-align:right;color:var(--text)}
@@ -41,7 +43,7 @@ body{background:var(--bodyBg, var(--bg)) center/cover fixed;color:var(--text);pa
 .card-admin{position:absolute;top:5px;left:5px;display:flex;gap:4px;z-index:10}
 .card-admin button{background:var(--yellow);color:#000;border:none;border-radius:6px;width:28px;height:28px;cursor:pointer;font-size:0.8rem}
 .card-admin.del{background:var(--red);color:#fff}
-.back-btn{background:var(--blue);color:#fff;border:none;padding:10px 15px;border-radius:8px;margin:10px;cursor:pointer}
+.back-btn{background:var(--blue);color:#fff;border:none;padding:10px 15px;border-radius:8px;margin:10px;cursor:pointer;position:relative;z-index:2}
 
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid #ddd;display:flex;justify-content:space-around;padding:8px 0;z-index:998}
 .nav-item{text-align:center;font-size:0.8rem;color:var(--text);cursor:pointer;position:relative}
@@ -58,7 +60,7 @@ body{background:var(--bodyBg, var(--bg)) center/cover fixed;color:var(--text);pa
 /* نافذة الحساب */
 #accountModal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000a;z-index:100002;align-items:center;justify-content:center}
 #accountModal.show{display:flex}
-.account-box{background:var(--card);width:90%;max-width:400px;padding:20px;border-radius:15px;color:var(--text)}
+.account-box{background:var(--card);width:90%;max-width:400px;padding:20px;border-radius:15px;color:var(--text);position:relative;z-index:2}
 .account-box h2{text-align:center;color:var(--orange);margin-bottom:15px}
 .account-box input{width:100%;padding:12px;margin:8px 0;border-radius:8px;border:1px solid #ddd;background:var(--bg);color:var(--text)}
 .account-box button{width:100%;padding:12px;margin:8px 0;border:none;border-radius:8px;font-weight:700;cursor:pointer}
@@ -78,6 +80,8 @@ body{background:var(--bodyBg, var(--bg)) center/cover fixed;color:var(--text);pa
 </style>
 </head>
 <body>
+
+<div class="overlay-logo" id="overlayLogo"></div>
 
 <div class="top-header">
   <div class="brand-row">
@@ -127,7 +131,7 @@ body{background:var(--bodyBg, var(--bg)) center/cover fixed;color:var(--text);pa
       <input type="text" id="loginUser" placeholder="الايميل او رقم الجوال">
       <input type="password" id="loginPass" placeholder="كلمة السر">
       <button onclick="login()" style="background:var(--green);color:#fff">دخول</button>
-      <div class="account-switch" onclick="showRegister()">ليس لديك حساب؟ سجل الان</div>
+      <div class="account-switch" onclick="showRegister()">انشاء حساب جديد</div>
     </div>
     <div id="registerForm" style="display:none">
       <input type="text" id="regName" placeholder="الاسم">
@@ -177,13 +181,18 @@ body{background:var(--bodyBg, var(--bg)) center/cover fixed;color:var(--text);pa
     </div>
 
     <div class="admin-section">
-      <h3>3. تغيير الخلفية</h3>
+      <h3>3. الخلفية والصورة الشفافة</h3>
       <label>لون الخلفية:</label>
       <input type="color" id="bgColor" class="color-picker" value="#EAEDED" onchange="changeBgColor(this.value)">
-      <label>او صورة خلفية:</label>
+      <label>صورة خلفية:</label>
       <input type="file" id="bgFile" accept="image/*" onchange="changeBackground(this)">
       <img id="bgPreview" class="preview-img" style="display:none">
-      <button onclick="removeBg()" style="background:var(--red)">حذف الصورة</button>
+      <button onclick="removeBg()" style="background:var(--red)">حذف الخلفية</button>
+      <hr style="margin:10px 0;border-color:#555">
+      <label>صورة شفافة فوق الموقع:</label>
+      <input type="file" id="overlayLogoFile" accept="image/*" onchange="changeOverlayLogo(this)">
+      <img id="overlayPreview" class="preview-img" style="display:none">
+      <button onclick="removeOverlay()" style="background:var(--red)">حذف الصورة الشفافة</button>
     </div>
 
     <button onclick="saveData()" style="background:var(--green)">حفظ كل التغييرات</button>
@@ -193,12 +202,12 @@ body{background:var(--bodyBg, var(--bg)) center/cover fixed;color:var(--text);pa
 
 <script>
 let cart = [];
-let siteData = JSON.parse(localStorage.getItem('oskarSiteDataV8')) || getDefaultData();
-let users = JSON.parse(localStorage.getItem('oskarUsers')) || [];
-let currentUser = JSON.parse(localStorage.getItem('oskarCurrentUser')) || null;
+let siteData = JSON.parse(localStorage.getItem('oskarSiteDataV9')) || getDefaultData();
+let users = JSON.parse(localStorage.getItem('oskarUsersV2')) || [];
+let currentUser = JSON.parse(localStorage.getItem('oskarCurrentUserV2')) || null;
 let tempCatImg = '';
 let tempProdImg = '';
-let adminActive = localStorage.getItem('adminActiveV8') === 'true';
+let adminActive = localStorage.getItem('adminActiveV9') === 'true';
 let allProducts = [];
 let currentCat = 'all';
 const SECRET_CODE = "oskad0099";
@@ -207,6 +216,7 @@ function getDefaultData(){
   return {
     bodyBg: "",
     bgColor: "#EAEDED",
+    overlayLogo: "",
     categories: [
       {id:"phones", name:"جوالات", img:"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400"},
       {id:"accessories", name:"اكسسوارات", img:"https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400"}
@@ -238,6 +248,27 @@ function changeBackground(input){
     saveData();alert('تم تغيير الخلفية')
   }
   reader.readAsDataURL(file);
+}
+
+function changeOverlayLogo(input){
+  const file = input.files[0];if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e){
+    siteData.overlayLogo = e.target.result;
+    document.getElementById('overlayPreview').src = e.target.result;
+    document.getElementById('overlayPreview').style.display = 'block';
+    document.getElementById('overlayLogo').style.setProperty('--overlayLogo', `url('${e.target.result}')`);
+    document.getElementById('overlayLogo').style.display = 'block';
+    saveData();alert('تم اضافة الصورة الشفافة')
+  }
+  reader.readAsDataURL(file);
+}
+
+function removeOverlay(){
+  siteData.overlayLogo = "";
+  document.getElementById('overlayLogo').style.display = 'none';
+  document.getElementById('overlayPreview').style.display = 'none';
+  saveData();alert('تم حذف الصورة الشفافة')
 }
 
 function changeBgColor(color){
@@ -309,7 +340,6 @@ function productCardHTML(p, catId, i){
 }
 
 function openCategory(catId){
-  if(!checkLogin()) return;
   currentCat = catId;
   document.getElementById('mainContent').style.display = 'none';
   document.getElementById('categoryPage').style.display = 'block';
@@ -338,13 +368,12 @@ function goHome(){
 }
 
 function addToCart(item){
-  if(!checkLogin()) return;
   let existing = cart.find(p=>p.name==item.name);if(existing) existing.qty++;else cart.push({...item, qty:1});updateCart();
 }
 function updateCart(){document.getElementById('cartCount').innerText = cart.reduce((a,b)=>a+b.qty,0);}
 
 function checkoutShamCash(){
-  if(!checkLogin()) return;
+  if(!currentUser){alert('يجب تسجيل الدخول للشراء');openAccount();return}
   if(cart.length == 0){ alert("السلة فارغة"); return; }
   let total = cart.reduce((a,b)=>a + parseInt(b.price) * b.qty, 0);
   let message = `مرحبا مركز اوسكار التقني\nالعميل: ${currentUser.name}\nاريد الدفع عبر شام كاش\n`;
@@ -358,7 +387,7 @@ function openAccount(){
   if(currentUser){logout()}else{document.getElementById('accountModal').classList.add('show')}
 }
 function closeAccount(){document.getElementById('accountModal').classList.remove('show')}
-function showRegister(){document.getElementById('loginForm').style.display='none';document.getElementById('registerForm').style.display='block';document.getElementById('accountTitle').innerText='تسجيل حساب جديد'}
+function showRegister(){document.getElementById('loginForm').style.display='none';document.getElementById('registerForm').style.display='block';document.getElementById('accountTitle').innerText='انشاء حساب جديد'}
 function showLogin(){document.getElementById('registerForm').style.display='none';document.getElementById('loginForm').style.display='block';document.getElementById('accountTitle').innerText='تسجيل الدخول'}
 
 function register(){
@@ -368,7 +397,7 @@ function register(){
   if(!name||!user||!pass){alert('كمل البيانات');return}
   if(users.find(u=>u.user==user)){alert('الحساب موجود');return}
   users.push({name,user,pass});
-  localStorage.setItem('oskarUsers',JSON.stringify(users));
+  localStorage.setItem('oskarUsersV2',JSON.stringify(users));
   alert('تم التسجيل بنجاح');
   showLogin();
 }
@@ -379,21 +408,16 @@ function login(){
   let u = users.find(u=>u.user==user && u.pass==pass);
   if(!u){alert('البيانات خاطئة');return}
   currentUser=u;
-  localStorage.setItem('oskarCurrentUser',JSON.stringify(u));
+  localStorage.setItem('oskarCurrentUserV2',JSON.stringify(u));
   document.getElementById('accountText').innerText=u.name;
   closeAccount();alert('اهلا '+u.name);
 }
 
 function logout(){
   if(confirm('تسجيل خروج؟')){
-    currentUser=null;localStorage.removeItem('oskarCurrentUser');
+    currentUser=null;localStorage.removeItem('oskarCurrentUserV2');
     document.getElementById('accountText').innerText='حسابك';cart=[];updateCart();
   }
-}
-
-function checkLogin(){
-  if(!currentUser){alert('يجب تسجيل الدخول اولا');openAccount();return false}
-  return true;
 }
 
 function searchProduct(){
@@ -401,7 +425,7 @@ function searchProduct(){
   let box = document.getElementById('searchResults');
   if(val === SECRET_CODE){
     adminActive =!adminActive;
-    localStorage.setItem('adminActiveV8', adminActive);
+    localStorage.setItem('adminActiveV9', adminActive);
     if(adminActive){
       document.getElementById('adminToggleBtn').classList.add('show');
       document.getElementById('adminPanel').classList.add('show');
@@ -422,7 +446,7 @@ function searchProduct(){
 function toggleAdminPanel(){document.getElementById('adminPanel').classList.toggle('show');}
 function closeAdminPanel(){
   document.getElementById('adminPanel').classList.remove('show');
-  adminActive=false;localStorage.setItem('adminActiveV8','false');
+  adminActive=false;localStorage.setItem('adminActiveV9','false');
   document.getElementById('adminToggleBtn').classList.remove('show');
   saveData();renderAll();
 }
@@ -510,11 +534,11 @@ function changeProdImage(cat,i){
 }
 
 function renderAll(){renderCategories();renderAllProducts();buildAllProducts();if(currentCat!='all') openCategory(currentCat);}
-function saveData(){localStorage.setItem('oskarSiteDataV8',JSON.stringify(siteData));}
-function resetData(){if(confirm('ارجاع كل شي للافتراضي؟')){localStorage.removeItem('oskarSiteDataV8');localStorage.removeItem('adminActiveV8');location.reload();}}
+function saveData(){localStorage.setItem('oskarSiteDataV9',JSON.stringify(siteData));}
+function resetData(){if(confirm('ارجاع كل شي للافتراضي؟')){localStorage.removeItem('oskarSiteDataV9');localStorage.removeItem('adminActiveV9');location.reload();}}
 
 function exportData(){let blob = new Blob([JSON.stringify({site:siteData,users:users})], {type: "application/json"});let a = document.createElement('a');a.href = URL.createObjectURL(blob);a.download = "oskar_backup.json";a.click();}
-function importData(event){let reader = new FileReader();reader.onload = function(e){let data=JSON.parse(e.target.result);siteData=data.site;users=data.users||[];saveData();localStorage.setItem('oskarUsers',JSON.stringify(users));location.reload();alert('تم الاستيراد بنجاح');};reader.readAsText(event.target.files[0]);}
+function importData(event){let reader = new FileReader();reader.onload = function(e){let data=JSON.parse(e.target.result);siteData=data.site;users=data.users||[];saveData();localStorage.setItem('oskarUsersV2',JSON.stringify(users));location.reload();alert('تم الاستيراد بنجاح');};reader.readAsText(event.target.files[0]);}
 
 document.addEventListener('click', ()=>{document.getElementById('searchResults').style.display='none'});
 
@@ -522,12 +546,14 @@ window.onload = function(){
   document.body.style.backgroundColor = siteData.bgColor;
   document.body.style.setProperty('--bg', siteData.bgColor);
   if(siteData.bodyBg) document.body.style.setProperty('--bodyBg', siteData.bodyBg);
+  if(siteData.overlayLogo){
+    document.getElementById('overlayLogo').style.setProperty('--overlayLogo', `url('${siteData.overlayLogo}')`);
+    document.getElementById('overlayLogo').style.display = 'block';
+    document.getElementById('overlayPreview').src = siteData.overlayLogo;
+    document.getElementById('overlayPreview').style.display = 'block';
+  }
   document.getElementById('bgColor').value = siteData.bgColor;
   if(localStorage.getItem('theme')=='dark') document.body.classList.add('dark');
   if(currentUser) document.getElementById('accountText').innerText=currentUser.name;
   renderAll();
-  if(adminActive){document.getElementById('adminToggleBtn').classList.add('show');document.getElementById('adminPanel').classList.add('show')}
-}
-</script>
-</body>
-</html>
+  if(adminActive){document.getElementById('adminToggleBtn').classList.add('show');document.getElementById('adminPanel').class
