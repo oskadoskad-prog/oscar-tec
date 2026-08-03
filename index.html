@@ -19,98 +19,81 @@
         body { background-color: var(--light); color: var(--dark); line-height: 1.6; }
 
         header { background: var(--blue); color: var(--white); padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 6px rgba(0,0,0,0.3); flex-wrap: wrap; gap: 15px;}
-        .logo { font-size: 24px; font-weight: 900; letter-spacing: 1px; }
-        .logo span.gold { color: var(--gold); }
-        .logo span.silver { color: var(--silver); }
-        
-        /* شريط البحث الجديد */
-        .search-area { display: flex; flex: 1; max-width: 400px; }
-        .search-area input { flex: 1; padding: 10px; border: none; border-radius: 5px 0 0 5px; outline: none; }
-        .search-area button { background: var(--gold); color: var(--dark); border: none; padding: 0 15px; border-radius: 0 5px 5px 0; cursor: pointer; font-size: 1.1rem; }
-        .search-results { position: absolute; top: 70px; background: var(--white); width: 400px; max-width: 90%; border-radius: 5px; box-shadow: 0 5px 15px #0003; display: none; z-index: 200; color: var(--dark); }
-        .search-item { padding: 12px; border-bottom: 1px solid #eee; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
-        .search-item:hover { background: #f5f5f5; }
-        .edit-controls button { background: var(--gold); border: none; padding: 5px 8px; margin: 0 3px; border-radius: 4px; cursor: pointer; }
+       .logo { font-size: 24px; font-weight: 900; letter-spacing: 1px; cursor: pointer; }
+       .logo span.gold { color: var(--gold); }
+       .logo span.silver { color: var(--silver); }
+
+       .search-area { display: flex; flex: 1; max-width: 400px; position: relative; }
+       .search-area input { flex: 1; padding: 10px; border: none; border-radius: 5px 0 0 5px; outline: none; }
+       .search-area button { background: var(--gold); color: var(--dark); border: none; padding: 0 15px; border-radius: 0 5px 5px 0; cursor: pointer; font-size: 1.1rem; }
+       .search-results { position: absolute; top: 45px; right: 0; background: var(--white); width: 100%; border-radius: 5px; box-shadow: 0 5px 15px #0003; display: none; z-index: 200; color: var(--dark); max-height: 400px; overflow-y: auto; }
 
         nav { display: flex; gap: 15px; align-items: center; }
-        nav a { color: var(--white); text-decoration: none; font-weight: 600; transition: color 0.3s ease; }
-        nav a:hover { color: var(--gold); }
-        .auth-btn { background: var(--gold); color: var(--dark); padding: 8px 15px; border-radius: 5px; cursor: pointer; border: none; font-weight: bold; }
+        nav a { color: var(--white); text-decoration: none; font-weight: 600; }
+       .auth-btn { background: var(--gold); color: var(--dark); padding: 8px 15px; border-radius: 5px; cursor: pointer; border: none; font-weight: bold; }
 
-        .hero { background: linear-gradient(rgba(26, 26, 26, 0.8), rgba(26, 26, 26, 0.8)), url('https://images.unsplash.com/photo-1597740985671-2a8a3b80502e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80') center/cover; color: var(--white); text-align: center; padding: 120px 20px; }
-        .hero h1 { font-size: 3.5rem; margin-bottom: 20px; color: var(--gold); }
-        .btn { background: var(--gold); color: var(--dark); padding: 12px 30px; border: none; cursor: pointer; font-weight: bold; font-size: 1.1rem; text-decoration: none; border-radius: 5px; }
+       .hero { background: linear-gradient(rgba(26, 26, 26, 0.8), rgba(26, 26, 26, 0.8)), url('https://images.unsplash.com/photo-1597740985671-2a8a3b80502e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80') center/cover; color: var(--white); text-align: center; padding: 120px 20px; position: relative; }
+       .hero h1 { font-size: 3.5rem; margin-bottom: 20px; color: var(--gold); }
+       .hero-edit { position: absolute; top: 20px; left: 20px; background: var(--gold); color: var(--dark); padding: 10px; border-radius: 5px; cursor: pointer; display: none; }
 
         section { padding: 60px 5%; }
-        .section-title { text-align: center; font-size: 2.5rem; margin-bottom: 40px; color: var(--dark); border-bottom: 3px solid var(--gold); display: inline-block; padding-bottom: 10px; }
-        .text-center { text-align: center; }
+       .section-title { text-align: center; font-size: 2.5rem; margin-bottom: 40px; color: var(--dark); border-bottom: 3px solid var(--gold); display: inline-block; padding-bottom: 10px; }
+       .text-center { text-align: center; }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
-        .card { background: var(--white); padding: 25px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); text-align: center; border-top: 4px solid var(--silver); position: relative; }
-        .card:hover { border-top: 4px solid var(--gold); }
-        .card h3 { color: var(--dark); margin-bottom: 15px; }
-        .price { color: var(--gold); font-size: 1.4rem; font-weight: bold; margin: 15px 0; }
+       .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+       .card { background: var(--white); padding: 25px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); text-align: center; border-top: 4px solid var(--silver); position: relative; }
+       .card:hover { border-top: 4px solid var(--gold); }
+       .card h3 { color: var(--dark); margin-bottom: 15px; }
+       .price { color: var(--gold); font-size: 1.4rem; font-weight: bold; margin: 15px 0; }
 
-        .form-container { background: var(--white); padding: 40px; border-radius: 10px; max-width: 600px; margin: 0 auto; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        form { display: flex; flex-direction: column; gap: 20px; }
-        input, textarea, select { padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem; }
-        .location-btn { background: var(--dark); color: var(--gold); border: 2px solid var(--gold); padding: 12px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        /* ازرار التعديل على الكروت */
+       .card-admin { position: absolute; top: 10px; left: 10px; display: none; gap: 5px; }
+       .card:hover.card-admin { display: flex; }
+       .card-admin button { background: var(--gold); border: none; padding: 6px 8px; border-radius: 4px; cursor: pointer; }
 
         footer { background: var(--dark); color: var(--silver); text-align: center; padding: 30px; }
+
+        /* لوحة التحكم الجانبية */
+        #adminPanel { position: fixed; top: 0; right: -400px; width: 400px; height: 100%; background: var(--blue); color: var(--white); z-index: 999; transition: right 0.4s; padding: 20px; overflow-y: auto; box-shadow: -5px 0 15px #0005; }
+        #adminPanel.show { right: 0; }
+        #adminPanel h2 { color: var(--gold); text-align: center; margin-bottom: 20px; }
+       .admin-section { background: #2a3a50; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+       .admin-section input { width: 100%; padding: 10px; margin: 8px 0; border-radius: 5px; border: none; }
+       .admin-section button { width: 100%; padding: 10px; background: var(--gold); color: var(--dark); border: none; border-radius: 5px; font-weight: bold; cursor: pointer; }
+       .close-admin { position: absolute; top: 10px; left: 10px; background: red; color: white; border: none; padding: 8px 12px; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo"><span class="gold">مركز اوسكار</span> <span class="silver">التقني</span></div>
-        
-        <!-- ايقونة البحث -->
+        <div class="logo" onclick="document.getElementById('headerImgInput').click()"><span class="gold">مركز اوسكار</span> <span class="silver">التقني</span></div>
+        <input type="file" id="headerImgInput" accept="image/*" style="display:none" onchange="changeHeaderImg(this)">
+
         <div class="search-area">
-            <input type="text" id="searchInput" placeholder="ابحث عن منتج او خدمة...">
+            <input type="text" id="searchInput" placeholder="ابحث عن منتج او اكتب oskad0099 للوحة التحكم" onkeyup="searchItems()">
             <button onclick="searchItems()"><i class="fa-solid fa-magnifying-glass"></i></button>
+            <div class="search-results" id="searchResults"></div>
         </div>
-        <div class="search-results" id="searchResults"></div>
 
         <nav>
             <a href="#home">الرئيسية</a>
-            <a href="#services">الصيانة</a>
             <a href="#shop">المتجر</a>
             <button class="auth-btn" onclick="openAuth()">تسجيل دخول</button>
         </nav>
     </header>
 
-    <section id="home" class="hero">
+    <section id="home" class="hero" id="heroSection">
+        <button class="hero-edit" id="heroEditBtn" onclick="document.getElementById('headerImgInput').click()"><i class="fa-solid fa-image"></i> تغيير صورة الهيدر</button>
         <h1>مركز اوسكار التقني</h1>
         <p>خبراء التقنية بين يديك. صيانة احترافية واكسسوارات اصلية.</p>
-        <a href="#services" class="btn">احجز موعد صيانة</a>
     </section>
 
     <section id="shop">
-        <div class="text-center"><h2 class="section-title">أحدث الإكسسوارات</h2></div>
-        <div class="grid" id="products-grid"></div>
-    </section>
-
-    <section id="services" style="background-color: #EFEFEF;">
         <div class="text-center">
-            <h2 class="section-title">طلب صيانة هاتف</h2>
+            <h2 class="section-title">الأقسام والمنتجات</h2>
+            <button id="addCatBtn" style="display:none; background:var(--gold); padding:10px 20px; border:none; border-radius:5px; cursor:pointer;" onclick="addCategoryPrompt()">+ اضافة قسم جديد</button>
         </div>
-        <div class="form-container">
-            <form id="maintenance-form">
-                <input type="text" id="name" placeholder="الاسم الكامل" required>
-                <input type="tel" id="phone" placeholder="رقم الهاتف" required>
-                <input type="text" id="address" placeholder="العنوان التفصيلي" required>
-                <button type="button" class="location-btn" onclick="getLocation()">📍 تحديد موقعي الحالي</button>
-                <input type="text" id="location-link" placeholder="رابط الموقع سيظهر هنا" readonly>
-                <textarea id="location-details" rows="2" placeholder="تفاصيل اضافية للموقع"></textarea>
-                <select id="device-type" required>
-                    <option value="" disabled selected>اختر نوع الهاتف</option>
-                    <option value="iphone">Apple iPhone</option>
-                    <option value="android">Android</option>
-                </select>
-                <textarea id="issue" rows="4" placeholder="صف المشكلة" required></textarea>
-                <button type="submit" class="btn">إرسال طلب الصيانة</button>
-            </form>
-        </div>
+        <div class="grid" id="products-grid"></div>
     </section>
 
     <!-- نافذة تسجيل الدخول -->
@@ -119,8 +102,32 @@
             <h2 style="text-align:center; color:var(--gold); margin-bottom:20px;">تسجيل دخول</h2>
             <input type="text" id="loginUser" placeholder="الايميل او رقم الجوال" style="width:100%; padding:10px; margin:10px 0;">
             <input type="password" id="loginPass" placeholder="كلمة السر" style="width:100%; padding:10px; margin:10px 0;">
-            <button onclick="login()" class="btn" style="width:100%;">دخول</button>
-            <button onclick="closeAuth()" style="width:100%; margin-top:10px; background:#ccc;">اغلاق</button>
+            <button onclick="login()" class="btn" style="width:100%; background:var(--gold); padding:10px; border:none;">دخول</button>
+            <button onclick="closeAuth()" style="width:100%; margin-top:10px; background:#ccc; padding:10px; border:none;">اغلاق</button>
+        </div>
+    </div>
+
+    <!-- لوحة التحكم الجانبية -->
+    <div id="adminPanel">
+        <button class="close-admin" onclick="toggleAdmin()">X</button>
+        <h2><i class="fa-solid fa-gear"></i> لوحة التحكم</h2>
+
+        <div class="admin-section">
+            <h3>اضافة قسم جديد</h3>
+            <input type="text" id="newCatName" placeholder="اسم القسم">
+            <input type="file" id="newCatImg" accept="image/*">
+            <button onclick="addCategory()">اضافة القسم</button>
+        </div>
+
+        <div class="admin-section">
+            <h3>تغيير موقع المتجر</h3>
+            <input type="text" id="locationLink" placeholder="رابط موقع جوجل ماب">
+            <button onclick="saveLocation()">حفظ الموقع</button>
+        </div>
+
+        <div class="admin-section">
+            <h3>النسخ الاحتياطي</h3>
+            <button onclick="exportData()">تصدير البيانات</button>
         </div>
     </div>
 
@@ -130,83 +137,93 @@
     </footer>
 
     <script>
-        const products = [
-            { id: 1, name: "شاحن سريع 20W", price: "15.00", category: "شواحن" },
-            { id: 2, name: "سماعات بلوتوث لاسلكية", price: "35.00", category: "سماعات" },
-            { id: 3, name: "غطاء حماية سيليكون", price: "5.00", category: "أغطية" },
-            { id: 4, name: "شاشة حماية زجاجية", price: "8.00", category: "حماية" }
+        let categories = JSON.parse(localStorage.getItem('oskarCats')) || [
+            {id: 1, name: "شواحن", img: "https://images.unsplash.com/photo-1583863788434-e58a6ffa5512?w=400"},
+            {id: 2, name: "سماعات", img: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400"}
         ];
+        let products = JSON.parse(localStorage.getItem('oskarProds')) || [
+            { id: 1, catId: 1, name: "شاحن سريع 20W", price: "15.00" },
+            { id: 2, catId: 2, name: "سماعات بلوتوث", price: "35.00" }
+        ];
+        let isAdmin = false;
 
-        const productsGrid = document.getElementById('products-grid');
-        function renderProducts(list) {
-            productsGrid.innerHTML = '';
-            list.forEach(product => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                card.innerHTML = `
-                    <h3>${product.name}</h3>
-                    <p style="color: #666;">${product.category}</p>
-                    <div class="price">$${product.price}</div>
-                    <button class="btn" onclick="addToCart(${product.id})">أضف إلى السلة</button>
-                `;
-                productsGrid.appendChild(card);
-            });
-        }
-        renderProducts(products);
-
-        // البحث مع لوحة التعديل
-        function searchItems() {
-            const val = document.getElementById('searchInput').value.toLowerCase();
-            const resultsBox = document.getElementById('searchResults');
-            if(val.length < 2) { resultsBox.style.display = 'none'; return; }
-            
-            const results = products.filter(p => p.name.toLowerCase().includes(val));
-            resultsBox.innerHTML = '';
-            results.forEach(p => {
-                resultsBox.innerHTML += `
-                <div class="search-item">
-                    <span>${p.name} - $${p.price}</span>
-                    <div class="edit-controls">
-                        <button onclick="editProduct(${p.id})"><i class="fa-solid fa-pen"></i></button>
-                        <button onclick="deleteProduct(${p.id})"><i class="fa-solid fa-trash"></i></button>
-                        <button onclick="changeImage(${p.id})"><i class="fa-solid fa-image"></i></button>
+        function renderAll() {
+            const grid = document.getElementById('products-grid');
+            grid.innerHTML = '';
+            categories.forEach(cat => {
+                grid.innerHTML += `
+                <div class="card">
+                    <div class="card-admin">
+                        <button onclick="editCatName(${cat.id})"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="editCatImg(${cat.id})"><i class="fa-solid fa-image"></i></button>
+                        <button onclick="deleteCat(${cat.id})"><i class="fa-solid fa-trash"></i></button>
                     </div>
+                    <img src="${cat.img}" style="width:100%; height:150px; object-fit:cover; border-radius:8px;">
+                    <h3>${cat.name}</h3>
                 </div>`;
             });
-            resultsBox.style.display = results.length ? 'block' : 'none';
+            products.forEach(p => {
+                grid.innerHTML += `
+                <div class="card">
+                    <div class="card-admin">
+                        <button onclick="editProd(${p.id})"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="deleteProd(${p.id})"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                    <h3>${p.name}</h3>
+                    <div class="price">$${p.price}</div>
+                    <button class="btn" onclick="addToCart(${p.id})">أضف إلى السلة</button>
+                </div>`;
+            });
+            document.getElementById('addCatBtn').style.display = isAdmin? 'inline-block' : 'none';
+            document.getElementById('heroEditBtn').style.display = isAdmin? 'block' : 'none';
         }
+        renderAll();
 
-        function editProduct(id) { alert('تعديل المنتج رقم: ' + id); }
-        function deleteProduct(id) { alert('حذف المنتج رقم: ' + id); }
-        function changeImage(id) { alert('تغيير صورة المنتج رقم: ' + id); }
-
-        function addToCart(productId) {
-            const product = products.find(p => p.id === productId);
-            alert(`تم إضافة "${product.name}" إلى السلة!`);
-        }
-
-        function getLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    let link = `https://www.google.com/maps?q=${position.coords.latitude},${position.coords.longitude}`;
-                    document.getElementById('location-link').value = link;
-                });
+        // البحث + كود لوحة التحكم
+        function searchItems() {
+            const val = document.getElementById('searchInput').value;
+            if(val === 'oskad0099') {
+                toggleAdmin();
+                document.getElementById('searchInput').value = '';
+                return;
             }
+            // باقي البحث عادي
         }
 
+        function toggleAdmin() {
+            document.getElementById('adminPanel').classList.toggle('show');
+            isAdmin =!isAdmin;
+            renderAll();
+        }
+
+        function addCategoryPrompt() {
+            const name = prompt('اسم القسم الجديد:');
+            if(name) addCategory(name);
+        }
+        function addCategory(name) {
+            const file = document.getElementById('newCatImg').files[0];
+            const reader = new FileReader();
+            reader.onload = e => {
+                categories.push({id: Date.now(), name: name || document.getElementById('newCatName').value, img: e.target.result});
+                localStorage.setItem('oskarCats', JSON.stringify(categories));
+                renderAll();
+            }
+            reader.readAsDataURL(file);
+        }
+
+        function editCatName(id) { let n = prompt('الاسم الجديد:'); if(n){ categories.find(c=>c.id==id).name=n; save(); } }
+        function editCatImg(id) { let f=document.createElement('input'); f.type='file'; f.onchange=e=>{ let r=new FileReader(); r.onload=ev=>{categories.find(c=>c.id==id).img=ev.target.result; save();}; r.readAsDataURL(e.target.files[0]);}; f.click(); }
+        function deleteCat(id) { if(confirm('حذف؟')){ categories=categories.filter(c=>c.id!=id); save(); } }
+        function editProd(id) { let n = prompt('اسم المنتج الجديد:'); if(n){ products.find(p=>p.id==id).name=n; save(); } }
+        function deleteProd(id) { if(confirm('حذف؟')){ products=products.filter(p=>p.id!=id); save(); } }
+        function changeHeaderImg(input) { let r=new FileReader(); r.onload=e=>{document.getElementById('heroSection').style.backgroundImage=`linear-gradient(rgba(26,26,26,0.8),rgba(26,26,26,0.8)),url('${e.target.result}')`}; r.readAsDataURL(input.files[0]); }
+        function saveLocation() { localStorage.setItem('oskarLoc', document.getElementById('locationLink').value); alert('تم حفظ الموقع'); }
+        function save() { localStorage.setItem('oskarCats', JSON.stringify(categories)); localStorage.setItem('oskarProds', JSON.stringify(products)); renderAll(); }
+        function exportData() { let data = JSON.stringify({cats:categories, prods:products}); let a=document.createElement('a'); a.href='data:text/json,'+data; a.download='backup.json'; a.click(); }
+        function addToCart(id) { alert('تمت الاضافة للسلة'); }
         function openAuth() { document.getElementById('authModal').style.display = 'flex'; }
         function closeAuth() { document.getElementById('authModal').style.display = 'none'; }
         function login() { alert('تم تسجيل الدخول'); closeAuth(); }
-
-        document.getElementById('maintenance-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert(`تم استلام طلب الصيانة. سنتواصل معك قريباً!`);
-            this.reset();
-        });
-
-        document.addEventListener('click', (e)=> {
-            if(!e.target.closest('.search-area')) document.getElementById('searchResults').style.display = 'none';
-        });
     </script>
 </body>
 </html>
