@@ -10,9 +10,9 @@
 :root{--bg:#EAEDED;--card:#fff;--blue:#232F3E;--orange:#FF9900;--green:#067D62; --red:#B12704; --yellow:#FFD814; --text:#0F1111}
 body.dark{--bg:#131921;--card:#232F3E;--text:#fff}
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Cairo',sans-serif}
-body{background:var(--bg);color:var(--text);padding-bottom:70px}
+body{background:var(--bodyBg, var(--bg)) center/cover fixed;color:var(--text);padding-bottom:70px}
 
-.top-header{background:var(--blue);padding:10px;color:#fff;position:sticky;top:0;z-index:999}
+.top-header{background:var(--headerBg, var(--blue));background-size:cover;background-position:center;padding:10px;color:#fff;position:sticky;top:0;z-index:999}
 .brand-row{display:flex;justify-content:space-between;align-items:center}
 .brand-name{font-weight:900;font-size:1.4rem;color:var(--orange)}
 .whatsapp-top{background:#25D366;color:#fff;border:none;padding:8px 12px;border-radius:8px;font-weight:700;cursor:pointer;font-size:0.9rem}
@@ -38,7 +38,7 @@ body{background:var(--bg);color:var(--text);padding-bottom:70px}
 .add-cart-btn{background:var(--yellow);border:none;width:100%;padding:8px;border-radius:20px;margin-top:8px;font-weight:700;cursor:pointer;color:#000}
 .add-product-in-cat{background:var(--green);color:#fff;border:none;padding:12px;width:95%;margin:10px auto;display:block;border-radius:10px;font-weight:900;cursor:pointer}
 
-.card-admin{position:absolute;top:5px;left:5px;display:flex;gap:4px;z-index:10}
+.card-admin{position:absolute;top:5px;left:5px;display:flex;gap:4px;z-index:10;flex-wrap:wrap;width:90px}
 .card-admin button{background:var(--yellow);color:#000;border:none;border-radius:6px;width:28px;height:28px;cursor:pointer;font-size:0.8rem}
 .card-admin.del{background:var(--red);color:#fff}
 .back-btn{background:var(--blue);color:#fff;border:none;padding:10px 15px;border-radius:8px;margin:10px;cursor:pointer}
@@ -56,18 +56,22 @@ body{background:var(--bg);color:var(--text);padding-bottom:70px}
 .admin-section{border:1px solid #555;padding:15px;border-radius:10px;margin:15px 0}
 .admin-box input,.admin-box select{width:100%;padding:10px;margin:8px 0;border-radius:8px;border:1px solid var(--orange);background:#131921;color:#fff}
 .admin-box button{padding:10px;border:none;border-radius:8px;font-weight:700;cursor:pointer;width:100%;margin:5px 0}
+.preview-img{width:80px;height:80px;border-radius:8px;object-fit:cover;margin:5px;border:2px solid var(--orange)}
 
-/* نافذة السلة */
-#cartModal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000a;z-index:100003;align-items:center;justify-content:center}
-#cartModal.show{display:flex}
-.cart-box{background:var(--card);width:95%;max-width:500px;padding:20px;border-radius:15px;max-height:90vh;overflow-y:auto;color:var(--text)}
+/* نوافذ */
+#cartModal, #accountModal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000a;z-index:100003;align-items:center;justify-content:center}
+#cartModal.show, #accountModal.show{display:flex}
+.modal-box{background:var(--card);width:95%;max-width:500px;padding:20px;border-radius:15px;max-height:90vh;overflow-y:auto;color:var(--text)}
 .cart-item{display:flex;gap:10px;border-bottom:1px solid #ddd;padding:10px 0}
 .cart-item img{width:60px;height:60px;object-fit:contain}
+.account-tabs{display:flex;gap:5px;margin-bottom:15px}
+.account-tabs button{flex:1;padding:10px;border:none;border-radius:8px;background:#ddd;cursor:pointer;font-weight:700}
+.account-tabs button.active{background:var(--orange);color:#000}
 </style>
 </head>
 <body>
 
-<div class="top-header">
+<div class="top-header" id="topHeader">
   <div class="brand-row">
     <div class="brand-name"><i class="fa-solid fa-microchip"></i> مركز اوسكار التقني</div>
     <button class="whatsapp-top" onclick="window.open('https://wa.me/+971544066811','_blank')"><i class="fa-brands fa-whatsapp"></i> تواصل</button>
@@ -81,7 +85,6 @@ body{background:var(--bg);color:var(--text);padding-bottom:70px}
 <div id="mainContent">
   <h2 class="section-title">الاقسام</h2>
   <div id="categoriesGrid" class="categories-grid"></div>
-
   <h2 class="section-title">خصومات كبيرة لك</h2>
   <div id="productsGrid" class="products-grid"></div>
 </div>
@@ -103,17 +106,51 @@ body{background:var(--bg);color:var(--text);padding-bottom:70px}
 
 <!-- نافذة السلة -->
 <div id="cartModal">
-  <div class="cart-box">
+  <div class="modal-box">
     <h3 style="text-align:center;margin-bottom:15px">سلة التسوق</h3>
     <div id="cartItems"></div>
     <h4>بيانات التوصيل</h4>
     <input type="text" id="customerName" placeholder="الاسم الكامل">
     <input type="text" id="customerPhone" placeholder="رقم الجوال">
-    <input type="text" id="customerAddress" placeholder="العنوان بالتفصيل: المدينة - الحي - الشارع">
+    <input type="text" id="customerAddress" placeholder="العنوان بالتفصيل">
     <button onclick="getLocation()" style="background:var(--blue);color:#fff">تحديد موقعي الحالي</button>
     <p id="locationText" style="font-size:0.8rem;color:green"></p>
-    <button onclick="sendOrder()" style="background:var(--green);color:#fff;margin-top:10px">ارسال الطلب عبر واتساب</button>
+    <h4>طريقة الدفع</h4>
+    <select id="paymentMethod">
+      <option value="الدفع عند الاستلام">الدفع عند الاستلام</option>
+      <option value="تحويل بنكي">تحويل بنكي</option>
+    </select>
+    <button onclick="sendOrder()" style="background:var(--green);color:#fff;margin-top:10px">تأكيد الطلب</button>
     <button onclick="closeCart()" style="background:var(--red);color:#fff;margin-top:10px">اغلاق</button>
+  </div>
+</div>
+
+<!-- نافذة الحساب -->
+<div id="accountModal">
+  <div class="modal-box">
+    <div id="loggedInView" style="display:none">
+      <h3 id="userNameDisplay"></h3>
+      <button onclick="logout()" style="background:var(--red);color:#fff;width:100%;padding:12px;border:none;border-radius:8px">تسجيل خروج</button>
+      <button onclick="closeAccount()" style="background:#888;color:#fff;width:100%;padding:12px;border:none;border-radius:8px;margin-top:10px">اغلاق</button>
+    </div>
+    <div id="guestView">
+      <div class="account-tabs">
+        <button id="tabLogin" class="active" onclick="showLogin()">تسجيل دخول</button>
+        <button id="tabRegister" onclick="showRegister()">انشاء حساب</button>
+      </div>
+      <div id="loginForm">
+        <input type="text" id="loginUser" placeholder="الايميل او رقم الجوال">
+        <input type="password" id="loginPass" placeholder="كلمة السر">
+        <button onclick="login()" style="background:var(--green);color:#fff;width:100%;padding:12px;border:none;border-radius:8px">دخول</button>
+      </div>
+      <div id="registerForm" style="display:none">
+        <input type="text" id="regName" placeholder="الاسم الكامل">
+        <input type="text" id="regUser" placeholder="الايميل او رقم الجوال">
+        <input type="password" id="regPass" placeholder="كلمة السر">
+        <button onclick="register()" style="background:var(--orange);color:#000;width:100%;padding:12px;border:none;border-radius:8px">انشاء حساب</button>
+      </div>
+      <button onclick="closeAccount()" style="background:var(--red);color:#fff;width:100%;padding:10px;border:none;border-radius:8px;margin-top:10px">اغلاق</button>
+    </div>
   </div>
 </div>
 
@@ -129,8 +166,29 @@ body{background:var(--bg);color:var(--text);padding-bottom:70px}
       <select id="productCat"></select>
       <input type="text" id="productName" placeholder="اسم المنتج">
       <input type="number" id="productPrice" placeholder="السعر بالليرة">
-      <input type="text" id="productImg" placeholder="رابط الصورة">
+      <label>صورة المنتج من الجهاز:</label>
+      <input type="file" id="productImgFile" accept="image/*" onchange="previewFile(this,'prodPreview')">
+      <img id="prodPreview" class="preview-img" style="display:none">
       <button onclick="addProduct()" style="background:var(--green)">اضافة منتج</button>
+    </div>
+
+    <div class="admin-section">
+      <h3>تغيير التصميم</h3>
+      <label>خلفية الموقع:</label>
+      <input type="file" id="bgFile" accept="image/*" onchange="changeBackground(this)">
+      <img id="bgPreview" class="preview-img" style="display:none">
+      <button onclick="removeBg()" style="background:var(--red)">حذف خلفية الموقع</button>
+      <label>خلفية الهيدر:</label>
+      <input type="file" id="headerFile" accept="image/*" onchange="changeHeader(this)">
+      <img id="headerPreview" class="preview-img" style="display:none">
+      <button onclick="removeHeader()" style="background:var(--red)">حذف خلفية الهيدر</button>
+    </div>
+
+    <div class="admin-section">
+      <h3>النسخ الاحتياطي</h3>
+      <button onclick="exportData()" style="background:var(--blue)">تصدير البيانات</button>
+      <input type="file" id="importFile" accept=".json" onchange="importData(event)" style="display:none">
+      <button onclick="document.getElementById('importFile').click()" style="background:var(--yellow);color:#000">استيراد البيانات</button>
     </div>
 
     <button onclick="resetData()" style="background:var(--red)">ارجاع الافتراضي</button>
@@ -138,15 +196,19 @@ body{background:var(--bg);color:var(--text);padding-bottom:70px}
 </div>
 
 <script>
-let cart = JSON.parse(localStorage.getItem('oskarCart')) || [];
-let siteData = JSON.parse(localStorage.getItem('oskarSiteDataV11')) || getDefaultData();
-let adminActive = localStorage.getItem('adminActiveV11') === 'true';
+let cart = JSON.parse(localStorage.getItem('oskarCartV12')) || [];
+let siteData = JSON.parse(localStorage.getItem('oskarSiteDataV12')) || getDefaultData();
+let users = JSON.parse(localStorage.getItem('oskarUsersV12')) || [];
+let currentUser = JSON.parse(localStorage.getItem('oskarCurrentUserV12')) || null;
+let adminActive = localStorage.getItem('adminActiveV12') === 'true';
 let currentCat = 'all';
 let currentBrand = '';
+let tempProdImg = '';
 const SECRET_CODE = "oskad0099";
 
 function getDefaultData(){
   return {
+    bodyBg: "", headerBg: "",
     categories: [
       {id:"phones", name:"جوالات", img:"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400"},
       {id:"software", name:"شحن برامج", img:"https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=400"},
@@ -156,14 +218,8 @@ function getDefaultData(){
       {id:"must", name:"مستلزماتك", img:"https://images.unsplash.com/photo-1556740738-b6a63e27c4df?w=400"}
     ],
     phoneBrands: [
-      {id:"iphone", name:"ايفون", img:"https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg", products:[
-        {name:"ايفون 15 برو ماكس", price:12000000, img:"https://fdn2.gsmarena.com/vv/pics/apple-iphone-15-pro-max-1.jpg"},
-        {name:"ايفون 14", price:8000000, img:"https://fdn2.gsmarena.com/vv/pics/apple/apple-iphone-14-1.jpg"}
-      ]},
-      {id:"samsung", name:"سامسونج", img:"https://upload.wikimedia.org/wikipedia/commons/2/24/Samsung_Logo.svg", products:[
-        {name:"S24 Ultra", price:11000000, img:"https://fdn2.gsmarena.com/vv/pics/samsung/samsung-galaxy-s24-ultra-5g-1.jpg"},
-        {name:"A55", price:3500000, img:"https://fdn2.gsmarena.com/vv/pics/samsung/samsung-galaxy-a55-1.jpg"}
-      ]},
+      {id:"iphone", name:"ايفون", img:"https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg", products:[]},
+      {id:"samsung", name:"سامسونج", img:"https://upload.wikimedia.org/wikipedia/commons/2/24/Samsung_Logo.svg", products:[]},
       {id:"infinix", name:"انفنكس", img:"https://via.placeholder.com/100/FF9900/fff?text=Infinix", products:[]},
       {id:"huawei", name:"هواوي", img:"https://via.placeholder.com/100/FF0000/fff?text=Huawei", products:[]},
       {id:"honor", name:"هونر", img:"https://via.placeholder.com/100/000/fff?text=Honor", products:[]},
@@ -173,6 +229,65 @@ function getDefaultData(){
     ],
     products: {phones: [], software: [], repair: [], accessories: [], offers: [], must: []}
   }
+}
+
+function previewFile(input, previewId){
+  const file = input.files[0]; if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e){
+    document.getElementById(previewId).src = e.target.result;
+    document.getElementById(previewId).style.display = 'block';
+    tempProdImg = e.target.result;
+  }
+  reader.readAsDataURL(file);
+}
+
+function changeBackground(input){
+  const file = input.files[0];if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e){
+    siteData.bodyBg = `url('${e.target.result}')`;
+    document.getElementById('bgPreview').src = e.target.result;
+    document.getElementById('bgPreview').style.display = 'block';
+    document.body.style.setProperty('--bodyBg', siteData.bodyBg);
+    saveData();
+  }
+  reader.readAsDataURL(file);
+}
+function removeBg(){siteData.bodyBg = "";document.body.style.setProperty('--bodyBg', '');document.getElementById('bgPreview').style.display = 'none';saveData()}
+function changeHeader(input){
+  const file = input.files[0];if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e){
+    siteData.headerBg = `url('${e.target.result}')`;
+    document.getElementById('headerPreview').src = e.target.result;
+    document.getElementById('headerPreview').style.display = 'block';
+    document.getElementById('topHeader').style.setProperty('--headerBg', siteData.headerBg);
+    saveData();
+  }
+  reader.readAsDataURL(file);
+}
+function removeHeader(){siteData.headerBg = "";document.getElementById('topHeader').style.setProperty('--headerBg', '');document.getElementById('headerPreview').style.display = 'none';saveData()}
+
+function exportData(){
+  const dataStr = JSON.stringify({siteData, users, cart});
+  const blob = new Blob([dataStr], {type: "application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = "oskar_backup.json"; a.click();
+  URL.revokeObjectURL(url);
+}
+function importData(event){
+  const file = event.target.files[0];
+  const reader = new FileReader();
+  reader.onload = function(e){
+    let data = JSON.parse(e.target.result);
+    siteData = data.siteData || siteData;
+    users = data.users || users;
+    cart = data.cart || cart;
+    saveData();saveCart();renderAll();alert('تم الاستيراد')
+  }
+  reader.readAsText(file);
 }
 
 function renderCategories(){
@@ -186,12 +301,9 @@ function renderCategories(){
       <img src="${cat.img}"><h3>${cat.name}</h3></div>`;
   });
   document.getElementById('categoriesGrid').innerHTML = html;
-
   let select = document.getElementById('productCat');
   select.innerHTML = '';
-  siteData.categories.forEach(cat=>{
-    select.innerHTML += `<option value="${cat.id}">${cat.name}</option>`;
-  });
+  siteData.categories.forEach(cat=>{select.innerHTML += `<option value="${cat.id}">${cat.name}</option>`;});
 }
 
 function openCategory(catId){
@@ -220,7 +332,15 @@ function openCategory(catId){
     document.getElementById('brandGrid').style.display = 'none';
     let html = '';
     siteData.products[catId].forEach((p,i)=>{
-      html += productCardHTML(p, catId, i);
+      html += `<div class="product-card">
+        <div class="card-admin" style="display:${adminActive?'flex':'none'}">
+          <button onclick="editProduct('${catId}',${i})"><i class="fa-solid fa-pen"></i></button>
+          <button class="del" onclick="deleteProduct('${catId}',${i})"><i class="fa-solid fa-trash"></i></button>
+        </div>
+        <img src="${p.img}"><div class="product-name">${p.name}</div>
+        <div class="product-price">${parseInt(p.price).toLocaleString()} ل.س</div>
+        <button class="add-cart-btn" onclick='addToCart(${JSON.stringify(p)})'>اضافة للعربة</button>
+      </div>`;
     });
     document.getElementById('catProductsGrid').innerHTML = html || '<p style="text-align:center;padding:20px">لا توجد منتجات</p>';
   }
@@ -231,7 +351,6 @@ function openBrand(brandId){
   let brand = siteData.phoneBrands.find(b=>b.id==brandId);
   document.getElementById('catPageTitle').innerText = brand.name;
   document.getElementById('brandGrid').style.display = 'none';
-
   let html = '';
   brand.products.forEach((p,i)=>{
     html += `<div class="product-card">
@@ -248,40 +367,41 @@ function openBrand(brandId){
   document.getElementById('catProductsGrid').innerHTML = html;
 }
 
-function quickAddToBrand(brandId){
-  document.getElementById('productCat').value = 'phones';
-  document.getElementById('productName').placeholder = `اسم المنتج ل ${brandId}`;
-  document.getElementById('adminPanel').classList.add('show');
+function quickAddToCurrentCat(){document.getElementById('productCat').value = currentCat;document.getElementById('adminPanel').classList.add('show');}
+function quickAddToBrand(brandId){document.getElementById('productCat').value = 'phones';document.getElementById('productName').placeholder = `اسم المنتج ل ${brandId}`;document.getElementById('adminPanel').classList.add('show');}
+
+function addProduct(){
+  let cat=document.getElementById('productCat').value;
+  let name=document.getElementById('productName').value.trim();
+  let price=document.getElementById('productPrice').value;
+  let img=tempProdImg || 'https://via.placeholder.com/150';
+  if(!name||!price){alert('كمل البيانات');return}
+  let product = {name,price,img};
+  if(cat=='phones' && currentBrand){
+    let brand = siteData.phoneBrands.find(b=>b.id==currentBrand);
+    brand.products.push(product);
+  }else{
+    siteData.products[cat].push(product);
+  }
+  saveData();renderAll();alert('تمت الاضافة');
+  document.getElementById('productName').value='';document.getElementById('productPrice').value='';
+  document.getElementById('prodPreview').style.display='none';tempProdImg='';
 }
 
-function editBrand(brandId){
-  let brand = siteData.phoneBrands.find(b=>b.id==brandId);
-  let newName = prompt('الاسم الجديد:', brand.name);
-  if(newName) brand.name = newName;
-  saveData();renderCategories();
-}
-function changeBrandImage(brandId){
-  let brand = siteData.phoneBrands.find(b=>b.id==brandId);
-  let url = prompt('ضع رابط الصورة الجديدة:', brand.img);
-  if(url) brand.img = url;
-  saveData();renderCategories();
-}
+function editCategory(id){let cat = siteData.categories.find(c=>c.id==id);let newName = prompt('الاسم الجديد:', cat.name);if(newName) cat.name = newName;saveData();renderCategories();}
+function changeCatImage(id){let cat = siteData.categories.find(c=>c.id==id);let fileInput = document.createElement('input');fileInput.type = 'file';fileInput.accept = 'image/*';fileInput.onchange = function(e){const file = e.target.files[0];const reader = new FileReader();reader.onload = function(ev){cat.img = ev.target.result;saveData();renderCategories();};reader.readAsDataURL(file);};fileInput.click();}
+function editBrand(id){let brand = siteData.phoneBrands.find(b=>b.id==id);let newName = prompt('الاسم الجديد:', brand.name);if(newName) brand.name = newName;saveData();renderCategories();}
+function changeBrandImage(id){let brand = siteData.phoneBrands.find(b=>b.id==id);let fileInput = document.createElement('input');fileInput.type = 'file';fileInput.accept = 'image/*';fileInput.onchange = function(e){const file = e.target.files[0];const reader = new FileReader();reader.onload = function(ev){brand.img = ev.target.result;saveData();renderCategories();};reader.readAsDataURL(file);};fileInput.click();}
 
 function addToCart(item){let existing = cart.find(p=>p.name==item.name);if(existing) existing.qty++;else cart.push({...item, qty:1});updateCart();saveCart();}
 function updateCart(){document.getElementById('cartCount').innerText = cart.reduce((a,b)=>a+b.qty,0);}
-function saveCart(){localStorage.setItem('oskarCart', JSON.stringify(cart));}
+function saveCart(){localStorage.setItem('oskarCartV12', JSON.stringify(cart));}
 
 function openCart(){
   document.getElementById('cartModal').classList.add('show');
   let html = '';
   if(cart.length==0) html = '<p>السلة فاضية</p>';
-  cart.forEach((item,i)=>{
-    html += `<div class="cart-item">
-      <img src="${item.img}"><div>
-      <div>${item.name}</div>
-      <div>${item.price.toLocaleString()} ل.س x ${item.qty}</div>
-      </div></div>`;
-  });
+  cart.forEach((item,i)=>{html += `<div class="cart-item"><img src="${item.img}"><div><div>${item.name}</div><div>${item.price.toLocaleString()} ل.س x ${item.qty}</div></div></div>`;});
   document.getElementById('cartItems').innerHTML = html;
 }
 function closeCart(){document.getElementById('cartModal').classList.remove('show')}
@@ -289,62 +409,51 @@ function closeCart(){document.getElementById('cartModal').classList.remove('show
 function getLocation(){
   if(navigator.geolocation){
     navigator.geolocation.getCurrentPosition(pos=>{
-      document.getElementById('locationText').innerText = `تم تحديد الموقع: Lat ${pos.coords.latitude.toFixed(4)}, Lng ${pos.coords.longitude.toFixed(4)}`;
+      document.getElementById('locationText').innerText = `الموقع: ${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)}`;
     });
-  }else{alert('المتصفح لا يدعم تحديد الموقع')}
+  }
 }
 
 function sendOrder(){
   let name = document.getElementById('customerName').value;
   let phone = document.getElementById('customerPhone').value;
   let address = document.getElementById('customerAddress').value;
+  let payment = document.getElementById('paymentMethod').value;
   let location = document.getElementById('locationText').innerText;
-  let msg = `طلب جديد من ${name}%0Aالجوال: ${phone}%0Aالعنوان: ${address}%0A${location}%0A%0Aالمنتجات:%0A`;
+  let msg = `طلب جديد%0Aالاسم: ${name}%0Aالجوال: ${phone}%0Aالعنوان: ${address}%0A${location}%0Aالدفع: ${payment}%0A%0Aالمنتجات:%0A`;
   cart.forEach(i=>{msg += `${i.name} - ${i.qty} x ${i.price} ل.س%0A`});
   window.open(`https://wa.me/+971544066811?text=${msg}`,'_blank');
+  cart=[];saveCart();updateCart();closeCart();alert('تم ارسال الطلب');
 }
 
-function addProduct(){
-  let cat=document.getElementById('productCat').value;
-  let name=document.getElementById('productName').value.trim();
-  let price=document.getElementById('productPrice').value;
-  let img=document.getElementById('productImg').value || 'https://via.placeholder.com/150';
-  if(!name||!price){alert('كمل البيانات');return}
-  siteData.products[cat].push({name,price,img});
-  saveData();renderAll();alert('تمت الاضافة')
-}
+// الحساب
+function openAccount(){ document.getElementById('accountModal').classList.add('show'); if(currentUser){document.getElementById('guestView').style.display='none';document.getElementById('loggedInView').style.display='block';document.getElementById('userNameDisplay').innerText='اهلا '+currentUser.name;}else{document.getElementById('guestView').style.display='block';document.getElementById('loggedInView').style.display='none';} }
+function closeAccount(){ document.getElementById('accountModal').classList.remove('show') }
+function showRegister(){document.getElementById('loginForm').style.display='none';document.getElementById('registerForm').style.display='block';document.getElementById('tabLogin').classList.remove('active');document.getElementById('tabRegister').classList.add('active')}
+function showLogin(){document.getElementById('registerForm').style.display='none';document.getElementById('loginForm').style.display='block';document.getElementById('tabRegister').classList.remove('active');document.getElementById('tabLogin').classList.add('active')}
+function register(){ let name=document.getElementById('regName').value; let user=document.getElementById('regUser').value; let pass=document.getElementById('regPass').value; if(!name||!user||!pass){alert('كمل البيانات');return} users.push({name,user,pass}); localStorage.setItem('oskarUsersV12',JSON.stringify(users)); alert('تم انشاء الحساب'); showLogin(); }
+function login(){ let user=document.getElementById('loginUser').value; let pass=document.getElementById('loginPass').value; let u = users.find(u=>u.user==user && u.pass==pass); if(!u) return alert('البيانات خطأ'); currentUser=u; localStorage.setItem('oskarCurrentUserV12',JSON.stringify(u)); openAccount(); alert('اهلا '+u.name) }
+function logout(){ currentUser=null; localStorage.removeItem('oskarCurrentUserV12'); openAccount(); alert('تم تسجيل الخروج') }
 
 function toggleAdminPanel(){document.getElementById('adminPanel').classList.toggle('show');}
-function closeAdminPanel(){
-  document.getElementById('adminPanel').classList.remove('show');
-  adminActive=false;localStorage.setItem('adminActiveV11','false');
-  document.getElementById('adminToggleBtn').classList.remove('show');
-}
+function closeAdminPanel(){document.getElementById('adminPanel').classList.remove('show');adminActive=false;localStorage.setItem('adminActiveV12','false');document.getElementById('adminToggleBtn').classList.remove('show');}
 
 document.addEventListener('keyup', e=>{
-  if(e.key === SECRET_CODE.split('')[0]){
-    let val = document.getElementById('searchInput').value;
-    if(val === SECRET_CODE){
-      adminActive =!adminActive;
-      localStorage.setItem('adminActiveV11', adminActive);
-      if(adminActive){
-        document.getElementById('adminToggleBtn').classList.add('show');
-        document.getElementById('adminPanel').classList.add('show');
-      }
-      document.getElementById('searchInput').value='';
-      renderAll();
-    }
+  if(document.getElementById('searchInput').value === SECRET_CODE){
+    adminActive =!adminActive;
+    localStorage.setItem('adminActiveV12', adminActive);
+    if(adminActive){document.getElementById('adminToggleBtn').classList.add('show');document.getElementById('adminPanel').classList.add('show');}
+    document.getElementById('searchInput').value='';
+    renderAll();
   }
 });
 
-function renderAll(){renderCategories();updateCart();}
-function saveData(){localStorage.setItem('oskarSiteDataV11',JSON.stringify(siteData));}
+function goHome(){currentCat = 'all';document.getElementById('mainContent').style.display = 'block';document.getElementById('categoryPage').style.display = 'none';}
+function renderAll(){renderCategories();updateCart();if(siteData.bodyBg) document.body.style.setProperty('--bodyBg', siteData.bodyBg);if(siteData.headerBg) document.getElementById('topHeader').style.setProperty('--headerBg', siteData.headerBg);}
+function saveData(){localStorage.setItem('oskarSiteDataV12',JSON.stringify(siteData));}
 function resetData(){if(confirm('ارجاع كل شي؟')){localStorage.clear();location.reload();}}
 
-window.onload = function(){
-  renderAll();
-  if(adminActive){document.getElementById('adminToggleBtn').classList.add('show');document.getElementById('adminPanel').classList.add('show')}
-}
+window.onload = function(){renderAll();if(adminActive){document.getElementById('adminToggleBtn').classList.add('show');document.getElementById('adminPanel').classList.add('show')}}
 </script>
 </body>
 </html>
