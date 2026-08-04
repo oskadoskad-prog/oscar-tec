@@ -1,4 +1,4 @@
-لا حذفت كل شي انت رجع كل شي سويناه انتبه تحذف شي                                <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -41,6 +41,7 @@ body{background:var(--bodyBg, var(--bg)) center/cover fixed;color:var(--text);pa
 
 .card-admin{position:absolute;top:5px;left:5px;display:flex;gap:4px;z-index:10;flex-wrap:wrap;width:90px}
 .card-admin button{background:var(--yellow);color:#000;border:none;border-radius:6px;width:28px;height:28px;cursor:pointer;font-size:0.8rem}
+.card-admin.del{background:var(--red);color:#fff}
 .back-btn{background:var(--blue);color:#fff;border:none;padding:10px 15px;border-radius:8px;margin:10px;cursor:pointer}
 
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid #ddd;display:flex;justify-content:space-around;padding:8px 0;z-index:998}
@@ -114,7 +115,6 @@ body{background:var(--bodyBg, var(--bg)) center/cover fixed;color:var(--text);pa
   <div class="nav-item" onclick="goHome()"><i class="fa-solid fa-house"></i>الرئيسية</div>
 </div>
 
-<!-- نافذة السلة -->
 <div id="cartModal">
   <div class="modal-box">
     <h3 style="text-align:center;margin-bottom:15px">سلة التسوق</h3>
@@ -136,7 +136,6 @@ body{background:var(--bodyBg, var(--bg)) center/cover fixed;color:var(--text);pa
   </div>
 </div>
 
-<!-- نافذة الحساب -->
 <div id="accountModal">
   <div class="modal-box">
     <div id="loggedInView" style="display:none">
@@ -191,16 +190,21 @@ body{background:var(--bodyBg, var(--bg)) center/cover fixed;color:var(--text);pa
       <input type="color" class="color-picker" id="headerColorPicker" onchange="changeHeaderColor(this.value)">
     </div>
 
+    <div class="admin-section">
+      <h3>النسخ الاحتياطي</h3>
+      <button onclick="exportData()" style="background:var(--blue)">تصدير البيانات</button>
+    </div>
+
     <button onclick="resetData()" style="background:var(--red)">ارجاع الافتراضي</button>
   </div>
 </div>
 
 <script>
-let cart = JSON.parse(localStorage.getItem('oskarCartV14')) || [];
-let siteData = JSON.parse(localStorage.getItem('oskarSiteDataV14')) || getDefaultData();
-let users = JSON.parse(localStorage.getItem('oskarUsersV14')) || [];
-let currentUser = JSON.parse(localStorage.getItem('oskarCurrentUserV14')) || null;
-let adminActive = localStorage.getItem('adminActiveV14') === 'true';
+let cart = JSON.parse(localStorage.getItem('oskarCartV16')) || [];
+let siteData = JSON.parse(localStorage.getItem('oskarSiteDataV16')) || getDefaultData();
+let users = JSON.parse(localStorage.getItem('oskarUsersV16')) || [];
+let currentUser = JSON.parse(localStorage.getItem('oskarCurrentUserV16')) || null;
+let adminActive = localStorage.getItem('adminActiveV16') === 'true';
 let currentCat = 'all';
 let currentBrand = '';
 let tempProdImg = '';
@@ -218,14 +222,62 @@ function getDefaultData(){
       {id:"must", name:"مستلزماتك", img:"https://images.unsplash.com/photo-1556740738-b6a63e27c4df?w=400"}
     ],
     phoneBrands: [
-      {id:"iphone", name:"ايفون", img:"https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg", products:[]},
-      {id:"samsung", name:"سامسونج", img:"https://upload.wikimedia.org/wikipedia/commons/2/24/Samsung_Logo.svg", products:[]},
-      {id:"huawei", name:"هواوي", img:"https://upload.wikimedia.org/wikipedia/commons/0/0c/Huawei_Standard_logo.svg", products:[]},
-      {id:"xiaomi", name:"شاومي", img:"https://upload.wikimedia.org/wikipedia/commons/a/ae/Xiaomi_logo_%282021-%29.svg", products:[]},
-      {id:"oppo", name:"اوبو", img:"https://upload.wikimedia.org/wikipedia/commons/7/78/Oppo_logo.svg", products:[]},
-      {id:"infinix", name:"انفنكس", img:"https://logo.clearbit.com/infinixmobility.com", products:[]},
-      {id:"tecno", name:"تكنو", img:"https://logo.clearbit.com/tecno-mobile.com", products:[]},
-      {id:"honor", name:"هونر", img:"https://upload.wikimedia.org/wikipedia/commons/8/8c/Honor_logo.svg", products:[]}
+      {id:"iphone", name:"ايفون", img:"https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg", products:[
+        {name:"ايفون 15 برو ماكس 256GB", price:12500000, img:"https://fdn2.gsmarena.com/vv/pics/apple-iphone-15-pro-max-1.jpg"},
+        {name:"ايفون 15 برو 128GB", price:11000000, img:"https://fdn2.gsmarena.com/vv/pics/apple-iphone-15-pro-1.jpg"},
+        {name:"ايفون 14 128GB", price:8500000, img:"https://fdn2.gsmarena.com/vv/pics/apple-iphone-14-1.jpg"},
+        {name:"ايفون 13 128GB", price:6500000, img:"https://fdn2.gsmarena.com/vv/pics/apple-iphone-13-1.jpg"},
+        {name:"ايفون SE 2022", price:4500000, img:"https://fdn2.gsmarena.com/vv/pics/apple-iphone-se-2022-1.jpg"}
+      ]},
+      {id:"samsung", name:"سامسونج", img:"https://upload.wikimedia.org/wikipedia/commons/2/24/Samsung_Logo.svg", products:[
+        {name:"S24 Ultra 512GB", price:11500000, img:"https://fdn2.gsmarena.com/vv/pics/samsung-galaxy-s24-ultra-5g-1.jpg"},
+        {name:"S24+ 256GB", price:8500000, img:"https://fdn2.gsmarena.com/vv/pics/samsung-galaxy-s24-plus-1.jpg"},
+        {name:"A55 256GB", price:3800000, img:"https://fdn2.gsmarena.com/vv/pics/samsung-galaxy-a55-1.jpg"},
+        {name:"A35 128GB", price:2800000, img:"https://fdn2.gsmarena.com/vv/pics/samsung-galaxy-a35-1.jpg"},
+        {name:"M34 128GB", price:2200000, img:"https://fdn2.gsmarena.com/vv/pics/samsung-galaxy-m34-5g-1.jpg"}
+      ]},
+      {id:"huawei", name:"هواوي", img:"https://upload.wikimedia.org/wikipedia/commons/0/0c/Huawei_Standard_logo.svg", products:[
+        {name:"P60 Pro 256GB", price:7000000, img:"https://fdn2.gsmarena.com/vv/pics/huawei-p60-pro-1.jpg"},
+        {name:"Mate 50 Pro", price:6500000, img:"https://fdn2.gsmarena.com/vv/pics/huawei-mate-50-pro-1.jpg"},
+        {name:"Nova 11 Pro", price:4200000, img:"https://fdn2.gsmarena.com/vv/pics/huawei-nova-11-pro-1.jpg"},
+        {name:"Y9a 128GB", price:1800000, img:"https://fdn2.gsmarena.com/vv/pics/huawei-y9a-1.jpg"},
+        {name:"P50 Pocket", price:5500000, img:"https://fdn2.gsmarena.com/vv/pics/huawei-p50-pocket-1.jpg"}
+      ]},
+      {id:"xiaomi", name:"شاومي", img:"https://upload.wikimedia.org/wikipedia/commons/a/ae/Xiaomi_logo_%282021-%29.svg", products:[
+        {name:"Redmi Note 13 Pro+", price:4500000, img:"https://fdn2.gsmarena.com/vv/pics/xiaomi-redmi-note-13-pro-plus-1.jpg"},
+        {name:"Redmi Note 13 Pro", price:3500000, img:"https://fdn2.gsmarena.com/vv/pics/xiaomi-redmi-note-13-pro-4g-1.jpg"},
+        {name:"Poco X6 Pro", price:3200000, img:"https://fdn2.gsmarena.com/vv/pics/xiaomi-poco-x6-pro-1.jpg"},
+        {name:"Redmi 13C", price:1500000, img:"https://fdn2.gsmarena.com/vv/pics/xiaomi-redmi-13c-1.jpg"},
+        {name:"Mi 13T", price:6000000, img:"https://fdn2.gsmarena.com/vv/pics/xiaomi-mi-13t-1.jpg"}
+      ]},
+      {id:"oppo", name:"اوبو", img:"https://upload.wikimedia.org/wikipedia/commons/7/78/Oppo_logo.svg", products:[
+        {name:"Find X6 Pro", price:8000000, img:"https://fdn2.gsmarena.com/vv/pics/oppo-find-x6-pro-1.jpg"},
+        {name:"Reno 11 Pro", price:4500000, img:"https://fdn2.gsmarena.com/vv/pics/oppo-reno-11-pro-1.jpg"},
+        {name:"A78 4G", price:2000000, img:"https://fdn2.gsmarena.com/vv/pics/oppo-a78-4g-1.jpg"},
+        {name:"F25 Pro", price:3000000, img:"https://fdn2.gsmarena.com/vv/pics/oppo-f25-pro-1.jpg"},
+        {name:"A58", price:1600000, img:"https://fdn2.gsmarena.com/vv/pics/oppo-a58-1.jpg"}
+      ]},
+      {id:"infinix", name:"انفنكس", img:"https://logo.clearbit.com/infinixmobility.com", products:[
+        {name:"Zero 30 5G", price:2800000, img:"https://fdn2.gsmarena.com/vv/pics/infinix-zero-30-5g-1.jpg"},
+        {name:"Note 40 Pro", price:2500000, img:"https://fdn2.gsmarena.com/vv/pics/infinix-note-40-pro-1.jpg"},
+        {name:"Hot 40 Pro", price:1800000, img:"https://fdn2.gsmarena.com/vv/pics/infinix-hot-40-pro-1.jpg"},
+        {name:"Smart 8", price:900000, img:"https://fdn2.gsmarena.com/vv/pics/infinix-smart-8-1.jpg"},
+        {name:"GT 20 Pro", price:3200000, img:"https://fdn2.gsmarena.com/vv/pics/infinix-gt-20-pro-1.jpg"}
+      ]},
+      {id:"tecno", name:"تكنو", img:"https://logo.clearbit.com/tecno-mobile.com", products:[
+        {name:"Phantom V Fold", price:6000000, img:"https://fdn2.gsmarena.com/vv/pics/tecno-phantom-v-fold-1.jpg"},
+        {name:"Camon 20 Pro", price:2200000, img:"https://fdn2.gsmarena.com/vv/pics/tecno-camon-20-pro-1.jpg"},
+        {name:"Spark 20 Pro", price:1800000, img:"https://fdn2.gsmarena.com/vv/pics/tecno-spark-20-pro-1.jpg"},
+        {name:"Pova 5 Pro", price:1600000, img:"https://fdn2.gsmarena.com/vv/pics/tecno-pova-5-pro-1.jpg"},
+        {name:"Pop 8", price:800000, img:"https://fdn2.gsmarena.com/vv/pics/tecno-pop-8-1.jpg"}
+      ]},
+      {id:"honor", name:"هونر", img:"https://upload.wikimedia.org/wikipedia/commons/8/8c/Honor_logo.svg", products:[
+        {name:"Magic 6 Pro", price:7500000, img:"https://fdn2.gsmarena.com/vv/pics/honor-magic-6-pro-1.jpg"},
+        {name:"Honor 90", price:4000000, img:"https://fdn2.gsmarena.com/vv/pics/honor-90-1.jpg"},
+        {name:"X9b", price:2500000, img:"https://fdn2.gsmarena.com/vv/pics/honor-x9b-1.jpg"},
+        {name:"X8b", price:1800000, img:"https://fdn2.gsmarena.com/vv/pics/honor-x8b-1.jpg"},
+        {name:"Play 50", price:1200000, img:"https://fdn2.gsmarena.com/vv/pics/honor-play-50-1.jpg"}
+      ]}
     ],
     products: {phones: [], software: [], repair: [], accessories: [], offers: [], must: []}
   }
@@ -251,6 +303,15 @@ function changeHeaderColor(color){
   siteData.headerColor = color;
   document.getElementById('topHeader').style.background = color;
   saveData();
+}
+
+function exportData(){
+  const dataStr = JSON.stringify({siteData, users, cart});
+  const blob = new Blob([dataStr], {type: "application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = "oskar_backup.json"; a.click();
+  URL.revokeObjectURL(url);
 }
 
 function renderCategories(){
@@ -300,6 +361,8 @@ function openCategory(catId){
       html += `<div class="product-card">
         <div class="card-admin" style="display:${adminActive?'flex':'none'}">
           <button onclick="editProduct('${catId}',${i})"><i class="fa-solid fa-pen"></i></button>
+          <button onclick="changeProdImage('${catId}',${i})"><i class="fa-solid fa-image"></i></button>
+          <button class="del" onclick="deleteProduct('${catId}',${i})"><i class="fa-solid fa-trash"></i></button>
         </div>
         <img src="${p.img}"><div class="product-name">${p.name}</div>
         <div class="product-price">${parseInt(p.price).toLocaleString()} ل.س</div>
@@ -320,6 +383,8 @@ function openBrand(brandId){
     html += `<div class="product-card">
       <div class="card-admin" style="display:${adminActive?'flex':'none'}">
         <button onclick="editBrandProduct('${brandId}',${i})"><i class="fa-solid fa-pen"></i></button>
+        <button onclick="changeBrandProdImage('${brandId}',${i})"><i class="fa-solid fa-image"></i></button>
+        <button class="del" onclick="deleteBrandProduct('${brandId}',${i})"><i class="fa-solid fa-trash"></i></button>
       </div>
       <img src="${p.img}"><div class="product-name">${p.name}</div>
       <div class="product-price">${parseInt(p.price).toLocaleString()} ل.س</div>
@@ -353,91 +418,6 @@ function addProduct(){
   document.getElementById('prodPreview').style.display='none';tempProdImg='';
 }
 
-function editCategory(id){let cat = siteData.categories.find(c=>c.id==id);let newName = prompt('الاسم الجديد:', cat.name);if(newName) cat.name = newName;saveData();renderCategories();}
-function changeCatImage(id){let cat = siteData.categories.find(c=>c.id==id);let fileInput = document.createElement('input');fileInput.type = 'file';fileInput.accept = 'image/*';fileInput.onchange = function(e){const file = e.target.files[0];const reader = new FileReader();reader.onload = function(ev){cat.img = ev.target.result;saveData();renderCategories();};reader.readAsDataURL(file);};fileInput.click();}
-function editBrand(id){let brand = siteData.phoneBrands.find(b=>b.id==id);let newName = prompt('الاسم الجديد:', brand.name);if(newName) brand.name = newName;saveData();renderCategories();}
-function changeBrandImage(id){let brand = siteData.phoneBrands.find(b=>b.id==id);let fileInput = document.createElement('input');fileInput.type = 'file';fileInput.accept = 'image/*';fileInput.onchange = function(e){const file = e.target.files[0];const reader = new FileReader();reader.onload = function(ev){brand.img = ev.target.result;saveData();renderCategories();};reader.readAsDataURL(file);};fileInput.click();}
-
-function addToCart(item){let existing = cart.find(p=>p.name==item.name);if(existing) existing.qty++;else cart.push({...item, qty:1});updateCart();saveCart();}
-function updateCart(){document.getElementById('cartCount').innerText = cart.reduce((a,b)=>a+b.qty,0);}
-function saveCart(){localStorage.setItem('oskarCartV14', JSON.stringify(cart));}
-
-function openCart(){
-  document.getElementById('cartModal').classList.add('show');
-  let html = '';
-  if(cart.length==0) html = '<p>السلة فاضية</p>';
-  cart.forEach((item,i)=>{html += `<div class="cart-item"><img src="${item.img}"><div><div>${item.name}</div><div>${item.price.toLocaleString()} ل.س x ${item.qty}</div></div></div>`;});
-  document.getElementById('cartItems').innerHTML = html;
-}
-function closeCart(){document.getElementById('cartModal').classList.remove('show')}
-
-function getLocation(){
-  if(navigator.geolocation){
-    navigator.geolocation.getCurrentPosition(pos=>{
-      document.getElementById('lat').value = pos.coords.latitude;
-      document.getElementById('lng').value = pos.coords.longitude;
-      document.getElementById('locationText').innerText = `تم تحديد الموقع`;
-    });
-  }
-}
-
-function sendOrder(){
-  let name = document.getElementById('customerName').value;
-  let phone = document.getElementById('customerPhone').value;
-  let address = document.getElementById('customerAddress').value;
-  let payment = document.getElementById('paymentMethod').value;
-  let lat = document.getElementById('lat').value;
-  let lng = document.getElementById('lng').value;
-  let mapLink = lat? `https://www.google.com/maps?q=${lat},${lng}` : 'لم يتم تحديد الموقع';
-  let msg = `طلب جديد%0Aالاسم: ${name}%0Aالجوال: ${phone}%0Aالعنوان: ${address}%0Aالموقع: ${mapLink}%0Aالدفع: ${payment}%0A%0Aالمنتجات:%0A`;
-  cart.forEach(i=>{msg += `${i.name} - ${i.qty} x ${i.price} ل.س%0A`});
-  window.open(`https://wa.me/+971544066811?text=${msg}`,'_blank');
-  cart=[];saveCart();updateCart();closeCart();alert('تم ارسال الطلب');
-}
-
-// الحساب
-function openAccount(){ document.getElementById('accountModal').classList.add('show'); if(currentUser){document.getElementById('guestView').style.display='none';document.getElementById('loggedInView').style.display='block';document.getElementById('userNameDisplay').innerText='اهلا '+currentUser.name;}else{document.getElementById('guestView').style.display='block';document.getElementById('loggedInView').style.display='none';} }
-function closeAccount(){ document.getElementById('accountModal').classList.remove('show') }
-function showRegister(){document.getElementById('loginForm').style.display='none';document.getElementById('registerForm').style.display='block';document.getElementById('tabLogin').style.background='#ddd';document.getElementById('tabRegister').style.background='var(--orange)';document.getElementById('tabRegister').style.color='#000'}
-function showLogin(){document.getElementById('registerForm').style.display='none';document.getElementById('loginForm').style.display='block';document.getElementById('tabRegister').style.background='#ddd';document.getElementById('tabLogin').style.background='var(--orange)';document.getElementById('tabLogin').style.color='#000'}
-function register(){ let name=document.getElementById('regName').value; let user=document.getElementById('regUser').value; let pass=document.getElementById('regPass').value; if(!name||!user||!pass){alert('كمل البيانات');return} users.push({name,user,pass}); localStorage.setItem('oskarUsersV14',JSON.stringify(users)); alert('تم انشاء الحساب'); showLogin(); }
-function login(){ let user=document.getElementById('loginUser').value; let pass=document.getElementById('loginPass').value; let u = users.find(u=>u.user==user && u.pass==pass); if(!u) return alert('البيانات خطأ'); currentUser=u; localStorage.setItem('oskarCurrentUserV14',JSON.stringify(u)); openAccount(); alert('اهلا '+u.name) }
-function logout(){ currentUser=null; localStorage.removeItem('oskarCurrentUserV14'); openAccount(); alert('تم تسجيل الخروج') }
-
-function toggleMenu(){document.getElementById('sideMenu').classList.toggle('show');document.getElementById('overlay').classList.toggle('show');}
-function toggleTheme(){document.body.classList.toggle('dark');localStorage.setItem('theme', document.body.classList.contains('dark')?'dark':'light');}
-
-function toggleAdminPanel(){document.getElementById('adminPanel').classList.toggle('show');}
-function closeAdminPanel(){
-  document.getElementById('adminPanel').classList.remove('show');
-  adminActive=false;localStorage.setItem('adminActiveV14','false');
-  document.getElementById('adminToggleBtn').classList.remove('show');
-  renderAll(); // عشان يخفي زر اضافة منتج
-}
-
-document.addEventListener('keyup', e=>{
-  if(document.getElementById('searchInput').value === SECRET_CODE){
-    adminActive =!adminActive;
-    localStorage.setItem('adminActiveV14', adminActive);
-    if(adminActive){document.getElementById('adminToggleBtn').classList.add('show');document.getElementById('adminPanel').classList.add('show');}
-    document.getElementById('searchInput').value='';
-    renderAll();
-  }
-});
-
-function goHome(){currentCat = 'all';document.getElementById('mainContent').style.display = 'block';document.getElementById('categoryPage').style.display = 'none';}
-function renderAll(){
-  renderCategories();updateCart();
-  document.body.style.background = siteData.bgColor;
-  document.getElementById('topHeader').style.background = siteData.headerColor;
-  document.getElementById('bgColorPicker').value = siteData.bgColor;
-  document.getElementById('headerColorPicker').value = siteData.headerColor;
-  if(localStorage.getItem('theme')=='dark') document.body.classList.add('dark');
-}
-function saveData(){localStorage.setItem('oskarSiteDataV14',JSON.stringify(siteData));}
-function resetData(){if(confirm('ارجاع كل شي؟')){localStorage.clear();location.reload();}}
-
-window.onload = function(){renderAll();if(adminActive){document.getElementById('adminToggleBtn').classList.add('show');document.getElementById('adminPanel').classList.add('show')}}
-</script>
-</body>
-</html>
+function deleteProduct(cat,i){if(confirm('حذف المنتج؟')){siteData.products[cat].splice(i,1);saveData();renderAll();}}
+function deleteBrandProduct(brandId,i){if(confirm('حذف المنتج؟')){let brand = siteData.phoneBrands.find(b=>b.id==brandId);brand.products.splice(i,1);saveData();renderAll();}}
+function changeProdImage(cat,i){let p = siteData.products[cat][i];let fileInput = document.createElement('input');fileInput.type = 'file';fileInput.accept = 'image/*';fileInput
