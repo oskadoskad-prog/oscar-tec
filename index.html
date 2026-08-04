@@ -10,13 +10,13 @@
 :root{--bg:#FFFFFF;--card:#fff;--blue:#232F3E;--orange:#FF9900;--green:#067D62; --red:#B12704; --yellow:#FFD814; --text:#0F1111}
 body.dark{--bg:#131921;--card:#232F3E;--text:#fff}
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Cairo',sans-serif}
-body{background:var(--bodyBg, var(--bg)) center/cover fixed;color:var(--text);padding-bottom:70px}
+body{background:var(--bg);color:var(--text);padding-bottom:70px}
 
-.top-header{background:var(--headerBg, var(--blue));background-size:cover;background-position:center;padding:10px;color:#fff;position:sticky;top:0;z-index:999}
+.top-header{background:var(--blue);padding:10px;color:#fff;position:sticky;top:0;z-index:999}
 .brand-row{display:flex;justify-content:space-between;align-items:center}
 .brand-name{font-weight:900;font-size:1.4rem;color:var(--orange)}
 .whatsapp-top{background:#25D366;color:#fff;border:none;padding:8px 12px;border-radius:8px;font-weight:700;cursor:pointer;font-size:0.9rem}
-.search-area{display:flex;gap:0;padding:10px 0 0 0;position:relative}
+.search-area{display:flex;gap:0;padding:10px 0 0 0}
 .search-icon{background:var(--orange);padding:0 10px;display:flex;align-items:center;border-radius:0 8px 8px 0;font-size:1.1rem;cursor:pointer}
 .search-area input{flex:1;padding:10px;border:none;outline:none;font-size:0.95rem;border-radius:8px 0 0 8px}
 
@@ -41,6 +41,7 @@ body{background:var(--bodyBg, var(--bg)) center/cover fixed;color:var(--text);pa
 
 .card-admin{position:absolute;top:5px;left:5px;display:flex;gap:4px;z-index:10;flex-wrap:wrap;width:90px}
 .card-admin button{background:var(--yellow);color:#000;border:none;border-radius:6px;width:28px;height:28px;cursor:pointer;font-size:0.8rem}
+.card-admin.del{background:var(--red);color:#fff}
 .back-btn{background:var(--blue);color:#fff;border:none;padding:10px 15px;border-radius:8px;margin:10px;cursor:pointer}
 
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid #ddd;display:flex;justify-content:space-around;padding:8px 0;z-index:998}
@@ -52,7 +53,7 @@ body{background:var(--bodyBg, var(--bg)) center/cover fixed;color:var(--text);pa
 #sideMenu.show{display:block}
 #sideMenu h3{color:var(--orange);margin:15px 0}
 #sideMenu button{width:100%;padding:12px;margin:8px 0;border:none;border-radius:8px;background:var(--blue);color:#fff;font-weight:700;cursor:pointer;text-align:right}
-.overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000aa;z-index:10000}
+.overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000a;z-index:10000}
 .overlay.show{display:block}
 
 #adminPanel{position:fixed;top:0;left:-450px;width:450px;height:100%;background:#232F3E;z-index:99999;overflow-y:auto;padding:20px;border-right:3px solid var(--orange);transition:left 0.4s ease;color:#fff}
@@ -81,8 +82,8 @@ body{background:var(--bodyBg, var(--bg)) center/cover fixed;color:var(--text);pa
     <button class="whatsapp-top" onclick="window.open('https://wa.me/+971544066811','_blank')"><i class="fa-brands fa-whatsapp"></i> تواصل</button>
   </div>
   <div class="search-area">
-    <div class="search-icon" onclick="searchProduct()"><i class="fa-solid fa-magnifying-glass"></i></div>
-    <input type="text" id="searchInput" placeholder="البحث في مركز اوسكار" onkeyup="searchProduct()">
+    <div class="search-icon" onclick="alert('اكتب oskad0099 لتفعيل لوحة التحكم')"><i class="fa-solid fa-magnifying-glass"></i></div>
+    <input type="text" id="searchInput" placeholder="البحث في مركز اوسكار" onkeyup="checkSecret()">
   </div>
 </div>
 
@@ -96,7 +97,7 @@ body{background:var(--bodyBg, var(--bg)) center/cover fixed;color:var(--text);pa
 <div id="categoryPage" style="display:none">
   <button class="back-btn" onclick="goHome()"><i class="fa-solid fa-arrow-right"></i> رجوع للاقسام</button>
   <h2 class="section-title" id="catPageTitle"></h2>
-  <button class="add-product-in-cat" style="display:none" id="addProductBtn" onclick="quickAddToCurrentCat()"><i class="fa-solid fa-plus"></i> اضافة منتج لهذا القسم</button>
+  <button class="add-product-in-cat" style="display:none" id="addProductBtn" onclick="quickAddCat()"><i class="fa-solid fa-plus"></i> + اضافة منتج لهذا القسم</button>
   <div id="brandGrid" class="categories-grid" style="display:none"></div>
   <div id="catProductsGrid" class="products-grid"></div>
 </div>
@@ -114,330 +115,155 @@ body{background:var(--bodyBg, var(--bg)) center/cover fixed;color:var(--text);pa
   <div class="nav-item" onclick="goHome()"><i class="fa-solid fa-house"></i>الرئيسية</div>
 </div>
 
-<!-- نافذة السلة -->
-<div id="cartModal">
-  <div class="modal-box">
-    <h3 style="text-align:center;margin-bottom:15px">سلة التسوق</h3>
-    <div id="cartItems"></div>
-    <h4>بيانات التوصيل</h4>
-    <input type="text" id="customerName" placeholder="الاسم الكامل">
-    <input type="text" id="customerPhone" placeholder="رقم الجوال">
-    <input type="text" id="customerAddress" placeholder="العنوان بالتفصيل">
-    <button onclick="getLocation()" style="background:var(--blue);color:#fff">تحديد موقعي الحالي</button>
-    <input type="hidden" id="lat"><input type="hidden" id="lng">
-    <p id="locationText" style="font-size:0.8rem;color:green"></p>
-    <h4>طريقة الدفع</h4>
-    <select id="paymentMethod">
-      <option value="الدفع عند الاستلام">الدفع عند الاستلام</option>
-      <option value="تحويل بنكي">تحويل بنكي</option>
-    </select>
-    <button onclick="sendOrder()" style="background:var(--green);color:#fff;margin-top:10px">تأكيد الطلب</button>
-    <button onclick="closeCart()" style="background:var(--red);color:#fff;margin-top:10px">اغلاق</button>
-  </div>
-</div>
+<div id="cartModal"><div class="modal-box">
+  <h3 style="text-align:center;margin-bottom:15px">سلة التسوق</h3><div id="cartItems"></div>
+  <h4>بيانات التوصيل</h4>
+  <input type="text" id="customerName" placeholder="الاسم الكامل">
+  <input type="text" id="customerPhone" placeholder="رقم الجوال">
+  <input type="text" id="customerAddress" placeholder="العنوان بالتفصيل">
+  <button onclick="getLocation()" style="background:var(--blue);color:#fff">تحديد موقعي الحالي</button>
+  <input type="hidden" id="lat"><input type="hidden" id="lng"><p id="locationText" style="font-size:0.8rem;color:green"></p>
+  <h4>طريقة الدفع</h4>
+  <select id="paymentMethod"><option>الدفع عند الاستلام</option><option>تحويل بنكي</option></select>
+  <button onclick="sendOrder()" style="background:var(--green);color:#fff;margin-top:10px">تأكيد الطلب</button>
+  <button onclick="closeCart()" style="background:var(--red);color:#fff;margin-top:10px">اغلاق</button>
+</div></div>
 
-<!-- نافذة الحساب -->
-<div id="accountModal">
-  <div class="modal-box">
-    <div id="loggedInView" style="display:none">
-      <h3 id="userNameDisplay"></h3>
-      <button onclick="logout()" style="background:var(--red);color:#fff;width:100%;padding:12px;border:none;border-radius:8px">تسجيل خروج</button>
-      <button onclick="closeAccount()" style="background:#888;color:#fff;width:100%;padding:12px;border:none;border-radius:8px;margin-top:10px">اغلاق</button>
-    </div>
-    <div id="guestView">
-      <div style="display:flex;gap:5px;margin-bottom:15px">
-        <button id="tabLogin" class="active" onclick="showLogin()" style="flex:1;padding:10px;border:none;border-radius:8px;background:var(--orange);color:#000;font-weight:700">تسجيل دخول</button>
-        <button id="tabRegister" onclick="showRegister()" style="flex:1;padding:10px;border:none;border-radius:8px;background:#ddd;cursor:pointer;font-weight:700">انشاء حساب</button>
-      </div>
-      <div id="loginForm">
-        <input type="text" id="loginUser" placeholder="الايميل او رقم الجوال">
-        <input type="password" id="loginPass" placeholder="كلمة السر">
-        <button onclick="login()" style="background:var(--green);color:#fff;width:100%;padding:12px;border:none;border-radius:8px">دخول</button>
-      </div>
-      <div id="registerForm" style="display:none">
-        <input type="text" id="regName" placeholder="الاسم الكامل">
-        <input type="text" id="regUser" placeholder="الايميل او رقم الجوال">
-        <input type="password" id="regPass" placeholder="كلمة السر">
-        <button onclick="register()" style="background:var(--orange);color:#000;width:100%;padding:12px;border:none;border-radius:8px">انشاء حساب</button>
-      </div>
-      <button onclick="closeAccount()" style="background:var(--red);color:#fff;width:100%;padding:10px;border:none;border-radius:8px;margin-top:10px">اغلاق</button>
-    </div>
+<div id="accountModal"><div class="modal-box">
+  <div id="loggedInView" style="display:none"><h3 id="userNameDisplay"></h3>
+    <button onclick="logout()" style="background:var(--red);color:#fff;width:100%;padding:12px;border:none;border-radius:8px">تسجيل خروج</button>
+    <button onclick="closeAccount()" style="background:#888;color:#fff;width:100%;padding:12px;border:none;border-radius:8px;margin-top:10px">اغلاق</button>
   </div>
-</div>
+  <div id="guestView">
+    <div style="display:flex;gap:5px;margin-bottom:15px">
+      <button id="tabLogin" onclick="showLogin()" style="flex:1;padding:10px;border:none;border-radius:8px;background:var(--orange);color:#000;font-weight:700">تسجيل دخول</button>
+      <button id="tabRegister" onclick="showRegister()" style="flex:1;padding:10px;border:none;border-radius:8px;background:#ddd;font-weight:700">انشاء حساب</button>
+    </div>
+    <div id="loginForm"><input id="loginUser" placeholder="الايميل او رقم الجوال"><input type="password" id="loginPass" placeholder="كلمة السر"><button onclick="login()" style="background:var(--green);color:#fff;width:100%;padding:12px;border:none;border-radius:8px">دخول</button></div>
+    <div id="registerForm" style="display:none"><input id="regName" placeholder="الاسم الكامل"><input id="regUser" placeholder="الايميل او رقم الجوال"><input type="password" id="regPass" placeholder="كلمة السر"><button onclick="register()" style="background:var(--orange);color:#000;width:100%;padding:12px;border:none;border-radius:8px">انشاء حساب</button></div>
+    <button onclick="closeAccount()" style="background:var(--red);color:#fff;width:100%;padding:10px;border:none;border-radius:8px;margin-top:10px">اغلاق</button>
+  </div>
+</div></div>
 
 <button id="adminToggleBtn" class="admin-toggle" onclick="toggleAdminPanel()"><i class="fa-solid fa-chevron-right"></i></button>
-
-<div id="adminPanel">
-  <div class="admin-box">
-    <h2><i class="fa-solid fa-user-shield"></i> لوحة التحكم</h2>
-    <button onclick="closeAdminPanel()" style="background:var(--red)">اغلاق</button>
-
-    <div class="admin-section">
-      <h3>اضافة منتج</h3>
-      <select id="productCat"></select>
-      <input type="text" id="productName" placeholder="اسم المنتج">
-      <input type="number" id="productPrice" placeholder="السعر بالليرة">
-      <label>صورة المنتج من الجهاز:</label>
-      <input type="file" id="productImgFile" accept="image/*" onchange="previewFile(this,'prodPreview')">
-      <img id="prodPreview" class="preview-img" style="display:none">
-      <button onclick="addProduct()" style="background:var(--green)">اضافة منتج</button>
-    </div>
-
-    <div class="admin-section">
-      <h3>تغيير الالوان</h3>
-      <label>لون الخلفية الرئيسية:</label>
-      <input type="color" class="color-picker" id="bgColorPicker" onchange="changeBgColor(this.value)">
-      <label>لون الهيدر:</label>
-      <input type="color" class="color-picker" id="headerColorPicker" onchange="changeHeaderColor(this.value)">
-    </div>
-
-    <button onclick="resetData()" style="background:var(--red)">ارجاع الافتراضي</button>
+<div id="adminPanel"><div class="admin-box">
+  <h2><i class="fa-solid fa-user-shield"></i> لوحة التحكم</h2>
+  <button onclick="closeAdminPanel()" style="background:var(--red)">اغلاق</button>
+  <div class="admin-section">
+    <h3>اضافة منتج</h3>
+    <select id="productCat"></select>
+    <input id="productName" placeholder="اسم المنتج">
+    <input type="number" id="productPrice" placeholder="السعر بالليرة">
+    <input type="file" id="productImgFile" accept="image/*" onchange="previewFile(this,'prodPreview')">
+    <img id="prodPreview" class="preview-img" style="display:none">
+    <button onclick="addProduct()" style="background:var(--green)">اضافة منتج</button>
   </div>
-</div>
+  <div class="admin-section">
+    <h3>تغيير الالوان</h3>
+    <label>لون الخلفية:</label><input type="color" class="color-picker" id="bgColorPicker" onchange="changeBgColor(this.value)">
+    <label>لون الهيدر:</label><input type="color" class="color-picker" id="headerColorPicker" onchange="changeHeaderColor(this.value)">
+  </div>
+  <div class="admin-section">
+    <h3>النسخ الاحتياطي</h3>
+    <button onclick="exportData()" style="background:var(--blue)">تصدير البيانات</button>
+  </div>
+  <button onclick="resetData()" style="background:var(--red)">ارجاع الافتراضي</button>
+</div></div>
 
 <script>
-let cart = JSON.parse(localStorage.getItem('oskarCartV14')) || [];
-let siteData = JSON.parse(localStorage.getItem('oskarSiteDataV14')) || getDefaultData();
-let users = JSON.parse(localStorage.getItem('oskarUsersV14')) || [];
-let currentUser = JSON.parse(localStorage.getItem('oskarCurrentUserV14')) || null;
-let adminActive = localStorage.getItem('adminActiveV14') === 'true';
-let currentCat = 'all';
-let currentBrand = '';
-let tempProdImg = '';
-const SECRET_CODE = "oskad0099";
+let cart=JSON.parse(localStorage.getItem('oskarCartV19'))||[];
+let siteData=JSON.parse(localStorage.getItem('oskarSiteDataV19'))||getDefaultData();
+let users=JSON.parse(localStorage.getItem('oskarUsersV19'))||[];
+let currentUser=JSON.parse(localStorage.getItem('oskarCurrentUserV19'))||null;
+let adminActive=localStorage.getItem('adminActiveV19')==='true';
+let currentCat='all',currentBrand='',tempProdImg='';
+const SECRET="oskad0099";
 
-function getDefaultData(){
-  return {
-    bgColor:"#FFFFFF", headerColor:"#232F3E", bodyBg:"", headerBg:"",
-    categories: [
-      {id:"phones", name:"جوالات", img:"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400"},
-      {id:"software", name:"شحن برامج", img:"https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=400"},
-      {id:"repair", name:"صيانة", img:"https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400"},
-      {id:"accessories", name:"اكسسوارات", img:"https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400"},
-      {id:"offers", name:"كل العروض", img:"https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=400"},
-      {id:"must", name:"مستلزماتك", img:"https://images.unsplash.com/photo-1556740738-b6a63e27c4df?w=400"}
-    ],
-    phoneBrands: [
-      {id:"iphone", name:"ايفون", img:"https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg", products:[]},
-      {id:"samsung", name:"سامسونج", img:"https://upload.wikimedia.org/wikipedia/commons/2/24/Samsung_Logo.svg", products:[]},
-      {id:"huawei", name:"هواوي", img:"https://upload.wikimedia.org/wikipedia/commons/0/0c/Huawei_Standard_logo.svg", products:[]},
-      {id:"xiaomi", name:"شاومي", img:"https://upload.wikimedia.org/wikipedia/commons/a/ae/Xiaomi_logo_%282021-%29.svg", products:[]},
-      {id:"oppo", name:"اوبو", img:"https://upload.wikimedia.org/wikipedia/commons/7/78/Oppo_logo.svg", products:[]},
-      {id:"infinix", name:"انفنكس", img:"https://logo.clearbit.com/infinixmobility.com", products:[]},
-      {id:"tecno", name:"تكنو", img:"https://logo.clearbit.com/tecno-mobile.com", products:[]},
-      {id:"honor", name:"هونر", img:"https://upload.wikimedia.org/wikipedia/commons/8/8c/Honor_logo.svg", products:[]}
-    ],
-    products: {phones: [], software: [], repair: [], accessories: [], offers: [], must: []}
-  }
+function getDefaultData(){return{
+  bgColor:"#FFFFFF",headerColor:"#232F3E",
+  categories:[
+    {id:"phones",name:"جوالات",img:"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400"},
+    {id:"software",name:"شحن برامج",img:"https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=400"},
+    {id:"repair",name:"صيانة",img:"https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400"},
+    {id:"accessories",name:"اكسسوارات",img:"https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400"},
+    {id:"offers",name:"كل العروض",img:"https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=400"},
+    {id:"must",name:"مستلزماتك",img:"https://images.unsplash.com/photo-1556740738-b6a63e27c4df?w=400"}
+  ],
+  phoneBrands:[
+    {id:"iphone",name:"ايفون",img:"https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg",products:[{name:"ايفون 15 برو ماكس",price:12500000,img:"https://fdn2.gsmarena.com/vv/pics/apple-iphone-15-pro-max-1.jpg"},{name:"ايفون 15 برو",price:11000000,img:"https://fdn2.gsmarena.com/vv/pics/apple-iphone-15-pro-1.jpg"},{name:"ايفون 14",price:8500000,img:"https://fdn2.gsmarena.com/vv/pics/apple-iphone-14-1.jpg"},{name:"ايفون 13",price:6500000,img:"https://fdn2.gsmarena.com/vv/pics/apple-iphone-13-1.jpg"},{name:"ايفون SE",price:4500000,img:"https://fdn2.gsmarena.com/vv/pics/apple-iphone-se-2022-1.jpg"}]},
+    {id:"samsung",name:"سامسونج",img:"https://upload.wikimedia.org/wikipedia/commons/2/24/Samsung_Logo.svg",products:[{name:"S24 Ultra",price:11500000,img:"https://fdn2.gsmarena.com/vv/pics/samsung-galaxy-s24-ultra-5g-1.jpg"},{name:"S24+",price:8500000,img:"https://fdn2.gsmarena.com/vv/pics/samsung-galaxy-s24-plus-1.jpg"},{name:"A55",price:3800000,img:"https://fdn2.gsmarena.com/vv/pics/samsung-galaxy-a55-1.jpg"},{name:"A35",price:2800000,img:"https://fdn2.gsmarena.com/vv/pics/samsung-galaxy-a35-1.jpg"},{name:"M34",price:2200000,img:"https://fdn2.gsmarena.com/vv/pics/samsung-galaxy-m34-5g-1.jpg"}]},
+    {id:"huawei",name:"هواوي",img:"https://upload.wikimedia.org/wikipedia/commons/0/0c/Huawei_Standard_logo.svg",products:[{name:"P60 Pro",price:7000000,img:"https://fdn2.gsmarena.com/vv/pics/huawei-p60-pro-1.jpg"},{name:"Mate 50 Pro",price:6500000,img:"https://fdn2.gsmarena.com/vv/pics/huawei-mate-50-pro-1.jpg"},{name:"Nova 11 Pro",price:4200000,img:"https://fdn2.gsmarena.com/vv/pics/huawei-nova-11-pro-1.jpg"},{name:"Y9a",price:1800000,img:"https://fdn2.gsmarena.com/vv/pics/huawei-y9a-1.jpg"},{name:"P50 Pocket",price:5500000,img:"https://fdn2.gsmarena.com/vv/pics/huawei-p50-pocket-1.jpg"}]},
+    {id:"xiaomi",name:"شاومي",img:"https://upload.wikimedia.org/wikipedia/commons/ae/Xiaomi_logo_%282021-%29.svg",products:[{name:"Redmi Note 13 Pro+",price:4500000,img:"https://fdn2.gsmarena.com/vv/pics/xiaomi-redmi-note-13-pro-plus-1.jpg"},{name:"Redmi Note 13 Pro",price:3500000,img:"https://fdn2.gsmarena.com/vv/pics/xiaomi-redmi-note-13-pro-4g-1.jpg"},{name:"Poco X6 Pro",price:3200000,img:"https://fdn2.gsmarena.com/vv/pics/xiaomi-poco-x6-pro-1.jpg"},{name:"Redmi 13C",price:1500000,img:"https://fdn2.gsmarena.com/vv/pics/xiaomi-redmi-13c-1.jpg"},{name:"Mi 13T",price:6000000,img:"https://fdn2.gsmarena.com/vv/pics/xiaomi-mi-13t-1.jpg"}]},
+    {id:"oppo",name:"اوبو",img:"https://upload.wikimedia.org/wikipedia/commons/7/78/Oppo_logo.svg",products:[{name:"Find X6 Pro",price:8000000,img:"https://fdn2.gsmarena.com/vv/pics/oppo-find-x6-pro-1.jpg"},{name:"Reno 11 Pro",price:4500000,img:"https://fdn2.gsmarena.com/vv/pics/oppo-reno-11-pro-1.jpg"},{name:"A78",price:2000000,img:"https://fdn2.gsmarena.com/vv/pics/oppo-a78-4g-1.jpg"},{name:"F25 Pro",price:3000000,img:"https://fdn2.gsmarena.com/vv/pics/oppo-f25-pro-1.jpg"},{name:"A58",price:1600000,img:"https://fdn2.gsmarena.com/vv/pics/oppo-a58-1.jpg"}]},
+    {id:"infinix",name:"انفنكس",img:"https://logo.clearbit.com/infinixmobility.com",products:[{name:"Zero 30 5G",price:2800000,img:"https://fdn2.gsmarena.com/vv/pics/infinix-zero-30-5g-1.jpg"},{name:"Note 40 Pro",price:2500000,img:"https://fdn2.gsmarena.com/vv/pics/infinix-note-40-pro-1.jpg"},{name:"Hot 40 Pro",price:1800000,img:"https://fdn2.gsmarena.com/vv/pics/infinix-hot-40-pro-1.jpg"},{name:"Smart 8",price:900000,img:"https://fdn2.gsmarena.com/vv/pics/infinix-smart-8-1.jpg"},{name:"GT 20 Pro",price:3200000,img:"https://fdn2.gsmarena.com/vv/pics/infinix-gt-20-pro-1.jpg"}]},
+    {id:"tecno",name:"تكنو",img:"https://logo.clearbit.com/tecno-mobile.com",products:[{name:"Phantom V Fold",price:6000000,img:"https://fdn2.gsmarena.com/vv/pics/tecno-phantom-v-fold-1.jpg"},{name:"Camon 20 Pro",price:2200000,img:"https://fdn2.gsmarena.com/vv/pics/tecno-camon-20-pro-1.jpg"},{name:"Spark 20 Pro",price:1800000,img:"https://fdn2.gsmarena.com/vv/pics/tecno-spark-20-pro-1.jpg"},{name:"Pova 5 Pro",price:1600000,img:"https://fdn2.gsmarena.com/vv/pics/tecno-pova-5-pro-1.jpg"},{name:"Pop 8",price:800000,img:"https://fdn2.gsmarena.com/vv/pics/tecno-pop-8-1.jpg"}]},
+    {id:"honor",name:"هونر",img:"https://upload.wikimedia.org/wikipedia/commons/8/8c/Honor_logo.svg",products:[{name:"Magic 6 Pro",price:7500000,img:"https://fdn2.gsmarena.com/vv/pics/honor-magic-6-pro-1.jpg"},{name:"Honor 90",price:4000000,img:"https://fdn2.gsmarena.com/vv/pics/honor-90-1.jpg"},{name:"X9b",price:2500000,img:"https://fdn2.gsmarena.com/vv/pics/honor-x9b-1.jpg"},{name:"X8b",price:1800000,img:"https://fdn2.gsmarena.com/vv/pics/honor-x8b-1.jpg"},{name:"Play 50",price:1200000,img:"https://fdn2.gsmarena.com/vv/pics/honor-play-50-1.jpg"}]}
+  ],
+  products:{phones:[],software:[],repair:[],accessories:[],offers:[],must:[]}
+}}
+
+function previewFile(i,id){let f=i.files[0];if(!f)return;let r=new FileReader();r.onload=e=>{document.getElementById(id).src=e.target.result;document.getElementById(id).style.display='block';tempProdImg=e.target.result};r.readAsDataURL(f)}
+function changeBgColor(c){siteData.bgColor=c;document.body.style.background=c;save()}
+function changeHeaderColor(c){siteData.headerColor=c;document.getElementById('topHeader').style.background=c;save()}
+function exportData(){let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify({siteData,users,cart})]));a.download="oskar_backup.json";a.click()}
+
+function checkSecret(){if(document.getElementById('searchInput').value===SECRET){adminActive=!adminActive;localStorage.setItem('adminActiveV19',adminActive);document.getElementById('adminToggleBtn').classList.toggle('show',adminActive);document.getElementById('adminPanel').classList.toggle('show',adminActive);document.getElementById('searchInput').value='';render()}}
+
+function render(){
+  let html='';siteData.categories.forEach(c=>html+=`<div class="cat-card" onclick="openCat('${c.id}')"><div class="card-admin" style="display:${adminActive?'flex':'none'}"><button onclick="editCat('${c.id}');event.stopPropagation()"><i class="fa-solid fa-pen"></i></button><button onclick="changeCatImg('${c.id}');event.stopPropagation()"><i class="fa-solid fa-image"></i></button><button class="del" onclick="delCat('${c.id}');event.stopPropagation()"><i class="fa-solid fa-trash"></i></button></div><img src="${c.img}"><h3>${c.name}</h3></div>`);
+  document.getElementById('categoriesGrid').innerHTML=html;
+  let sel=document.getElementById('productCat');sel.innerHTML='';siteData.categories.forEach(c=>sel.innerHTML+=`<option value="${c.id}">${c.name}</option>`);
+  document.body.style.background=siteData.bgColor;
+  document.getElementById('topHeader').style.background=siteData.headerColor;
+  document.getElementById('bgColorPicker').value=siteData.bgColor;
+  document.getElementById('headerColorPicker').value=siteData.headerColor;
+  updateCart();
+  if(localStorage.getItem('theme')==='dark')document.body.classList.add('dark');
 }
 
-function previewFile(input, previewId){
-  const file = input.files[0]; if(!file) return;
-  const reader = new FileReader();
-  reader.onload = function(e){
-    document.getElementById(previewId).src = e.target.result;
-    document.getElementById(previewId).style.display = 'block';
-    tempProdImg = e.target.result;
-  }
-  reader.readAsDataURL(file);
-}
+function delCat(id){if(confirm('متأكد تريد حذف القسم؟ سيتم حذف كل المنتجات داخله')){siteData.categories=siteData.categories.filter(c=>c.id!=id);delete siteData.products[id];save();render()}}
 
-function changeBgColor(color){
-  siteData.bgColor = color;
-  document.body.style.background = color;
-  saveData();
-}
-function changeHeaderColor(color){
-  siteData.headerColor = color;
-  document.getElementById('topHeader').style.background = color;
-  saveData();
-}
-
-function renderCategories(){
-  let html = '';
-  siteData.categories.forEach(cat=>{
-    html += `<div class="cat-card" onclick="openCategory('${cat.id}')">
-      <div class="card-admin" style="display:${adminActive?'flex':'none'}">
-        <button onclick="editCategory('${cat.id}');event.stopPropagation()"><i class="fa-solid fa-pen"></i></button>
-        <button onclick="changeCatImage('${cat.id}');event.stopPropagation()"><i class="fa-solid fa-image"></i></button>
-      </div>
-      <img src="${cat.img}"><h3>${cat.name}</h3></div>`;
-  });
-  document.getElementById('categoriesGrid').innerHTML = html;
-  let select = document.getElementById('productCat');
-  select.innerHTML = '';
-  siteData.categories.forEach(cat=>{select.innerHTML += `<option value="${cat.id}">${cat.name}</option>`;});
-}
-
-function openCategory(catId){
-  currentCat = catId;
-  document.getElementById('mainContent').style.display = 'none';
-  document.getElementById('categoryPage').style.display = 'block';
-  document.getElementById('addProductBtn').style.display = adminActive? 'block' : 'none';
-  let cat = siteData.categories.find(c=>c.id==catId);
-  document.getElementById('catPageTitle').innerText = cat.name;
-
-  if(catId == 'phones'){
-    document.getElementById('brandGrid').style.display = 'grid';
-    let brandHtml = '';
-    siteData.phoneBrands.forEach(b=>{
-      let count = b.products.length;
-      brandHtml += `<div class="cat-card" onclick="openBrand('${b.id}')">
-        <div class="card-admin" style="display:${adminActive?'flex':'none'}">
-          <button onclick="editBrand('${b.id}');event.stopPropagation()"><i class="fa-solid fa-pen"></i></button>
-          <button onclick="changeBrandImage('${b.id}');event.stopPropagation()"><i class="fa-solid fa-image"></i></button>
-          <button onclick="quickAddToBrand('${b.id}');event.stopPropagation()"><i class="fa-solid fa-plus"></i></button>
-        </div>
-        ${count>0?`<div class="notification">${count}</div>`:''}
-        <img src="${b.img}"><h3>${b.name}</h3></div>`;
-    });
-    document.getElementById('brandGrid').innerHTML = brandHtml;
-    document.getElementById('catProductsGrid').innerHTML = '';
+function openCat(id){
+  currentCat=id;document.getElementById('mainContent').style.display='none';document.getElementById('categoryPage').style.display='block';
+  document.getElementById('addProductBtn').style.display=adminActive?'block':'none';
+  document.getElementById('catPageTitle').innerText=siteData.categories.find(c=>c.id==id).name;
+  if(id=='phones'){
+    document.getElementById('brandGrid').style.display='grid';
+    let h='';siteData.phoneBrands.forEach(b=>h+=`<div class="cat-card" onclick="openBrand('${b.id}')"><div class="card-admin" style="display:${adminActive?'flex':'none'}"><button onclick="editBrand('${b.id}');event.stopPropagation()"><i class="fa-solid fa-pen"></i></button><button onclick="changeBrandImg('${b.id}');event.stopPropagation()"><i class="fa-solid fa-image"></i></button><button onclick="quickAddBrand('${b.id}');event.stopPropagation()"><i class="fa-solid fa-plus"></i></button></div>${b.products.length?`<div class="notification">${b.products.length}</div>`:''}<img src="${b.img}"><h3>${b.name}</h3></div>`);
+    document.getElementById('brandGrid').innerHTML=h;document.getElementById('catProductsGrid').innerHTML='';
   }else{
-    document.getElementById('brandGrid').style.display = 'none';
-    let html = '';
-    siteData.products[catId].forEach((p,i)=>{
-      html += `<div class="product-card">
-        <div class="card-admin" style="display:${adminActive?'flex':'none'}">
-          <button onclick="editProduct('${catId}',${i})"><i class="fa-solid fa-pen"></i></button>
-        </div>
-        <img src="${p.img}"><div class="product-name">${p.name}</div>
-        <div class="product-price">${parseInt(p.price).toLocaleString()} ل.س</div>
-        <button class="add-cart-btn" onclick='addToCart(${JSON.stringify(p)})'>اضافة للعربة</button>
-      </div>`;
-    });
-    document.getElementById('catProductsGrid').innerHTML = html || '<p style="text-align:center;padding:20px">لا توجد منتجات</p>';
+    document.getElementById('brandGrid').style.display='none';
+    let h='';siteData.products[id].forEach((p,i)=>h+=`<div class="product-card"><div class="card-admin" style="display:${adminActive?'flex':'none'}"><button onclick="editProd('${id}',${i})"><i class="fa-solid fa-pen"></i></button><button onclick="changeProdImg('${id}',${i})"><i class="fa-solid fa-image"></i></button><button class="del" onclick="delProd('${id}',${i})"><i class="fa-solid fa-trash"></i></button></div><img src="${p.img}"><div class="product-name">${p.name}</div><div class="product-price">${parseInt(p.price).toLocaleString()} ل.س</div><button class="add-cart-btn" onclick='addCart(${JSON.stringify(p)})'>اضافة للعربة</button></div>`);
+    document.getElementById('catProductsGrid').innerHTML=h||'<p style="text-align:center;padding:20px">لا توجد منتجات</p>';
   }
 }
 
-function openBrand(brandId){
-  currentBrand = brandId;
-  let brand = siteData.phoneBrands.find(b=>b.id==brandId);
-  document.getElementById('catPageTitle').innerText = brand.name;
-  document.getElementById('brandGrid').style.display = 'none';
-  let html = '';
-  brand.products.forEach((p,i)=>{
-    html += `<div class="product-card">
-      <div class="card-admin" style="display:${adminActive?'flex':'none'}">
-        <button onclick="editBrandProduct('${brandId}',${i})"><i class="fa-solid fa-pen"></i></button>
-      </div>
-      <img src="${p.img}"><div class="product-name">${p.name}</div>
-      <div class="product-price">${parseInt(p.price).toLocaleString()} ل.س</div>
-      <button class="add-cart-btn" onclick='addToCart(${JSON.stringify(p)})'>اضافة للعربة</button>
-    </div>`;
-  });
-  if(adminActive){
-    html += `<button class="add-product-in-cat" onclick="quickAddToBrand('${brandId}')"><i class="fa-solid fa-plus"></i> اضافة منتج ل ${brand.name}</button>`;
-  }
-  document.getElementById('catProductsGrid').innerHTML = html;
+function openBrand(id){
+  currentBrand=id;let b=siteData.phoneBrands.find(x=>x.id==id);
+  document.getElementById('catPageTitle').innerText=b.name;document.getElementById('brandGrid').style.display='none';
+  let h='';b.products.forEach((p,i)=>h+=`<div class="product-card"><div class="card-admin" style="display:${adminActive?'flex':'none'}"><button onclick="editBrandProd('${id}',${i})"><i class="fa-solid fa-pen"></i></button><button onclick="changeBrandProdImg('${id}',${i})"><i class="fa-solid fa-image"></i></button><button class="del" onclick="delBrandProd('${id}',${i})"><i class="fa-solid fa-trash"></i></button></div><img src="${p.img}"><div class="product-name">${p.name}</div><div class="product-price">${parseInt(p.price).toLocaleString()} ل.س</div><button class="add-cart-btn" onclick='addCart(${JSON.stringify(p)})'>اضافة للعربة</button></div>`);
+  if(adminActive)h+=`<button class="add-product-in-cat" onclick="quickAddBrand('${id}')"><i class="fa-solid fa-plus"></i> + اضافة منتج ل ${b.name}</button>`;
+  document.getElementById('catProductsGrid').innerHTML=h;
 }
 
-function quickAddToCurrentCat(){document.getElementById('productCat').value = currentCat;document.getElementById('adminPanel').classList.add('show');}
-function quickAddToBrand(brandId){document.getElementById('productCat').value = 'phones';currentBrand=brandId;document.getElementById('productName').placeholder = `اسم المنتج ل ${brandId}`;document.getElementById('adminPanel').classList.add('show');}
+function quickAddCat(){document.getElementById('productCat').value=currentCat;document.getElementById('adminPanel').classList.add('show')}
+function quickAddBrand(id){document.getElementById('productCat').value='phones';currentBrand=id;document.getElementById('productName').placeholder=`اسم المنتج ل ${id}`;document.getElementById('adminPanel').classList.add('show')}
 
 function addProduct(){
-  let cat=document.getElementById('productCat').value;
-  let name=document.getElementById('productName').value.trim();
-  let price=document.getElementById('productPrice').value;
-  let img=tempProdImg || 'https://via.placeholder.com/150';
-  if(!name||!price){alert('كمل البيانات');return}
-  let product = {name,price,img};
-  if(cat=='phones' && currentBrand){
-    let brand = siteData.phoneBrands.find(b=>b.id==currentBrand);
-    brand.products.push(product);
-  }else{
-    siteData.products[cat].push(product);
-  }
-  saveData();renderAll();alert('تمت الاضافة');
-  document.getElementById('productName').value='';document.getElementById('productPrice').value='';
-  document.getElementById('prodPreview').style.display='none';tempProdImg='';
+  let cat=document.getElementById('productCat').value,name=document.getElementById('productName').value.trim(),price=document.getElementById('productPrice').value,img=tempProdImg||'https://via.placeholder.com/150';
+  if(!name||!price)return alert('كمل البيانات');
+  let p={name,price,img};
+  if(cat=='phones'&&currentBrand)siteData.phoneBrands.find(b=>b.id==currentBrand).products.push(p);
+  else siteData.products[cat].push(p);
+  save();render();alert('تمت الاضافة');document.getElementById('productName').value='';document.getElementById('productPrice').value='';document.getElementById('prodPreview').style.display='none';tempProdImg='';
 }
 
-function editCategory(id){let cat = siteData.categories.find(c=>c.id==id);let newName = prompt('الاسم الجديد:', cat.name);if(newName) cat.name = newName;saveData();renderCategories();}
-function changeCatImage(id){let cat = siteData.categories.find(c=>c.id==id);let fileInput = document.createElement('input');fileInput.type = 'file';fileInput.accept = 'image/*';fileInput.onchange = function(e){const file = e.target.files[0];const reader = new FileReader();reader.onload = function(ev){cat.img = ev.target.result;saveData();renderCategories();};reader.readAsDataURL(file);};fileInput.click();}
-function editBrand(id){let brand = siteData.phoneBrands.find(b=>b.id==id);let newName = prompt('الاسم الجديد:', brand.name);if(newName) brand.name = newName;saveData();renderCategories();}
-function changeBrandImage(id){let brand = siteData.phoneBrands.find(b=>b.id==id);let fileInput = document.createElement('input');fileInput.type = 'file';fileInput.accept = 'image/*';fileInput.onchange = function(e){const file = e.target.files[0];const reader = new FileReader();reader.onload = function(ev){brand.img = ev.target.result;saveData();renderCategories();};reader.readAsDataURL(file);};fileInput.click();}
+function delProd(c,i){if(confirm('حذف المنتج؟')){siteData.products[c].splice(i,1);save();render()}}
+function delBrandProd(b,i){if(confirm('حذف المنتج؟')){siteData.phoneBrands.find(x=>x.id==b).products.splice(i,1);save();render()}}
+function changeProdImg(c,i){let inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.onchange=e=>{let r=new FileReader();r.onload=ev=>{siteData.products[c][i].img=ev.target.result;save();render()};r.readAsDataURL(e.target.files[0])};inp.click()}
+function changeBrandProdImg(b,i){let inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.onchange=e=>{let r=new FileReader();r.onload=ev=>{siteData.phoneBrands.find(x=>x.id==b).products[i].img=ev.target.result;save();render()};r.readAsDataURL(e.target.files[0])};inp.click()}
 
-function addToCart(item){let existing = cart.find(p=>p.name==item.name);if(existing) existing.qty++;else cart.push({...item, qty:1});updateCart();saveCart();}
-function updateCart(){document.getElementById('cartCount').innerText = cart.reduce((a,b)=>a+b.qty,0);}
-function saveCart(){localStorage.setItem('oskarCartV14', JSON.stringify(cart));}
-
-function openCart(){
-  document.getElementById('cartModal').classList.add('show');
-  let html = '';
-  if(cart.length==0) html = '<p>السلة فاضية</p>';
-  cart.forEach((item,i)=>{html += `<div class="cart-item"><img src="${item.img}"><div><div>${item.name}</div><div>${item.price.toLocaleString()} ل.س x ${item.qty}</div></div></div>`;});
-  document.getElementById('cartItems').innerHTML = html;
-}
-function closeCart(){document.getElementById('cartModal').classList.remove('show')}
-
-function getLocation(){
-  if(navigator.geolocation){
-    navigator.geolocation.getCurrentPosition(pos=>{
-      document.getElementById('lat').value = pos.coords.latitude;
-      document.getElementById('lng').value = pos.coords.longitude;
-      document.getElementById('locationText').innerText = `تم تحديد الموقع`;
-    });
-  }
-}
-
-function sendOrder(){
-  let name = document.getElementById('customerName').value;
-  let phone = document.getElementById('customerPhone').value;
-  let address = document.getElementById('customerAddress').value;
-  let payment = document.getElementById('paymentMethod').value;
-  let lat = document.getElementById('lat').value;
-  let lng = document.getElementById('lng').value;
-  let mapLink = lat? `https://www.google.com/maps?q=${lat},${lng}` : 'لم يتم تحديد الموقع';
-  let msg = `طلب جديد%0Aالاسم: ${name}%0Aالجوال: ${phone}%0Aالعنوان: ${address}%0Aالموقع: ${mapLink}%0Aالدفع: ${payment}%0A%0Aالمنتجات:%0A`;
-  cart.forEach(i=>{msg += `${i.name} - ${i.qty} x ${i.price} ل.س%0A`});
-  window.open(`https://wa.me/+971544066811?text=${msg}`,'_blank');
-  cart=[];saveCart();updateCart();closeCart();alert('تم ارسال الطلب');
-}
-
-// الحساب
-function openAccount(){ document.getElementById('accountModal').classList.add('show'); if(currentUser){document.getElementById('guestView').style.display='none';document.getElementById('loggedInView').style.display='block';document.getElementById('userNameDisplay').innerText='اهلا '+currentUser.name;}else{document.getElementById('guestView').style.display='block';document.getElementById('loggedInView').style.display='none';} }
-function closeAccount(){ document.getElementById('accountModal').classList.remove('show') }
-function showRegister(){document.getElementById('loginForm').style.display='none';document.getElementById('registerForm').style.display='block';document.getElementById('tabLogin').style.background='#ddd';document.getElementById('tabRegister').style.background='var(--orange)';document.getElementById('tabRegister').style.color='#000'}
-function showLogin(){document.getElementById('registerForm').style.display='none';document.getElementById('loginForm').style.display='block';document.getElementById('tabRegister').style.background='#ddd';document.getElementById('tabLogin').style.background='var(--orange)';document.getElementById('tabLogin').style.color='#000'}
-function register(){ let name=document.getElementById('regName').value; let user=document.getElementById('regUser').value; let pass=document.getElementById('regPass').value; if(!name||!user||!pass){alert('كمل البيانات');return} users.push({name,user,pass}); localStorage.setItem('oskarUsersV14',JSON.stringify(users)); alert('تم انشاء الحساب'); showLogin(); }
-function login(){ let user=document.getElementById('loginUser').value; let pass=document.getElementById('loginPass').value; let u = users.find(u=>u.user==user && u.pass==pass); if(!u) return alert('البيانات خطأ'); currentUser=u; localStorage.setItem('oskarCurrentUserV14',JSON.stringify(u)); openAccount(); alert('اهلا '+u.name) }
-function logout(){ currentUser=null; localStorage.removeItem('oskarCurrentUserV14'); openAccount(); alert('تم تسجيل الخروج') }
-
-function toggleMenu(){document.getElementById('sideMenu').classList.toggle('show');document.getElementById('overlay').classList.toggle('show');}
-function toggleTheme(){document.body.classList.toggle('dark');localStorage.setItem('theme', document.body.classList.contains('dark')?'dark':'light');}
-
-function toggleAdminPanel(){document.getElementById('adminPanel').classList.toggle('show');}
-function closeAdminPanel(){
-  document.getElementById('adminPanel').classList.remove('show');
-  adminActive=false;localStorage.setItem('adminActiveV14','false');
-  document.getElementById('adminToggleBtn').classList.remove('show');
-  renderAll(); // عشان يخفي زر اضافة منتج
-}
-
-document.addEventListener('keyup', e=>{
-  if(document.getElementById('searchInput').value === SECRET_CODE){
-    adminActive =!adminActive;
-    localStorage.setItem('adminActiveV14', adminActive);
-    if(adminActive){document.getElementById('adminToggleBtn').classList.add('show');document.getElementById('adminPanel').classList.add('show');}
-    document.getElementById('searchInput').value='';
-    renderAll();
-  }
-});
-
-function goHome(){currentCat = 'all';document.getElementById('mainContent').style.display = 'block';document.getElementById('categoryPage').style.display = 'none';}
-function renderAll(){
-  renderCategories();updateCart();
-  document.body.style.background = siteData.bgColor;
-  document.getElementById('topHeader').style.background = siteData.headerColor;
-  document.getElementById('bgColorPicker').value = siteData.bgColor;
-  document.getElementById('headerColorPicker').value = siteData.headerColor;
-  if(localStorage.getItem('theme')=='dark') document.body.classList.add('dark');
-}
-function saveData(){localStorage.setItem('oskarSiteDataV14',JSON.stringify(siteData));}
-function resetData(){if(confirm('ارجاع كل شي؟')){localStorage.clear();location.reload();}}
-
-window.onload = function(){renderAll();if(adminActive){document.getElementById('adminToggleBtn').classList.add('show');document.getElementById('adminPanel').classList.add('show')}}
-</script>
-</body>
-</html>
+function editCat(id){let n=prompt('الاسم الجديد:',siteData.categories.find(c=>c.id==id).name);if(n){siteData.categories.find(c=>c.id==id).name=n;save();render()}}
+function changeCatImg(id){let inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.onchange=e=>{let r=new FileReader();r.onload=ev=>{siteData.categories.find(c=>c.id==id).img=ev.target.result;save();render()};r.readAsDataURL(e.target.files[0])};inp.click()}
+function editBrand(id){let n=prompt('الاسم الجديد:',siteData.phoneBrands.find(b=>b.id==id).name);if(n){siteData.phoneBrands.find(b=>b.id==id).name=n;save();render()}}
+function changeBrandImg(id){let inp=document.createElement('input');inp.type
