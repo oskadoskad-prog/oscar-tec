@@ -115,7 +115,6 @@ body{background:var(--bodyBg, var(--bg)) center/cover fixed;color:var(--text);pa
   <div class="nav-item" onclick="goHome()"><i class="fa-solid fa-house"></i>الرئيسية</div>
 </div>
 
-<!-- نافذة السلة -->
 <div id="cartModal">
   <div class="modal-box">
     <h3 style="text-align:center;margin-bottom:15px">سلة التسوق</h3>
@@ -137,7 +136,6 @@ body{background:var(--bodyBg, var(--bg)) center/cover fixed;color:var(--text);pa
   </div>
 </div>
 
-<!-- نافذة الحساب -->
 <div id="accountModal">
   <div class="modal-box">
     <div id="loggedInView" style="display:none">
@@ -422,4 +420,4 @@ function addProduct(){
 
 function deleteProduct(cat,i){if(confirm('حذف المنتج؟')){siteData.products[cat].splice(i,1);saveData();renderAll();}}
 function deleteBrandProduct(brandId,i){if(confirm('حذف المنتج؟')){let brand = siteData.phoneBrands.find(b=>b.id==brandId);brand.products.splice(i,1);saveData();renderAll();}}
-function changeProdImage(cat,i){let p = siteData.products[cat][i];let fileInput = document.createElement('input');fileInput.type = 'file';fileInput.accept = 'image/*';fileInput.onchange = function(e){const file = e.target.files[0];const reader =
+function changeProdImage(cat,i){let p = siteData.products[cat][i];let fileInput = document.createElement('input');fileInput.type = 'file';fileInput.accept = 'image/*';fileInput.onchange = function(e){const file = e.target.files[0];const reader = new FileReader();reader.onload = function(ev){p.img = ev.target.result;saveData();renderAll();};reader.readAsDataURL
